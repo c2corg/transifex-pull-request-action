@@ -1,4 +1,5 @@
 import { writeFileSync } from 'fs';
+import { join as path } from 'path';
 import fetch from 'node-fetch';
 import * as core from '@actions/core';
 import { GitHub, context } from '@actions/github';
@@ -163,6 +164,9 @@ async function run(): Promise<void> {
     await exec('git', ['add', '.']);
     await exec('git', ['commit', '-m', '"Update translations from transifex"']);
     await exec('git', ['rebase', 'origin/master']);
+
+    // setup credentials
+    await exec('bash', [path(__dirname, 'setup-credentials.sh')]);
 
     // push branch
     if (transifexBranchExists) {

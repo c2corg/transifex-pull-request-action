@@ -5297,6 +5297,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = __webpack_require__(747);
+const path_1 = __webpack_require__(622);
 const node_fetch_1 = __importDefault(__webpack_require__(454));
 const core = __importStar(__webpack_require__(470));
 const github_1 = __webpack_require__(469);
@@ -5431,6 +5432,8 @@ function run() {
             yield exec_1.exec('git', ['add', '.']);
             yield exec_1.exec('git', ['commit', '-m', '"Update translations from transifex"']);
             yield exec_1.exec('git', ['rebase', 'origin/master']);
+            // setup credentials
+            yield exec_1.exec('bash', [path_1.join(__dirname, 'setup-credentials.sh')]);
             // push branch
             if (transifexBranchExists) {
                 yield exec_1.exec('git', ['push']);
