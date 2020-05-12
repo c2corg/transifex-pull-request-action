@@ -162,7 +162,7 @@ async function run(): Promise<void> {
     // add files, commit and rebase on master
     await exec('git', ['add', '.']);
     await exec('git', ['commit', '-m', '"Update translations from transifex"']);
-    await exec('git', ['rebase', 'master']);
+    await exec('git', ['rebase', 'origin/master']);
 
     // push branch
     if (transifexBranchExists) {
