@@ -16,6 +16,8 @@ import {
   TransifexBranchQuery_repository_refs_edges,
   TransifexBranchQuery_repository_refs_edges_node_associatedPullRequests_edges,
 } from './types/TransifexBranchQuery';
+import deleteBranchMutation from './delete-branch-mutation';
+import { DeleteBranchMutation, DeleteBranchMutationVariables } from './types/DeleteBranchMutation';
 
 const transifexToken = core.getInput('transifex_token');
 const transifexProject = core.getInput('transifex_project');
@@ -61,7 +63,7 @@ async function run(): Promise<void> {
       branch,
     });
 
-    const transifexBranchExists = query?.repository?.refs?.totalCount || false;
+    let transifexBranchExists = query?.repository?.refs?.totalCount || false;
     let transifexPR: string | undefined = undefined;
     if (transifexBranchExists) {
       const pullRequests = (query?.repository?.refs?.edges as ReadonlyArray<
@@ -72,6 +74,17 @@ async function run(): Promise<void> {
           TransifexBranchQuery_repository_refs_edges_node_associatedPullRequests_edges
         >)[0].node?.id;
       }
+    }
+    if (transifexBranchExists && !transifexPR) {
+      // delete branch first, it should have been done anyway when previous PR was merged
+      graphql<DeleteBranchMutation, DeleteBranchMutationVariables>(deleteBranchMutation, {
+        input: {
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          refId: (query?.repository?.refs?.edges as ReadonlyArray<TransifexBranchQuery_repository_refs_edges>)[0].node
+            ?.id!,
+        },
+      });
+      transifexBranchExists = !transifexBranchExists;
     }
 
     // keep track of current branch
@@ -90,6 +103,9 @@ async function run(): Promise<void> {
     } else {
       await exec('git', ['checkout', '-b', branch]);
     }
+
+    // rebase on master
+    await exec('git', ['rebase', 'origin/master']);
 
     // retrieve gettext files from transifex and transform them to appropriate JSON files.
     const transifexBaseUrl = `https://www.transifex.com/api/2/project/${transifexProject}/resource/${transifexResource}`;
@@ -163,7 +179,6 @@ async function run(): Promise<void> {
     // add files, commit and rebase on master
     await exec('git', ['add', '.']);
     await exec('git', ['commit', '-m', '"Update translations from transifex"']);
-    await exec('git', ['rebase', 'origin/master']);
 
     // setup credentials
     await exec('bash', [path(__dirname, 'setup-credentials.sh')]);

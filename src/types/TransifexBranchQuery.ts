@@ -34,10 +34,7 @@ export interface TransifexBranchQuery_repository_refs_edges_node_associatedPullR
 
 export interface TransifexBranchQuery_repository_refs_edges_node {
   readonly __typename: "Ref";
-  /**
-   * The ref name.
-   */
-  readonly name: string;
+  readonly id: string;
   /**
    * A list of pull requests with this ref as the head ref.
    */

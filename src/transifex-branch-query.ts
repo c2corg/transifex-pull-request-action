@@ -8,7 +8,7 @@ export default gql`
         totalCount
         edges {
           node {
-            name
+            id
             associatedPullRequests(first: 1) {
               totalCount
               edges {

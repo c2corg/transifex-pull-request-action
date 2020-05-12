@@ -5305,6 +5305,7 @@ const exec_1 = __webpack_require__(986);
 const gettext_parser_1 = __webpack_require__(494);
 const create_pr_mutation_1 = __importDefault(__webpack_require__(942));
 const transifex_branch_query_1 = __importDefault(__webpack_require__(788));
+const delete_branch_mutation_1 = __importDefault(__webpack_require__(442));
 const transifexToken = core.getInput('transifex_token');
 const transifexProject = core.getInput('transifex_project');
 const transifexResource = core.getInput('transifex_resource');
@@ -5333,7 +5334,7 @@ const sort = (obj) => {
     return result;
 };
 function run() {
-    var _a, _b, _c, _d, _e, _f, _g;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
     return __awaiter(this, void 0, void 0, function* () {
         try {
             // check if there is a branch and a pull request matching already existing for translations
@@ -5342,13 +5343,23 @@ function run() {
                 name: repositoryName,
                 branch,
             });
-            const transifexBranchExists = ((_b = (_a = query === null || query === void 0 ? void 0 : query.repository) === null || _a === void 0 ? void 0 : _a.refs) === null || _b === void 0 ? void 0 : _b.totalCount) || false;
+            let transifexBranchExists = ((_b = (_a = query === null || query === void 0 ? void 0 : query.repository) === null || _a === void 0 ? void 0 : _a.refs) === null || _b === void 0 ? void 0 : _b.totalCount) || false;
             let transifexPR = undefined;
             if (transifexBranchExists) {
                 const pullRequests = (_e = ((_d = (_c = query === null || query === void 0 ? void 0 : query.repository) === null || _c === void 0 ? void 0 : _c.refs) === null || _d === void 0 ? void 0 : _d.edges)[0].node) === null || _e === void 0 ? void 0 : _e.associatedPullRequests;
                 if ((pullRequests === null || pullRequests === void 0 ? void 0 : pullRequests.totalCount) === 1) {
                     transifexPR = (_f = pullRequests.edges[0].node) === null || _f === void 0 ? void 0 : _f.id;
                 }
+            }
+            if (transifexBranchExists && !transifexPR) {
+                // delete branch first, it should have been done anyway when previous PR was merged
+                graphql(delete_branch_mutation_1.default, {
+                    input: {
+                        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                        refId: (_j = ((_h = (_g = query === null || query === void 0 ? void 0 : query.repository) === null || _g === void 0 ? void 0 : _g.refs) === null || _h === void 0 ? void 0 : _h.edges)[0].node) === null || _j === void 0 ? void 0 : _j.id,
+                    },
+                });
+                transifexBranchExists = !transifexBranchExists;
             }
             // keep track of current branch
             let currentBranch = '';
@@ -5366,6 +5377,8 @@ function run() {
             else {
                 yield exec_1.exec('git', ['checkout', '-b', branch]);
             }
+            // rebase on master
+            yield exec_1.exec('git', ['rebase', 'origin/master']);
             // retrieve gettext files from transifex and transform them to appropriate JSON files.
             const transifexBaseUrl = `https://www.transifex.com/api/2/project/${transifexProject}/resource/${transifexResource}`;
             for (const lang of locales) {
@@ -5431,7 +5444,6 @@ function run() {
             // add files, commit and rebase on master
             yield exec_1.exec('git', ['add', '.']);
             yield exec_1.exec('git', ['commit', '-m', '"Update translations from transifex"']);
-            yield exec_1.exec('git', ['rebase', 'origin/master']);
             // setup credentials
             yield exec_1.exec('bash', [path_1.join(__dirname, 'setup-credentials.sh')]);
             // push branch
@@ -5447,7 +5459,7 @@ function run() {
                     input: {
                         title: 'Import i18n from Transifex',
                         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                        repositoryId: (_g = query === null || query === void 0 ? void 0 : query.repository) === null || _g === void 0 ? void 0 : _g.id,
+                        repositoryId: (_k = query === null || query === void 0 ? void 0 : query.repository) === null || _k === void 0 ? void 0 : _k.id,
                         baseRefName: 'master',
                         headRefName: branch,
                     },
@@ -10097,6 +10109,24 @@ function simpleWrite(buf) {
 function simpleEnd(buf) {
   return buf && buf.length ? this.write(buf) : '';
 }
+
+/***/ }),
+
+/***/ 442:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const utils_1 = __webpack_require__(611);
+exports.default = utils_1.gql `
+  mutation DeleteBranchMutation($input: DeleteRefInput!) {
+    deleteRef(input: $input) {
+      clientMutationId
+    }
+  }
+`;
+
 
 /***/ }),
 
@@ -16492,7 +16522,7 @@ exports.default = utils_1.gql `
         totalCount
         edges {
           node {
-            name
+            id
             associatedPullRequests(first: 1) {
               totalCount
               edges {
