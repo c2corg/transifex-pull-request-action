@@ -5,7 +5,7 @@ inputs:
   transifex_token:
     description: Transifex token
     required: true
-  transifex_troject:
+  transifex_project:
     description: Transifex transifexProject
     required: true
   transifex_resource:
