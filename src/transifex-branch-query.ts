@@ -1,0 +1,25 @@
+import { gql } from './utils';
+
+export default gql`
+  query TransifexBranchQuery($owner: String!, $name: String!, $branch: String!) {
+    repository(owner: $owner, name: $name) {
+      id
+      refs(refPrefix: "refs/heads/", query: $branch, first: 1) {
+        totalCount
+        edges {
+          node {
+            name
+            associatedPullRequests(first: 1) {
+              totalCount
+              edges {
+                node {
+                  id
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;

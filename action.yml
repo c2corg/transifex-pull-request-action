@@ -1,0 +1,26 @@
+name: transifex-pull-request-action
+description: Fetches translations from transifex and proposes a pull request to merge these.
+author: Camptocamp Association
+inputs:
+  transifexToken:
+    description: Transifex token
+    required: true
+  transifexProject:
+    description: Transifex transifexProject
+    required: true
+  transifexResource:
+    description: Transifex resource
+    required: true
+  locales:
+    description: A list of locales to fetch, separated by commas
+    required: true
+  githubToken:
+    description: Github secret
+    required: true
+  branch:
+    description: Branch used for pull request
+    required: false
+    default: transifex/i18n-updates
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
