@@ -166,7 +166,11 @@ async function run(): Promise<void> {
     await exec('git', ['rebase', 'origin/master']);
 
     // setup credentials
-    await exec('bash', [path(__dirname, 'setup-credentials.sh')]);
+    await exec('bash', [path(__dirname, 'setup-credentials.sh')], {
+      env: {
+        GITHUB_TOKEN: githubToken,
+      },
+    });
 
     // push branch
     if (transifexBranchExists) {
