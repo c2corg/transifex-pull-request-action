@@ -17,15 +17,15 @@ import {
   TransifexBranchQuery_repository_refs_edges_node_associatedPullRequests_edges,
 } from './types/TransifexBranchQuery';
 
-const transifexToken = core.getInput('transifexToken');
-const transifexProject = core.getInput('transifexProject');
-const transifexResource = core.getInput('transifexResource');
+const transifexToken = core.getInput('transifex_token');
+const transifexProject = core.getInput('transifex_project');
+const transifexResource = core.getInput('transifex_resource');
 const locales = core
   .getInput('locales')
   .split(',')
   .map((locale) => locale.trim())
   .filter((locale) => !!locale);
-const githubToken = core.getInput('githubToken');
+const githubToken = core.getInput('github_token');
 const repositoryOwner = context.repo.owner;
 const repositoryName = context.repo.repo;
 const branch = core.getInput('branch');
@@ -166,11 +166,7 @@ async function run(): Promise<void> {
     await exec('git', ['rebase', 'origin/master']);
 
     // setup credentials
-    await exec('bash', [path(__dirname, 'setup-credentials.sh')], {
-      env: {
-        GITHUB_TOKEN: githubToken,
-      },
-    });
+    await exec('bash', [path(__dirname, 'setup-credentials.sh')]);
 
     // push branch
     if (transifexBranchExists) {

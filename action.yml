@@ -2,19 +2,19 @@ name: transifex-pull-request-action
 description: Fetches translations from transifex and proposes a pull request to merge these.
 author: Camptocamp Association
 inputs:
-  transifexToken:
+  transifex_token:
     description: Transifex token
     required: true
-  transifexProject:
+  transifex_troject:
     description: Transifex transifexProject
     required: true
-  transifexResource:
+  transifex_resource:
     description: Transifex resource
     required: true
   locales:
     description: A list of locales to fetch, separated by commas
     required: true
-  githubToken:
+  github_token:
     description: Github secret
     required: true
   branch:
