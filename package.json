@@ -8,7 +8,8 @@
     "build": "tsc",
     "lint": "prettier --check \"**/*.{ts,js,json,css,scss,less,md,html}\" && eslint src/**",
     "pack": "ncc build",
-    "types": "apollo codegen:generate --localSchemaFile=github-graphql-schema.json --target=typescript --includes=src/**/* --tagName=gql --globalTypesFile=src/types/graphql-types.ts --useReadOnlyTypes --addTypename types"
+    "types": "apollo codegen:generate --localSchemaFile=github-graphql-schema.json --target=typescript --includes=src/**/* --tagName=gql --globalTypesFile=src/types/graphql-types.ts --useReadOnlyTypes --addTypename types",
+    "all": "npm run types && npm run lint && npm run build && npm run pack"
   },
   "repository": {
     "type": "git",

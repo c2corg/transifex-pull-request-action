@@ -5416,7 +5416,7 @@ function run() {
             }
             // check whether new files bring modifications to the current branch
             let gitStatus = '';
-            yield exec_1.exec('git', ['status', 's'], {
+            yield exec_1.exec('git', ['status', '-s'], {
                 listeners: {
                     stdout: (data) => {
                         gitStatus += data.toString().trim();
@@ -5430,7 +5430,7 @@ function run() {
             // add files, commit and rebase on master
             yield exec_1.exec('git', ['add', '.']);
             yield exec_1.exec('git', ['commit', '-m', '"Update translations from transifex"']);
-            yield exec_1.exec('git', ['rebase', 'master']);
+            yield exec_1.exec('git', ['rebase', 'origin/master']);
             // push branch
             if (transifexBranchExists) {
                 yield exec_1.exec('git', ['push']);
