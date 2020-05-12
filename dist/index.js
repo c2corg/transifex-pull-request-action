@@ -5305,15 +5305,15 @@ const exec_1 = __webpack_require__(986);
 const gettext_parser_1 = __webpack_require__(494);
 const create_pr_mutation_1 = __importDefault(__webpack_require__(942));
 const transifex_branch_query_1 = __importDefault(__webpack_require__(788));
-const transifexToken = core.getInput('transifexToken');
-const transifexProject = core.getInput('transifexProject');
-const transifexResource = core.getInput('transifexResource');
+const transifexToken = core.getInput('transifex_token');
+const transifexProject = core.getInput('transifex_project');
+const transifexResource = core.getInput('transifex_resource');
 const locales = core
     .getInput('locales')
     .split(',')
     .map((locale) => locale.trim())
     .filter((locale) => !!locale);
-const githubToken = core.getInput('githubToken');
+const githubToken = core.getInput('github_token');
 const repositoryOwner = github_1.context.repo.owner;
 const repositoryName = github_1.context.repo.repo;
 const branch = core.getInput('branch');
