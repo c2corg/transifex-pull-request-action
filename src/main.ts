@@ -147,7 +147,7 @@ async function run(): Promise<void> {
 
     // check whether new files bring modifications to the current branch
     let gitStatus = '';
-    await exec('git', ['status', 's'], {
+    await exec('git', ['status', '-s'], {
       listeners: {
         stdout: (data: Buffer): void => {
           gitStatus += data.toString().trim();
