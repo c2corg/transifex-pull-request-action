@@ -5446,7 +5446,7 @@ function run() {
             }
             core.info('Add files and commit on master');
             yield exec_1.exec('git', ['add', '.']);
-            yield exec_1.exec('git', ['commit', '-m', '"Update translations from transifex"']);
+            yield exec_1.exec('git', ['commit', '-m', 'Update translations from transifex']);
             // setup credentials
             yield exec_1.exec('bash', [path_1.join(__dirname, 'setup-credentials.sh')]);
             core.info('Push branch to origin');
@@ -5461,12 +5461,13 @@ function run() {
                 core.info(`Creating new PR for branch ${branch}`);
                 yield graphql(create_pr_mutation_1.default, {
                     input: {
-                        title: 'Import i18n from Transifex',
+                        title: ':mortar_board: Import i18n from Transifex',
                         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                         repositoryId: (_k = query === null || query === void 0 ? void 0 : query.repository) === null || _k === void 0 ? void 0 : _k.id,
                         baseRefName: 'master',
                         headRefName: branch,
                     },
+                    body: 'Translations have been updated on Transifex. Review changes, merge this PR and have a :beer:.',
                 });
             }
             else {
@@ -16525,7 +16526,7 @@ exports.default = utils_1.gql `
   query TransifexBranchQuery($owner: String!, $name: String!, $branch: String!) {
     repository(owner: $owner, name: $name) {
       id
-      refs(refPrefix: "refs/heads/", query: $branch, first: 1) {
+      refs(refPrefix: "refs/heads/", query: $branch, first: 1, states: [OPEN]) {
         totalCount
         edges {
           node {
@@ -33437,7 +33438,7 @@ function hasNextPage (link) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const utils_1 = __webpack_require__(611);
 exports.default = utils_1.gql `
-  mutation CreatePRMutation($input: CreatePullRequestInput!) {
+  mutation CreatePRMutation($input: CreatePullRequestInput!, $body: String!) {
     createPullRequest(input: $input) {
       clientMutationId
       pullRequest {

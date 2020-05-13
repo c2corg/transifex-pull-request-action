@@ -180,7 +180,7 @@ async function run(): Promise<void> {
 
     core.info('Add files and commit on master');
     await exec('git', ['add', '.']);
-    await exec('git', ['commit', '-m', '"Update translations from transifex"']);
+    await exec('git', ['commit', '-m', 'Update translations from transifex']);
 
     // setup credentials
     await exec('bash', [path(__dirname, 'setup-credentials.sh')]);
@@ -197,12 +197,13 @@ async function run(): Promise<void> {
       core.info(`Creating new PR for branch ${branch}`);
       await graphql<CreatePRMutation, CreatePRMutationVariables>(createPRMutation, {
         input: {
-          title: 'Import i18n from Transifex',
+          title: ':mortar_board: Import i18n from Transifex',
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           repositoryId: query?.repository?.id!,
           baseRefName: 'master',
           headRefName: branch,
         },
+        body: 'Translations have been updated on Transifex. Review changes, merge this PR and have a :beer:.',
       });
     } else {
       core.info('PR already exists');
