@@ -198,12 +198,12 @@ async function run(): Promise<void> {
       await graphql<CreatePRMutation, CreatePRMutationVariables>(createPRMutation, {
         input: {
           title: ':mortar_board: Import i18n from Transifex',
+          body: 'Translations have been updated on Transifex. Review changes, merge this PR and have a :beer:.',
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           repositoryId: query?.repository?.id!,
           baseRefName: 'master',
           headRefName: branch,
         },
-        body: 'Translations have been updated on Transifex. Review changes, merge this PR and have a :beer:.',
       });
     } else {
       core.info('PR already exists');

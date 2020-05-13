@@ -5462,12 +5462,12 @@ function run() {
                 yield graphql(create_pr_mutation_1.default, {
                     input: {
                         title: ':mortar_board: Import i18n from Transifex',
+                        body: 'Translations have been updated on Transifex. Review changes, merge this PR and have a :beer:.',
                         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                         repositoryId: (_k = query === null || query === void 0 ? void 0 : query.repository) === null || _k === void 0 ? void 0 : _k.id,
                         baseRefName: 'master',
                         headRefName: branch,
                     },
-                    body: 'Translations have been updated on Transifex. Review changes, merge this PR and have a :beer:.',
                 });
             }
             else {
@@ -33438,7 +33438,7 @@ function hasNextPage (link) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const utils_1 = __webpack_require__(611);
 exports.default = utils_1.gql `
-  mutation CreatePRMutation($input: CreatePullRequestInput!, $body: String!) {
+  mutation CreatePRMutation($input: CreatePullRequestInput!) {
     createPullRequest(input: $input) {
       clientMutationId
       pullRequest {

@@ -42,5 +42,4 @@ export interface CreatePRMutation {
 
 export interface CreatePRMutationVariables {
   readonly input: CreatePullRequestInput;
-  readonly body: string;
 }
