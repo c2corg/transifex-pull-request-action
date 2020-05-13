@@ -5321,6 +5321,7 @@ const delete_branch_mutation_1 = __importDefault(__webpack_require__(442));
 const transifexToken = core.getInput('transifex_token');
 const transifexProject = core.getInput('transifex_project');
 const transifexResource = core.getInput('transifex_resource');
+const outputFolder = core.getInput('ouput').endsWith('/') ? core.getInput('ouput') : core.getInput('ouput') + '/';
 const locales = core
     .getInput('locales')
     .split(',')
@@ -5441,7 +5442,7 @@ function run() {
                         }
                     }
                 }
-                fs_1.writeFileSync(`src/translations/dist/${lang}.json`, JSON.stringify(sort(json), null, 2) + '\n');
+                fs_1.writeFileSync(`${outputFolder}${lang}.json`, JSON.stringify(sort(json), null, 2) + '\n');
             }
             core.info('Check whether new files bring modifications to the current branch');
             let gitStatus = '';

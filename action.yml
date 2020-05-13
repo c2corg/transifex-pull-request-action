@@ -11,6 +11,9 @@ inputs:
   transifex_resource:
     description: Transifex resource
     required: true
+  output:
+    description: Folder where to output files
+    required: true
   locales:
     description: A list of locales to fetch, separated by commas
     required: true

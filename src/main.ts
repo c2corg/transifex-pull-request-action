@@ -22,6 +22,7 @@ import { DeleteBranchMutation, DeleteBranchMutationVariables } from './types/Del
 const transifexToken = core.getInput('transifex_token');
 const transifexProject = core.getInput('transifex_project');
 const transifexResource = core.getInput('transifex_resource');
+const outputFolder = core.getInput('ouput').endsWith('/') ? core.getInput('ouput') : core.getInput('ouput') + '/';
 const locales = core
   .getInput('locales')
   .split(',')
@@ -161,7 +162,7 @@ async function run(): Promise<void> {
           }
         }
       }
-      writeFileSync(`src/translations/dist/${lang}.json`, JSON.stringify(sort(json), null, 2) + '\n');
+      writeFileSync(`${outputFolder}${lang}.json`, JSON.stringify(sort(json), null, 2) + '\n');
     }
 
     core.info('Check whether new files bring modifications to the current branch');
