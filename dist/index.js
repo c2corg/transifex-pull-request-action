@@ -5353,6 +5353,7 @@ function run() {
             }
             if (transifexBranchExists && !transifexPR) {
                 // delete branch first, it should have been done anyway when previous PR was merged
+                core.info(`Branch ${branch} already exists but no PR associated, delete it first`);
                 graphql(delete_branch_mutation_1.default, {
                     input: {
                         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -5370,18 +5371,20 @@ function run() {
                     },
                 },
             });
-            // checkout transifex branch or create it
             if (transifexBranchExists) {
+                core.info(`Checkout branch ${branch}`);
                 yield exec_1.exec('git', ['checkout', branch]);
+                yield exec_1.exec('git', ['rebase', 'origin/master']);
             }
             else {
+                core.info(`Create new branch ${branch}`);
                 yield exec_1.exec('git', ['checkout', '-b', branch]);
             }
-            // rebase on master
-            yield exec_1.exec('git', ['rebase', 'origin/master']);
             // retrieve gettext files from transifex and transform them to appropriate JSON files.
+            core.info('Retrieve translations from Transifex');
             const transifexBaseUrl = `https://www.transifex.com/api/2/project/${transifexProject}/resource/${transifexResource}`;
             for (const lang of locales) {
+                core.info(`  > ${lang}`);
                 const response = yield node_fetch_1.default(`${transifexBaseUrl}/translation/${lang}/?mode=reviewed&file`, {
                     headers: {
                         Authorization: `Basic ${Buffer.from('api:' + transifexToken).toString('base64')}`,
@@ -5428,7 +5431,7 @@ function run() {
                 }
                 fs_1.writeFileSync(`src/translations/dist/${lang}.json`, JSON.stringify(sort(json), null, 2));
             }
-            // check whether new files bring modifications to the current branch
+            core.info('Check whether new files bring modifications to the current branch');
             let gitStatus = '';
             yield exec_1.exec('git', ['status', '-s'], {
                 listeners: {
@@ -5441,12 +5444,12 @@ function run() {
                 core.info('No changes. Exiting');
                 return;
             }
-            // add files, commit and rebase on master
+            core.info('Add files and commit on master');
             yield exec_1.exec('git', ['add', '.']);
             yield exec_1.exec('git', ['commit', '-m', '"Update translations from transifex"']);
             // setup credentials
             yield exec_1.exec('bash', [path_1.join(__dirname, 'setup-credentials.sh')]);
-            // push branch
+            core.info('Push branch to origin');
             if (transifexBranchExists) {
                 yield exec_1.exec('git', ['push']);
             }
@@ -5455,6 +5458,7 @@ function run() {
             }
             // create PR if not exists
             if (!transifexPR) {
+                core.info(`Creating new PR for branch ${branch}`);
                 yield graphql(create_pr_mutation_1.default, {
                     input: {
                         title: 'Import i18n from Transifex',
@@ -5464,6 +5468,9 @@ function run() {
                         headRefName: branch,
                     },
                 });
+            }
+            else {
+                core.info('PR already exists');
             }
             // go back to previous branch
             yield exec_1.exec('git', ['checkout', currentBranch]);

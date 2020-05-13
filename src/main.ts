@@ -77,6 +77,7 @@ async function run(): Promise<void> {
     }
     if (transifexBranchExists && !transifexPR) {
       // delete branch first, it should have been done anyway when previous PR was merged
+      core.info(`Branch ${branch} already exists but no PR associated, delete it first`);
       graphql<DeleteBranchMutation, DeleteBranchMutationVariables>(deleteBranchMutation, {
         input: {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -97,19 +98,20 @@ async function run(): Promise<void> {
       },
     });
 
-    // checkout transifex branch or create it
     if (transifexBranchExists) {
+      core.info(`Checkout branch ${branch}`);
       await exec('git', ['checkout', branch]);
+      await exec('git', ['rebase', 'origin/master']);
     } else {
+      core.info(`Create new branch ${branch}`);
       await exec('git', ['checkout', '-b', branch]);
     }
 
-    // rebase on master
-    await exec('git', ['rebase', 'origin/master']);
-
     // retrieve gettext files from transifex and transform them to appropriate JSON files.
+    core.info('Retrieve translations from Transifex');
     const transifexBaseUrl = `https://www.transifex.com/api/2/project/${transifexProject}/resource/${transifexResource}`;
     for (const lang of locales) {
+      core.info(`  > ${lang}`);
       const response = await fetch(`${transifexBaseUrl}/translation/${lang}/?mode=reviewed&file`, {
         headers: {
           Authorization: `Basic ${Buffer.from('api:' + transifexToken).toString('base64')}`,
@@ -162,7 +164,7 @@ async function run(): Promise<void> {
       writeFileSync(`src/translations/dist/${lang}.json`, JSON.stringify(sort(json), null, 2));
     }
 
-    // check whether new files bring modifications to the current branch
+    core.info('Check whether new files bring modifications to the current branch');
     let gitStatus = '';
     await exec('git', ['status', '-s'], {
       listeners: {
@@ -176,14 +178,14 @@ async function run(): Promise<void> {
       return;
     }
 
-    // add files, commit and rebase on master
+    core.info('Add files and commit on master');
     await exec('git', ['add', '.']);
     await exec('git', ['commit', '-m', '"Update translations from transifex"']);
 
     // setup credentials
     await exec('bash', [path(__dirname, 'setup-credentials.sh')]);
 
-    // push branch
+    core.info('Push branch to origin');
     if (transifexBranchExists) {
       await exec('git', ['push']);
     } else {
@@ -192,6 +194,7 @@ async function run(): Promise<void> {
 
     // create PR if not exists
     if (!transifexPR) {
+      core.info(`Creating new PR for branch ${branch}`);
       await graphql<CreatePRMutation, CreatePRMutationVariables>(createPRMutation, {
         input: {
           title: 'Import i18n from Transifex',
@@ -201,6 +204,8 @@ async function run(): Promise<void> {
           headRefName: branch,
         },
       });
+    } else {
+      core.info('PR already exists');
     }
 
     // go back to previous branch
