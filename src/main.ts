@@ -161,7 +161,7 @@ async function run(): Promise<void> {
           }
         }
       }
-      writeFileSync(`src/translations/dist/${lang}.json`, JSON.stringify(sort(json), null, 2));
+      writeFileSync(`src/translations/dist/${lang}.json`, JSON.stringify(sort(json), null, 2) + '\n');
     }
 
     core.info('Check whether new files bring modifications to the current branch');
@@ -197,8 +197,8 @@ async function run(): Promise<void> {
       core.info(`Creating new PR for branch ${branch}`);
       await graphql<CreatePRMutation, CreatePRMutationVariables>(createPRMutation, {
         input: {
-          title: ':mortar_board: Import i18n from Transifex',
-          body: 'Translations have been updated on Transifex. Review changes, merge this PR and have a :beer:.',
+          title: '🎓 Import i18n from Transifex',
+          body: 'Translations have been updated on Transifex. Review changes, merge this PR and have a 🍺.',
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           repositoryId: query?.repository?.id!,
           baseRefName: 'master',
