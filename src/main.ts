@@ -187,7 +187,7 @@ async function run(): Promise<void> {
 
     core.info('Push branch to origin');
     if (transifexBranchExists) {
-      await exec('git', ['push']);
+      await exec('git', ['push', '--force']);
     } else {
       await exec('git', ['push', '--set-upstream', 'origin', branch]);
     }
