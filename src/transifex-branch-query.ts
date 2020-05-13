@@ -4,7 +4,7 @@ export default gql`
   query TransifexBranchQuery($owner: String!, $name: String!, $branch: String!) {
     repository(owner: $owner, name: $name) {
       id
-      refs(refPrefix: "refs/heads/", query: $branch, first: 1) {
+      refs(refPrefix: "refs/heads/", query: $branch, first: 1, states: [OPEN]) {
         totalCount
         edges {
           node {
