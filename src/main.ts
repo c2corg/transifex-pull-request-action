@@ -22,7 +22,7 @@ import { DeleteBranchMutation, DeleteBranchMutationVariables } from './types/Del
 const transifexToken = core.getInput('transifex_token');
 const transifexProject = core.getInput('transifex_project');
 const transifexResource = core.getInput('transifex_resource');
-const outputFolder = core.getInput('ouput').endsWith('/') ? core.getInput('ouput') : core.getInput('ouput') + '/';
+const outputFolder = core.getInput('output').endsWith('/') ? core.getInput('output') : core.getInput('output') + '/';
 const locales = core
   .getInput('locales')
   .split(',')
