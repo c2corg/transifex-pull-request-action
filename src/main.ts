@@ -150,7 +150,7 @@ async function run(): Promise<void> {
           if (msgctxt !== '') {
             json[lang][msgid] = json[lang][msgid] || {};
             if (typeof json[lang][msgid] === 'string') {
-              json[lang][msgid] = { $$noContext: msgstr };
+              json[lang][msgid] = { $$noContext: json[lang][msgid] as string };
             }
             (json[lang][msgid] as { [msgctxt: string]: string })[msgctxt] = msgstr;
           } else {
