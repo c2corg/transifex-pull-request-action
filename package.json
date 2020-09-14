@@ -31,7 +31,7 @@
     "@actions/github": "2.2.0",
     "@octokit/graphql": "4.4.0",
     "gettext-parser": "4.0.3",
-    "node-fetch": "2.6.0"
+    "node-fetch": "2.6.1"
   },
   "devDependencies": {
     "@types/gettext-parser": "4.0.0",
