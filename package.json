@@ -30,7 +30,7 @@
     "@actions/exec": "1.0.4",
     "@actions/github": "2.2.0",
     "@octokit/graphql": "4.4.0",
-    "gettext-parser": "4.0.3",
+    "gettext-parser": "4.0.4",
     "node-fetch": "2.6.1"
   },
   "devDependencies": {
