@@ -2,7 +2,7 @@ import { writeFileSync } from 'fs';
 import { join as path } from 'path';
 import fetch from 'node-fetch';
 import * as core from '@actions/core';
-import { GitHub, context } from '@actions/github';
+import github from '@actions/github';
 import { exec } from '@actions/exec';
 import { RequestParameters } from '@octokit/graphql/dist-types/types';
 import { po } from 'gettext-parser';
@@ -29,11 +29,11 @@ const locales = core
   .map((locale) => locale.trim())
   .filter((locale) => !!locale);
 const githubToken = core.getInput('github_token');
-const repositoryOwner = context.repo.owner;
-const repositoryName = context.repo.repo;
+const repositoryOwner = github.context.repo.owner;
+const repositoryName = github.context.repo.repo;
 const branch = core.getInput('branch');
 
-const octokit = new GitHub(githubToken);
+const octokit = github.getOctokit(githubToken);
 
 // helper function to make apollo generated types work with octokit graphql queries
 const graphql = <Q, V>(query: string, variables: V): Promise<Q | null> => {
@@ -67,13 +67,11 @@ async function run(): Promise<void> {
     let transifexBranchExists = query?.repository?.refs?.totalCount || false;
     let transifexPR: string | undefined = undefined;
     if (transifexBranchExists) {
-      const pullRequests = (query?.repository?.refs?.edges as ReadonlyArray<
-        TransifexBranchQuery_repository_refs_edges
-      >)[0].node?.associatedPullRequests;
+      const pullRequests = (query?.repository?.refs
+        ?.edges as ReadonlyArray<TransifexBranchQuery_repository_refs_edges>)[0].node?.associatedPullRequests;
       if (pullRequests?.totalCount === 1) {
-        transifexPR = (pullRequests.edges as ReadonlyArray<
-          TransifexBranchQuery_repository_refs_edges_node_associatedPullRequests_edges
-        >)[0].node?.id;
+        transifexPR = (pullRequests.edges as ReadonlyArray<TransifexBranchQuery_repository_refs_edges_node_associatedPullRequests_edges>)[0]
+          .node?.id;
       }
     }
     if (transifexBranchExists && !transifexPR) {
