@@ -29,7 +29,7 @@
     "@actions/core": "1.2.6",
     "@actions/exec": "1.0.4",
     "@actions/github": "4.0.0",
-    "@octokit/graphql": "4.5.9",
+    "@octokit/graphql": "4.6.0",
     "gettext-parser": "4.0.4",
     "node-fetch": "2.6.1"
   },
