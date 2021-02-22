@@ -99,6 +99,7 @@ async function run(): Promise<void> {
 
     if (transifexBranchExists) {
       core.info(`Checkout branch ${branch}`);
+      await exec('git', ['fetch']);
       await exec('git', ['checkout', branch]);
       await exec('git', ['rebase', 'origin/master']);
     } else {
