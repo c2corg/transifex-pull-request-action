@@ -2,7 +2,7 @@ import { writeFileSync } from 'fs';
 import { join as path } from 'path';
 import fetch from 'node-fetch';
 import * as core from '@actions/core';
-import github from '@actions/github';
+import * as github from '@actions/github';
 import { exec } from '@actions/exec';
 import { RequestParameters } from '@octokit/graphql/dist-types/types';
 import { po } from 'gettext-parser';
