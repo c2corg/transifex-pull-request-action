@@ -3312,7 +3312,7 @@ const fs_1 = __webpack_require__(747);
 const path_1 = __webpack_require__(622);
 const node_fetch_1 = __importDefault(__webpack_require__(454));
 const core = __importStar(__webpack_require__(470));
-const github_1 = __importDefault(__webpack_require__(469));
+const github = __importStar(__webpack_require__(469));
 const exec_1 = __webpack_require__(986);
 const gettext_parser_1 = __webpack_require__(494);
 const create_pr_mutation_1 = __importDefault(__webpack_require__(942));
@@ -3328,10 +3328,10 @@ const locales = core
     .map((locale) => locale.trim())
     .filter((locale) => !!locale);
 const githubToken = core.getInput('github_token');
-const repositoryOwner = github_1.default.context.repo.owner;
-const repositoryName = github_1.default.context.repo.repo;
+const repositoryOwner = github.context.repo.owner;
+const repositoryName = github.context.repo.repo;
 const branch = core.getInput('branch');
-const octokit = github_1.default.getOctokit(githubToken);
+const octokit = github.getOctokit(githubToken);
 // helper function to make apollo generated types work with octokit graphql queries
 const graphql = (query, variables) => {
     return octokit.graphql(query, variables);
