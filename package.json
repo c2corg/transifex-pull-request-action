@@ -41,7 +41,7 @@
     "@typescript-eslint/parser": "2.33.0",
     "@zeit/ncc": "0.22.3",
     "apollo": "2.32.5",
-    "eslint": "7.24.0",
+    "eslint": "7.25.0",
     "eslint-config-prettier": "8.2.0",
     "eslint-plugin-prettier": "3.4.0",
     "husky": "6.0.0",
