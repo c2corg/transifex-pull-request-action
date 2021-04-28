@@ -3319,6 +3319,7 @@ const create_pr_mutation_1 = __importDefault(__webpack_require__(942));
 const transifex_branch_query_1 = __importDefault(__webpack_require__(788));
 const delete_branch_mutation_1 = __importDefault(__webpack_require__(442));
 const transifexToken = core.getInput('transifex_token');
+const transifexOrganisation = core.getInput('transifex_organisation');
 const transifexProject = core.getInput('transifex_project');
 const transifexResource = core.getInput('transifex_resource');
 const outputFolder = core.getInput('output').endsWith('/') ? core.getInput('output') : core.getInput('output') + '/';
@@ -3336,6 +3337,9 @@ const octokit = github.getOctokit(githubToken);
 const graphql = (query, variables) => {
     return octokit.graphql(query, variables);
 };
+const sleep = (ms) => new Promise((resolve) => {
+    setTimeout(resolve, ms);
+});
 /**
  * Sort nested object by its keys.
  */
@@ -3346,6 +3350,62 @@ const sort = (obj) => {
     }
     return result;
 };
+const fetchTranslation = (lang) => __awaiter(void 0, void 0, void 0, function* () {
+    const headers = {
+        'Content-Type': 'application/vnd.api+json',
+        Authorization: `Bearer ${transifexToken}`,
+    };
+    const raw = JSON.stringify({
+        data: {
+            type: 'resource_translations_async_downloads',
+            attributes: {
+                content_encoding: 'text',
+                file_type: 'default',
+                mode: 'default',
+                pseudo: false,
+            },
+            relationships: {
+                resource: {
+                    data: {
+                        type: 'resources',
+                        id: `o:${transifexOrganisation}:p:${transifexProject}:r:${transifexResource}`,
+                    },
+                },
+                language: {
+                    data: {
+                        type: 'languages',
+                        id: `l:${lang}`,
+                    },
+                },
+            },
+        },
+    });
+    let response = yield node_fetch_1.default('https://rest.api.transifex.com/resource_translations_async_downloads', {
+        method: 'POST',
+        headers,
+        body: raw,
+        redirect: 'follow',
+    });
+    const downloadStatusUrl = response.headers.get('location');
+    if (!downloadStatusUrl) {
+        throw new Error(`Unable to retrieve translation file for ${lang} (unable to request file download action)`);
+    }
+    let attempts = 0;
+    do {
+        yield sleep(1000);
+        response = yield node_fetch_1.default(downloadStatusUrl, {
+            method: 'GET',
+            headers,
+            redirect: 'manual',
+        });
+    } while (response.status !== 303 && ++attempts < 10);
+    const downloadUrl = response.headers.get('location');
+    if (!downloadUrl) {
+        throw new Error(`Unable to retrieve translation file for ${lang} (unable to retrieve file download location)`);
+    }
+    response = yield node_fetch_1.default(downloadUrl);
+    return response.text();
+});
 function run() {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
     return __awaiter(this, void 0, void 0, function* () {
@@ -3397,19 +3457,11 @@ function run() {
             }
             // retrieve gettext files from transifex and transform them to appropriate JSON files.
             core.info('Retrieve translations from Transifex');
-            const transifexBaseUrl = `https://www.transifex.com/api/2/project/${transifexProject}/resource/${transifexResource}`;
             for (const lang of locales) {
                 core.info(`  > ${lang}`);
-                const response = yield node_fetch_1.default(`${transifexBaseUrl}/translation/${lang}/?mode=reviewed&file`, {
-                    headers: {
-                        Authorization: `Basic ${Buffer.from('api:' + transifexToken).toString('base64')}`,
-                    },
-                });
-                if (response.status !== 200) {
-                    throw new Error(`Error when retrieving lang ${lang}`);
-                }
+                const translationBody = yield fetchTranslation(lang);
                 // parse gettext file
-                const gettext = gettext_parser_1.po.parse(yield response.text());
+                const gettext = gettext_parser_1.po.parse(translationBody);
                 // build JSON file from gettext
                 const json = {};
                 for (const msgctxt in gettext.translations) {
@@ -10693,6 +10745,7 @@ exports.getInput = getInput;
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function setOutput(name, value) {
+    process.stdout.write(os.EOL);
     command_1.issueCommand('set-output', { name }, value);
 }
 exports.setOutput = setOutput;
@@ -17578,7 +17631,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 var request = __webpack_require__(753);
 var universalUserAgent = __webpack_require__(862);
 
-const VERSION = "4.6.0";
+const VERSION = "4.6.1";
 
 class GraphqlError extends Error {
   constructor(request, response) {
@@ -17601,10 +17654,18 @@ class GraphqlError extends Error {
 }
 
 const NON_VARIABLE_OPTIONS = ["method", "baseUrl", "url", "headers", "request", "query", "mediaType"];
+const FORBIDDEN_VARIABLE_OPTIONS = ["query", "method", "url"];
 const GHES_V3_SUFFIX_REGEX = /\/api\/v3\/?$/;
 function graphql(request, query, options) {
-  if (typeof query === "string" && options && "query" in options) {
-    return Promise.reject(new Error(`[@octokit/graphql] "query" cannot be used as variable name`));
+  if (options) {
+    if (typeof query === "string" && "query" in options) {
+      return Promise.reject(new Error(`[@octokit/graphql] "query" cannot be used as variable name`));
+    }
+
+    for (const key in options) {
+      if (!FORBIDDEN_VARIABLE_OPTIONS.includes(key)) continue;
+      return Promise.reject(new Error(`[@octokit/graphql] "${key}" cannot be used as variable name`));
+    }
   }
 
   const parsedOptions = typeof query === "string" ? Object.assign({

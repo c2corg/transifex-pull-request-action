@@ -20,6 +20,7 @@ import deleteBranchMutation from './delete-branch-mutation';
 import { DeleteBranchMutation, DeleteBranchMutationVariables } from './types/DeleteBranchMutation';
 
 const transifexToken = core.getInput('transifex_token');
+const transifexOrganisation = core.getInput('transifex_organisation');
 const transifexProject = core.getInput('transifex_project');
 const transifexResource = core.getInput('transifex_resource');
 const outputFolder = core.getInput('output').endsWith('/') ? core.getInput('output') : core.getInput('output') + '/';
@@ -44,6 +45,11 @@ type NestedStrings = {
   [key: string]: string | NestedStrings;
 };
 
+const sleep = (ms: number): Promise<unknown> =>
+  new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+
 /**
  * Sort nested object by its keys.
  */
@@ -53,6 +59,68 @@ const sort = (obj: NestedStrings): NestedStrings => {
     result[key] = typeof obj[key] === 'string' ? obj[key] : sort(obj[key] as NestedStrings);
   }
   return result;
+};
+
+const fetchTranslation = async (lang: string): Promise<string> => {
+  const headers: HeadersInit = {
+    'Content-Type': 'application/vnd.api+json',
+    Authorization: `Bearer ${transifexToken}`,
+  };
+
+  const raw = JSON.stringify({
+    data: {
+      type: 'resource_translations_async_downloads',
+      attributes: {
+        content_encoding: 'text',
+        file_type: 'default',
+        mode: 'default',
+        pseudo: false,
+      },
+      relationships: {
+        resource: {
+          data: {
+            type: 'resources',
+            id: `o:${transifexOrganisation}:p:${transifexProject}:r:${transifexResource}`,
+          },
+        },
+        language: {
+          data: {
+            type: 'languages',
+            id: `l:${lang}`,
+          },
+        },
+      },
+    },
+  });
+
+  let response = await fetch('https://rest.api.transifex.com/resource_translations_async_downloads', {
+    method: 'POST',
+    headers,
+    body: raw,
+    redirect: 'follow',
+  });
+  const downloadStatusUrl = response.headers.get('location');
+  if (!downloadStatusUrl) {
+    throw new Error(`Unable to retrieve translation file for ${lang} (unable to request file download action)`);
+  }
+
+  let attempts = 0;
+  do {
+    await sleep(1000);
+    response = await fetch(downloadStatusUrl, {
+      method: 'GET',
+      headers,
+      redirect: 'manual',
+    });
+  } while (response.status !== 303 && ++attempts < 10);
+
+  const downloadUrl = response.headers.get('location');
+  if (!downloadUrl) {
+    throw new Error(`Unable to retrieve translation file for ${lang} (unable to retrieve file download location)`);
+  }
+
+  response = await fetch(downloadUrl);
+  return response.text();
 };
 
 async function run(): Promise<void> {
@@ -109,20 +177,11 @@ async function run(): Promise<void> {
 
     // retrieve gettext files from transifex and transform them to appropriate JSON files.
     core.info('Retrieve translations from Transifex');
-    const transifexBaseUrl = `https://www.transifex.com/api/2/project/${transifexProject}/resource/${transifexResource}`;
     for (const lang of locales) {
       core.info(`  > ${lang}`);
-      const response = await fetch(`${transifexBaseUrl}/translation/${lang}/?mode=reviewed&file`, {
-        headers: {
-          Authorization: `Basic ${Buffer.from('api:' + transifexToken).toString('base64')}`,
-        },
-      });
-      if (response.status !== 200) {
-        throw new Error(`Error when retrieving lang ${lang}`);
-      }
-
+      const translationBody = await fetchTranslation(lang);
       // parse gettext file
-      const gettext = po.parse(await response.text());
+      const gettext = po.parse(translationBody);
 
       // build JSON file from gettext
       const json: {
