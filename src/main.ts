@@ -38,7 +38,7 @@ const octokit = github.getOctokit(githubToken);
 
 // helper function to make apollo generated types work with octokit graphql queries
 const graphql = <Q, V>(query: string, variables: V): Promise<Q | null> => {
-  return octokit.graphql(query, (variables as unknown) as RequestParameters) as Promise<Q | null>;
+  return octokit.graphql(query, variables as unknown as RequestParameters) as Promise<Q | null>;
 };
 
 type NestedStrings = {
@@ -135,11 +135,13 @@ async function run(): Promise<void> {
     let transifexBranchExists = query?.repository?.refs?.totalCount || false;
     let transifexPR: string | undefined = undefined;
     if (transifexBranchExists) {
-      const pullRequests = (query?.repository?.refs
-        ?.edges as ReadonlyArray<TransifexBranchQuery_repository_refs_edges>)[0].node?.associatedPullRequests;
+      const pullRequests = (
+        query?.repository?.refs?.edges as ReadonlyArray<TransifexBranchQuery_repository_refs_edges>
+      )[0].node?.associatedPullRequests;
       if (pullRequests?.totalCount === 1) {
-        transifexPR = (pullRequests.edges as ReadonlyArray<TransifexBranchQuery_repository_refs_edges_node_associatedPullRequests_edges>)[0]
-          .node?.id;
+        transifexPR = (
+          pullRequests.edges as ReadonlyArray<TransifexBranchQuery_repository_refs_edges_node_associatedPullRequests_edges>
+        )[0].node?.id;
       }
     }
     if (transifexBranchExists && !transifexPR) {
