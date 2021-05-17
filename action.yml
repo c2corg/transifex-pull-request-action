@@ -5,6 +5,9 @@ inputs:
   transifex_token:
     description: Transifex token
     required: true
+  transifex_organisation:
+    description: Transifex organisation
+    required: true
   transifex_project:
     description: Transifex transifexProject
     required: true
