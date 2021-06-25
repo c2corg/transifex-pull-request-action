@@ -4,7 +4,6 @@ import fetch from 'node-fetch';
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 import { exec } from '@actions/exec';
-import { RequestParameters } from '@octokit/graphql/dist-types/types';
 import { po } from 'gettext-parser';
 
 import createPRMutation from './create-pr-mutation';
@@ -35,11 +34,6 @@ const repositoryName = github.context.repo.repo;
 const branch = core.getInput('branch');
 
 const octokit = github.getOctokit(githubToken);
-
-// helper function to make apollo generated types work with octokit graphql queries
-const graphql = <Q, V>(query: string, variables: V): Promise<Q | null> => {
-  return octokit.graphql(query, variables as unknown as RequestParameters) as Promise<Q | null>;
-};
 
 type NestedStrings = {
   [key: string]: string | NestedStrings;
@@ -126,11 +120,12 @@ const fetchTranslation = async (lang: string): Promise<string> => {
 async function run(): Promise<void> {
   try {
     // check if there is a branch and a pull request matching already existing for translations
-    const query = await graphql<TransifexBranchQuery, TransifexBranchQueryVariables>(transifexBranchQuery, {
+    const queryData: TransifexBranchQueryVariables = {
       owner: repositoryOwner,
       name: repositoryName,
       branch,
-    });
+    };
+    const query = await octokit.graphql<TransifexBranchQuery>(transifexBranchQuery, { data: queryData });
 
     let transifexBranchExists = query?.repository?.refs?.totalCount || false;
     let transifexPR: string | undefined = undefined;
@@ -147,13 +142,14 @@ async function run(): Promise<void> {
     if (transifexBranchExists && !transifexPR) {
       // delete branch first, it should have been done anyway when previous PR was merged
       core.info(`Branch ${branch} already exists but no PR associated, delete it first`);
-      graphql<DeleteBranchMutation, DeleteBranchMutationVariables>(deleteBranchMutation, {
+      const queryData: DeleteBranchMutationVariables = {
         input: {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           refId: (query?.repository?.refs?.edges as ReadonlyArray<TransifexBranchQuery_repository_refs_edges>)[0].node
             ?.id!,
         },
-      });
+      };
+      octokit.graphql<DeleteBranchMutation>(deleteBranchMutation, { data: queryData });
       transifexBranchExists = !transifexBranchExists;
     }
 
@@ -256,7 +252,7 @@ async function run(): Promise<void> {
     // create PR if not exists
     if (!transifexPR) {
       core.info(`Creating new PR for branch ${branch}`);
-      await graphql<CreatePRMutation, CreatePRMutationVariables>(createPRMutation, {
+      const queryData: CreatePRMutationVariables = {
         input: {
           title: '🎓 Import i18n from Transifex',
           body: 'Translations have been updated on Transifex. Review changes, merge this PR and have a 🍺.',
@@ -265,7 +261,8 @@ async function run(): Promise<void> {
           baseRefName: 'master',
           headRefName: branch,
         },
-      });
+      };
+      await octokit.graphql<CreatePRMutation>(createPRMutation, { data: queryData });
     } else {
       core.info('PR already exists');
     }
