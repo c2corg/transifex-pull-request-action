@@ -125,7 +125,7 @@ async function run(): Promise<void> {
       name: repositoryName,
       branch,
     };
-    const query = await octokit.graphql<TransifexBranchQuery>(transifexBranchQuery, { data: queryData });
+    const query = await octokit.graphql<TransifexBranchQuery>({ query: transifexBranchQuery, ...queryData });
 
     let transifexBranchExists = query?.repository?.refs?.totalCount || false;
     let transifexPR: string | undefined = undefined;
@@ -149,7 +149,7 @@ async function run(): Promise<void> {
             ?.id!,
         },
       };
-      octokit.graphql<DeleteBranchMutation>(deleteBranchMutation, { data: queryData });
+      octokit.graphql<DeleteBranchMutation>({ query: deleteBranchMutation, ...queryData });
       transifexBranchExists = !transifexBranchExists;
     }
 
@@ -262,7 +262,7 @@ async function run(): Promise<void> {
           headRefName: branch,
         },
       };
-      await octokit.graphql<CreatePRMutation>(createPRMutation, { data: queryData });
+      await octokit.graphql<CreatePRMutation>({ query: createPRMutation, ...queryData });
     } else {
       core.info('PR already exists');
     }
