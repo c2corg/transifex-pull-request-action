@@ -270,7 +270,9 @@ async function run(): Promise<void> {
     // go back to previous branch
     await exec('git', ['checkout', currentBranch]);
   } catch (error) {
-    core.setFailed(error.message);
+    if (error instanceof Error) {
+      core.setFailed(error.message);
+    }
   }
 }
 
