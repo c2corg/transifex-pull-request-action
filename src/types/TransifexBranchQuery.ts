@@ -3,9 +3,11 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
+
 // ====================================================
 // GraphQL query operation: TransifexBranchQuery
 // ====================================================
+
 
 export interface TransifexBranchQuery_repository_refs_edges_node_associatedPullRequests_edges_node {
   readonly __typename: "PullRequest";

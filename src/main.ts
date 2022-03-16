@@ -95,7 +95,9 @@ const fetchTranslation = async (lang: string): Promise<string> => {
   });
   const downloadStatusUrl = response.headers.get('location');
   if (!downloadStatusUrl) {
-    throw new Error(`Unable to retrieve translation file for ${lang} (unable to request file download action)`);
+    throw new Error(
+      `Unable to retrieve translation file for ${lang} (unable to request file download action) [${response.status} - ${response.body}]`,
+    );
   }
 
   let attempts = 0;
@@ -110,7 +112,9 @@ const fetchTranslation = async (lang: string): Promise<string> => {
 
   const downloadUrl = response.headers.get('location');
   if (!downloadUrl) {
-    throw new Error(`Unable to retrieve translation file for ${lang} (unable to retrieve file download location)`);
+    throw new Error(
+      `Unable to retrieve translation file for ${lang} (unable to retrieve file download location) [${response.status} - ${response.body}]`,
+    );
   }
 
   response = await fetch(downloadUrl);
@@ -144,7 +148,7 @@ async function run(): Promise<void> {
       core.info(`Branch ${branch} already exists but no PR associated, delete it first`);
       const queryData: DeleteBranchMutationVariables = {
         input: {
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
           refId: (query?.repository?.refs?.edges as ReadonlyArray<TransifexBranchQuery_repository_refs_edges>)[0].node
             ?.id!,
         },
@@ -256,7 +260,7 @@ async function run(): Promise<void> {
         input: {
           title: '🎓 Import i18n from Transifex',
           body: 'Translations have been updated on Transifex. Review changes, merge this PR and have a 🍺.',
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
           repositoryId: query?.repository?.id!,
           baseRefName: 'master',
           headRefName: branch,
