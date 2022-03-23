@@ -96,7 +96,7 @@ const fetchTranslation = async (lang: string): Promise<string> => {
   const downloadStatusUrl = response.headers.get('Content-Location');
   if (!downloadStatusUrl) {
     throw new Error(
-      `Unable to retrieve translation file for ${lang} (unable to request file download action) [${response.status} - ${response.body}]`,
+      `Unable to retrieve translation file for ${lang} (unable to request file download action) [${response.status}]`,
     );
   }
 
@@ -113,7 +113,7 @@ const fetchTranslation = async (lang: string): Promise<string> => {
   const downloadUrl = response.headers.get('location');
   if (!downloadUrl) {
     throw new Error(
-      `Unable to retrieve translation file for ${lang} (unable to retrieve file download location) [${response.status} - ${response.body}]`,
+      `Unable to retrieve translation file for ${lang} (unable to retrieve file download location) [${response.status}]`,
     );
   }
 
