@@ -5,18 +5,18 @@ import * as core from '@actions/core';
 import * as github from '@actions/github';
 import { exec } from '@actions/exec';
 import { po } from 'gettext-parser';
-
-import createPRMutation from './create-pr-mutation';
-import transifexBranchQuery from './transifex-branch-query';
-import { CreatePRMutationVariables, CreatePRMutation } from './types/CreatePRMutation';
+import { print } from 'graphql/language/printer';
 import {
+  CreatePr,
+  CreatePrMutation,
+  CreatePrMutationVariables,
+  DeleteBranch,
+  DeleteBranchMutation,
+  DeleteBranchMutationVariables,
+  TransifexBranch,
   TransifexBranchQuery,
   TransifexBranchQueryVariables,
-  TransifexBranchQuery_repository_refs_edges,
-  TransifexBranchQuery_repository_refs_edges_node_associatedPullRequests_edges,
-} from './types/TransifexBranchQuery';
-import deleteBranchMutation from './delete-branch-mutation';
-import { DeleteBranchMutation, DeleteBranchMutationVariables } from './types/DeleteBranchMutation';
+} from './generated/graphql';
 
 const transifexToken = core.getInput('transifex_token');
 const transifexOrganisation = core.getInput('transifex_organisation');
@@ -50,7 +50,8 @@ const sleep = (ms: number): Promise<unknown> =>
 const sort = (obj: NestedStrings): NestedStrings => {
   const result: NestedStrings = {};
   for (const key of Object.keys(obj).sort()) {
-    result[key] = typeof obj[key] === 'string' ? obj[key] : sort(obj[key] as NestedStrings);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    result[key] = typeof obj[key] === 'string' ? obj[key]! : sort(obj[key] as NestedStrings);
   }
   return result;
 };
@@ -129,18 +130,14 @@ async function run(): Promise<void> {
       name: repositoryName,
       branch,
     };
-    const query = await octokit.graphql<TransifexBranchQuery>({ query: transifexBranchQuery, ...queryData });
+    const query = await octokit.graphql<TransifexBranchQuery>({ query: print(TransifexBranch), ...queryData });
 
     let transifexBranchExists = query?.repository?.refs?.totalCount || false;
     let transifexPR: string | undefined = undefined;
     if (transifexBranchExists) {
-      const pullRequests = (
-        query?.repository?.refs?.edges as ReadonlyArray<TransifexBranchQuery_repository_refs_edges>
-      )[0].node?.associatedPullRequests;
+      const pullRequests = query?.repository?.refs?.edges?.[0]?.node?.associatedPullRequests;
       if (pullRequests?.totalCount === 1) {
-        transifexPR = (
-          pullRequests.edges as ReadonlyArray<TransifexBranchQuery_repository_refs_edges_node_associatedPullRequests_edges>
-        )[0].node?.id;
+        transifexPR = pullRequests.edges?.[0]?.node?.id;
       }
     }
     if (transifexBranchExists && !transifexPR) {
@@ -149,11 +146,10 @@ async function run(): Promise<void> {
       const queryData: DeleteBranchMutationVariables = {
         input: {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
-          refId: (query?.repository?.refs?.edges as ReadonlyArray<TransifexBranchQuery_repository_refs_edges>)[0].node
-            ?.id!,
+          refId: query?.repository?.refs?.edges?.[0]?.node?.id!,
         },
       };
-      octokit.graphql<DeleteBranchMutation>({ query: deleteBranchMutation, ...queryData });
+      octokit.graphql<DeleteBranchMutation>({ query: print(DeleteBranch), ...queryData });
       transifexBranchExists = !transifexBranchExists;
     }
 
@@ -199,25 +195,26 @@ async function run(): Promise<void> {
             // skip artifactory empty key
             continue;
           }
-          const { msgstr: msgstrs } = values[msgid];
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          const { msgstr: msgstrs } = values[msgid]!;
           const msgstr = msgstrs[0]; // we do not handle specific formats
-          if (!msgstr.trim() || msgid === msgstr.trim()) {
+          if (!msgstr || !msgstr.trim() || msgid === msgstr.trim()) {
             // to save bits, skip entries whose value is equal to key or empty
             continue;
           }
 
-          json[lang] = json[lang] || {};
+          const jsonLang = json[lang] || {};
           if (msgctxt !== '') {
-            json[lang][msgid] = json[lang][msgid] || {};
-            if (typeof json[lang][msgid] === 'string') {
-              json[lang][msgid] = { $$noContext: json[lang][msgid] as string };
+            jsonLang[msgid] = jsonLang[msgid] || {};
+            if (typeof jsonLang[msgid] === 'string') {
+              jsonLang[msgid] = { $$noContext: jsonLang[msgid] as string };
             }
-            (json[lang][msgid] as { [msgctxt: string]: string })[msgctxt] = msgstr;
+            (jsonLang[msgid] as { [msgctxt: string]: string })[msgctxt] = msgstr;
           } else {
-            if (typeof json[lang][msgid] === 'object') {
-              (json[lang][msgid] as { [msgctxt: string]: string }).$$noContext = msgstr;
+            if (typeof jsonLang[msgid] === 'object') {
+              (jsonLang[msgid] as { [msgctxt: string]: string })['$$noContext'] = msgstr;
             } else {
-              json[lang][msgid] = msgstr;
+              jsonLang[msgid] = msgstr;
             }
           }
         }
@@ -256,7 +253,7 @@ async function run(): Promise<void> {
     // create PR if not exists
     if (!transifexPR) {
       core.info(`Creating new PR for branch ${branch}`);
-      const queryData: CreatePRMutationVariables = {
+      const queryData: CreatePrMutationVariables = {
         input: {
           title: '🎓 Import i18n from Transifex',
           body: 'Translations have been updated on Transifex. Review changes, merge this PR and have a 🍺.',
@@ -266,7 +263,7 @@ async function run(): Promise<void> {
           headRefName: branch,
         },
       };
-      await octokit.graphql<CreatePRMutation>({ query: createPRMutation, ...queryData });
+      await octokit.graphql<CreatePrMutation>({ query: print(CreatePr), ...queryData });
     } else {
       core.info('PR already exists');
     }

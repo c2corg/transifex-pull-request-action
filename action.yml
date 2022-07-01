@@ -28,5 +28,5 @@ inputs:
     required: false
     default: transifex/i18n-updates
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'
