@@ -1,6 +1,7 @@
 import { writeFileSync } from 'fs';
 import { join as path } from 'path';
 import fetch from 'node-fetch';
+import type { HeadersInit } from 'node-fetch';
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 import { exec } from '@actions/exec';
