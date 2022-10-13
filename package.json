@@ -30,7 +30,7 @@
     "@actions/core": "1.10.0",
     "@actions/exec": "1.1.1",
     "@actions/github": "5.1.1",
-    "@octokit/graphql": "5.0.1",
+    "@octokit/graphql": "5.0.2",
     "gettext-parser": "6.0.0",
     "graphql": "16.6.0",
     "node-fetch": "3.2.10"
