@@ -132,7 +132,6 @@ const fetchTranslation = async (lang: string): Promise<string> => {
       `Unable to retrieve translation file for ${lang} (unable to retrieve file download location) [${response.status}]`,
     );
   }
-
   response = await fetch(downloadUrl);
   return response.text();
 };
@@ -195,7 +194,6 @@ async function run(): Promise<void> {
       const translationBody = await fetchTranslation(lang);
       // parse gettext file
       const gettext = po.parse(translationBody);
-
       // build JSON file from gettext
       const json: {
         [lang: string]: {
@@ -232,32 +230,44 @@ async function run(): Promise<void> {
               jsonLang[msgid] = msgstr;
             }
           }
+          json[lang] = jsonLang;
         }
       }
       writeFileSync(`${outputFolder}${lang}.json`, JSON.stringify(sort(json), null, 2) + '\n');
     }
 
     core.info('Check whether new files bring modifications to the current branch');
-    const updatedLangs: string[] = [];
+    let gitStatus = '';
     await exec('git', ['config', 'color.status', 'false']);
     await exec('git', ['status', '-s'], {
       listeners: {
         stdout: (data: Buffer): void => {
-          const match = data.toString().match(new RegExp(`[ MTADRCU]{2}${outputFolder}([\\w]+).json`));
-          if (match?.[1]) {
-            updatedLangs.push(match[1]);
-          }
+          gitStatus += data.toString().trim();
         },
       },
     });
-    if (!updatedLangs.length) {
+    if (!gitStatus.trim()) {
       core.info('No changes. Exiting');
       return;
     }
 
     core.info(`Add files and commit on ${baseBranch}`);
     await exec('git', ['add', '.']);
-    await exec('git', ['commit', '-m', 'Update translations from transifex']);
+    await exec('git', ['commit', '-a', '-m', 'Update translations from transifex']);
+
+    const updatedLangs: string[] = [];
+    await exec('git', ['log', '--name-only', '--oneline', 'HEAD^..HEAD'], {
+      listeners: {
+        stdout: (data: Buffer): void => {
+          updatedLangs.push(
+            ...[...data.toString().matchAll(new RegExp(`^${outputFolder}([\\w]+)\.json$`, 'gm'))].map(
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              ([_full, lang]) => lang!,
+            ),
+          );
+        },
+      },
+    });
 
     // setup credentials
     await exec('bash', [path(__dirname, 'setup-credentials.sh')]);
