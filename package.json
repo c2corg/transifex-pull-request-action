@@ -11,7 +11,7 @@
     "graphql": "graphql-codegen --config codegen.yml",
     "all": "npm run graphql && npm run lint && npm run build && npm run pack",
     "prepare": "husky install",
-    "preversion": "npm run all"
+    "preversion": "npm run all && git add -A src/generated dist"
   },
   "repository": {
     "type": "git",
