@@ -2586,30 +2586,38 @@ async function run() {
                             jsonLang[msgid] = msgstr;
                         }
                     }
+                    json[lang] = jsonLang;
                 }
             }
             (0, fs_1.writeFileSync)(`${outputFolder}${lang}.json`, JSON.stringify(sort(json), null, 2) + '\n');
         }
         core.info('Check whether new files bring modifications to the current branch');
-        const updatedLangs = [];
+        let gitStatus = '';
         await (0, exec_1.exec)('git', ['config', 'color.status', 'false']);
         await (0, exec_1.exec)('git', ['status', '-s'], {
             listeners: {
                 stdout: (data) => {
-                    const match = data.toString().match(new RegExp(`[ MTADRCU]{2}${outputFolder}([\\w]+).json`));
-                    if (match?.[1]) {
-                        updatedLangs.push(match[1]);
-                    }
+                    gitStatus += data.toString().trim();
                 },
             },
         });
-        if (!updatedLangs.length) {
+        if (!gitStatus.trim()) {
             core.info('No changes. Exiting');
             return;
         }
         core.info(`Add files and commit on ${baseBranch}`);
         await (0, exec_1.exec)('git', ['add', '.']);
-        await (0, exec_1.exec)('git', ['commit', '-m', 'Update translations from transifex']);
+        await (0, exec_1.exec)('git', ['commit', '-a', '-m', 'Update translations from transifex']);
+        const updatedLangs = [];
+        await (0, exec_1.exec)('git', ['log', '--name-only', '--oneline', 'HEAD^..HEAD'], {
+            listeners: {
+                stdout: (data) => {
+                    updatedLangs.push(...[...data.toString().matchAll(new RegExp(`^${outputFolder}([\\w]+)\.json$`, 'gm'))].map(
+                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                    ([_full, lang]) => lang));
+                },
+            },
+        });
         // setup credentials
         await (0, exec_1.exec)('bash', [(0, path_1.join)(__dirname, 'setup-credentials.sh')]);
         core.info('Push branch to origin');

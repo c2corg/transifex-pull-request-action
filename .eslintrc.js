@@ -10,7 +10,8 @@ module.exports = {
     sourceType: 'module', // Allows for the use of imports
   },
   rules: {
-    '@typescript-eslint/explicit-function-return-type': 2,
-    '@typescript-eslint/camelcase': 0,
+    '@typescript-eslint/explicit-function-return-type': 'error',
+    '@typescript-eslint/camelcase': 'off',
+    '@typescript-eslint/no-unused-vars': ['error', { ignoreRestSiblings: true, destructuredArrayIgnorePattern: '^_' }],
   },
 };
