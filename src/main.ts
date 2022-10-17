@@ -8,15 +8,24 @@ import { exec } from '@actions/exec';
 import { po } from 'gettext-parser';
 import { print } from 'graphql/language/printer';
 import {
+  AddLabels,
+  AddLabelsMutation,
+  AddLabelsMutationVariables,
   CreatePr,
   CreatePrMutation,
   CreatePrMutationVariables,
   DeleteBranch,
   DeleteBranchMutation,
   DeleteBranchMutationVariables,
+  Labels,
+  LabelsQuery,
+  LabelsQueryVariables,
   TransifexBranch,
   TransifexBranchQuery,
   TransifexBranchQueryVariables,
+  UpdatePullRequest,
+  UpdatePullRequestMutation,
+  UpdatePullRequestMutationVariables,
 } from './generated/graphql';
 
 const transifexToken = core.getInput('transifex_token');
@@ -33,6 +42,11 @@ const githubToken = core.getInput('github_token');
 const repositoryOwner = github.context.repo.owner;
 const repositoryName = github.context.repo.repo;
 const branch = core.getInput('branch');
+const baseBranch = core.getInput('base_branch') || 'master';
+const labels = (core.getInput('labels') || '')
+  .split(',')
+  .map((label) => label.trim())
+  .filter((label) => !!label);
 
 const octokit = github.getOctokit(githubToken);
 
@@ -168,7 +182,7 @@ async function run(): Promise<void> {
       core.info(`Checkout branch ${branch}`);
       await exec('git', ['fetch']);
       await exec('git', ['checkout', branch]);
-      await exec('git', ['rebase', 'origin/master']);
+      await exec('git', ['rebase', `origin/${baseBranch}`]);
     } else {
       core.info(`Create new branch ${branch}`);
       await exec('git', ['checkout', '-b', branch]);
@@ -237,7 +251,7 @@ async function run(): Promise<void> {
       return;
     }
 
-    core.info('Add files and commit on master');
+    core.info(`Add files and commit on ${baseBranch}`);
     await exec('git', ['add', '.']);
     await exec('git', ['commit', '-m', 'Update translations from transifex']);
 
@@ -251,22 +265,61 @@ async function run(): Promise<void> {
       await exec('git', ['push', '--set-upstream', 'origin', branch]);
     }
 
-    // create PR if not exists
+    // create PR if not exists, update otherwise
+    const title = '🎓 Import i18n from Transifex';
+    const body = 'Translations have been updated on Transifex. Review changes, merge this PR and have a 🍺.';
+    let prId: string;
     if (!transifexPR) {
       core.info(`Creating new PR for branch ${branch}`);
       const queryData: CreatePrMutationVariables = {
         input: {
-          title: '🎓 Import i18n from Transifex',
-          body: 'Translations have been updated on Transifex. Review changes, merge this PR and have a 🍺.',
+          title,
+          body,
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
           repositoryId: query?.repository?.id!,
-          baseRefName: 'master',
+          baseRefName: baseBranch,
           headRefName: branch,
         },
       };
-      await octokit.graphql<CreatePrMutation>({ query: print(CreatePr), ...queryData });
+      const response = await octokit.graphql<CreatePrMutation>({ query: print(CreatePr), ...queryData });
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
+      prId = response.createPullRequest?.pullRequest?.id!;
     } else {
-      core.info('PR already exists');
+      core.info('PR already exists, updating');
+      const mutationData: UpdatePullRequestMutationVariables = {
+        input: {
+          pullRequestId: transifexPR,
+          title,
+          body,
+        },
+      };
+      const response = await octokit.graphql<UpdatePullRequestMutation>({
+        query: print(UpdatePullRequest),
+        ...mutationData,
+      });
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
+      prId = response.updatePullRequest?.pullRequest?.id!;
+    }
+
+    // apply labels (if matching label found, do not attempt to create missing label)
+    const labelsQueryData: LabelsQueryVariables = {
+      owner: repositoryOwner,
+      name: repositoryName,
+    };
+    const labelIds =
+      (await octokit.graphql<LabelsQuery>({ query: print(Labels), ...labelsQueryData })).repository?.labels?.edges
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
+        ?.filter((edge) => labels.includes(edge?.node?.name!))
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
+        .map((edge) => edge?.node?.id!) ?? [];
+    if (labelIds.length) {
+      const addLabelsMutationData: AddLabelsMutationVariables = {
+        input: {
+          labelableId: prId,
+          labelIds,
+        },
+      };
+      await octokit.graphql<AddLabelsMutation>({ query: print(AddLabels), ...addLabelsMutationData });
     }
 
     // go back to previous branch

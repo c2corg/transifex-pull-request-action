@@ -1,0 +1,27 @@
+inputs:
+  transifex_token:
+    type: string
+  transifex_organisation:
+    type: string
+  transifex_project:
+    type: string
+  transifex_resource:
+    type: string
+  output:
+    type: string
+  locales:
+    type: list
+    separator: ','
+    list-item:
+      type: string
+  github_token:
+    type: string
+  branch:
+    type: string
+  base_branch:
+    type: string
+  labels:
+    type: list
+    separator: ','
+    list-item:
+      type: string
