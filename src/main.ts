@@ -238,15 +238,19 @@ async function run(): Promise<void> {
     }
 
     core.info('Check whether new files bring modifications to the current branch');
-    let gitStatus = '';
+    const updatedLangs: string[] = [];
+    await exec('git', ['config', 'color.status', 'false']);
     await exec('git', ['status', '-s'], {
       listeners: {
         stdout: (data: Buffer): void => {
-          gitStatus += data.toString().trim();
+          const match = data.toString().match(new RegExp(`[ MTADRCU]{2}${outputFolder}([\\w]{2}).json`));
+          if (match?.[1]) {
+            updatedLangs.push(match[1]);
+          }
         },
       },
     });
-    if (!gitStatus.trim()) {
+    if (!updatedLangs.length) {
       core.info('No changes. Exiting');
       return;
     }
@@ -266,7 +270,7 @@ async function run(): Promise<void> {
     }
 
     // create PR if not exists, update otherwise
-    const title = '🎓 Import i18n from Transifex';
+    const title = '🎓 Import i18n from Transifex [' + updatedLangs.sort().join(',') + ']';
     const body = 'Translations have been updated on Transifex. Review changes, merge this PR and have a 🍺.';
     let prId: string;
     if (!transifexPR) {
