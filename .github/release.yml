@@ -18,7 +18,7 @@ changelog:
         - removed
     - title: 📚 Documentation
       labels:
-        - doc
+        - documentation
     - title: 🏗 Chores
       labels:
         - chore
