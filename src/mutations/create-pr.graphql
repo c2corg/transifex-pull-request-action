@@ -2,8 +2,8 @@ mutation CreatePR($input: CreatePullRequestInput!) {
   createPullRequest(input: $input) {
     clientMutationId
     pullRequest {
-      body
-      title
+      id
+      number
     }
   }
 }

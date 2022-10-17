@@ -289,7 +289,7 @@ export type AddProjectDraftIssueInput = {
   /**
    * The IDs of the assignees of the draft issue.
    *
-   * **Upcoming Change on 2022-10-01 UTC**
+   * **Upcoming Change on 2023-01-01 UTC**
    * **Description:** `assigneeIds` will be removed. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement.
    * **Reason:** The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API.
    *
@@ -298,7 +298,7 @@ export type AddProjectDraftIssueInput = {
   /**
    * The body of the draft issue.
    *
-   * **Upcoming Change on 2022-10-01 UTC**
+   * **Upcoming Change on 2023-01-01 UTC**
    * **Description:** `body` will be removed. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement.
    * **Reason:** The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API.
    *
@@ -309,7 +309,7 @@ export type AddProjectDraftIssueInput = {
   /**
    * The ID of the Project to add the draft issue to. This field is required.
    *
-   * **Upcoming Change on 2022-10-01 UTC**
+   * **Upcoming Change on 2023-01-01 UTC**
    * **Description:** `projectId` will be removed. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement.
    * **Reason:** The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API.
    *
@@ -318,7 +318,7 @@ export type AddProjectDraftIssueInput = {
   /**
    * The title of the draft issue. This field is required.
    *
-   * **Upcoming Change on 2022-10-01 UTC**
+   * **Upcoming Change on 2023-01-01 UTC**
    * **Description:** `title` will be removed. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement.
    * **Reason:** The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API.
    *
@@ -333,7 +333,7 @@ export type AddProjectDraftIssuePayload = {
   clientMutationId?: Maybe<Scalars['String']>;
   /**
    * The draft issue added to the project.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   projectNextItem?: Maybe<ProjectNextItem>;
 };
@@ -345,7 +345,7 @@ export type AddProjectNextItemInput = {
   /**
    * The content id of the item (Issue or PullRequest). This field is required.
    *
-   * **Upcoming Change on 2022-10-01 UTC**
+   * **Upcoming Change on 2023-01-01 UTC**
    * **Description:** `contentId` will be removed. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement.
    * **Reason:** The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API.
    *
@@ -354,7 +354,7 @@ export type AddProjectNextItemInput = {
   /**
    * The ID of the Project to add the item to. This field is required.
    *
-   * **Upcoming Change on 2022-10-01 UTC**
+   * **Upcoming Change on 2023-01-01 UTC**
    * **Description:** `projectId` will be removed. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement.
    * **Reason:** The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API.
    *
@@ -369,7 +369,7 @@ export type AddProjectNextItemPayload = {
   clientMutationId?: Maybe<Scalars['String']>;
   /**
    * The item added to the project.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   projectNextItem?: Maybe<ProjectNextItem>;
 };
@@ -1587,8 +1587,12 @@ export type CheckRunFilter = {
   checkName?: InputMaybe<Scalars['String']>;
   /** Filters the check runs by this type. */
   checkType?: InputMaybe<CheckRunType>;
-  /** Filters the check runs by this status. */
+  /** Filters the check runs by these conclusions. */
+  conclusions?: InputMaybe<Array<CheckConclusionState>>;
+  /** Filters the check runs by this status. Superceded by statuses. */
   status?: InputMaybe<CheckStatusState>;
+  /** Filters the check runs by this status. Overrides status. */
+  statuses?: InputMaybe<Array<CheckStatusState>>;
 };
 
 /** Descriptive details about the check run. */
@@ -1613,6 +1617,47 @@ export type CheckRunOutputImage = {
   caption?: InputMaybe<Scalars['String']>;
   /** The full URL of the image. */
   imageUrl: Scalars['URI'];
+};
+
+/** The possible states of a check run in a status rollup. */
+export enum CheckRunState {
+  /** The check run requires action. */
+  ActionRequired = 'ACTION_REQUIRED',
+  /** The check run has been cancelled. */
+  Cancelled = 'CANCELLED',
+  /** The check run has been completed. */
+  Completed = 'COMPLETED',
+  /** The check run has failed. */
+  Failure = 'FAILURE',
+  /** The check run is in progress. */
+  InProgress = 'IN_PROGRESS',
+  /** The check run was neutral. */
+  Neutral = 'NEUTRAL',
+  /** The check run is in pending state. */
+  Pending = 'PENDING',
+  /** The check run has been queued. */
+  Queued = 'QUEUED',
+  /** The check run was skipped. */
+  Skipped = 'SKIPPED',
+  /** The check run was marked stale by GitHub. Only GitHub can use this conclusion. */
+  Stale = 'STALE',
+  /** The check run has failed at startup. */
+  StartupFailure = 'STARTUP_FAILURE',
+  /** The check run has succeeded. */
+  Success = 'SUCCESS',
+  /** The check run has timed out. */
+  TimedOut = 'TIMED_OUT',
+  /** The check run is in waiting state. */
+  Waiting = 'WAITING'
+}
+
+/** Represents a count of the state of a check run. */
+export type CheckRunStateCount = {
+  __typename?: 'CheckRunStateCount';
+  /** The number of check runs with this state. */
+  count: Scalars['Int'];
+  /** The state of a check run. */
+  state: CheckRunState;
 };
 
 /** The possible types of check runs. */
@@ -1797,6 +1842,27 @@ export type ClearLabelsFromLabelablePayload = {
   clientMutationId?: Maybe<Scalars['String']>;
   /** The item that was unlabeled. */
   labelable?: Maybe<Labelable>;
+};
+
+/** Autogenerated input type of ClearProjectV2ItemFieldValue */
+export type ClearProjectV2ItemFieldValueInput = {
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The ID of the field to be cleared. */
+  fieldId: Scalars['ID'];
+  /** The ID of the item to be cleared. */
+  itemId: Scalars['ID'];
+  /** The ID of the Project. */
+  projectId: Scalars['ID'];
+};
+
+/** Autogenerated return type of ClearProjectV2ItemFieldValue */
+export type ClearProjectV2ItemFieldValuePayload = {
+  __typename?: 'ClearProjectV2ItemFieldValuePayload';
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The updated item. */
+  projectV2Item?: Maybe<ProjectV2Item>;
 };
 
 /** Autogenerated input type of CloneProject */
@@ -2065,8 +2131,13 @@ export type Commit = GitObject & Node & Subscribable & UniformResourceLocatable 
   authors: GitActorConnection;
   /** Fetches `git blame` information. */
   blame: Blame;
-  /** The number of changed files in this commit. */
+  /**
+   * We recommend using the `changedFielsIfAvailable` field instead of `changedFiles`, as `changedFiles` will cause your request to return an error if GitHub is unable to calculate the number of changed files.
+   * @deprecated `changedFiles` will be removed. Use `changedFilesIfAvailable` instead. Removal on 2023-01-01 UTC.
+   */
   changedFiles: Scalars['Int'];
+  /** The number of changed files in this commit. If GitHub is unable to calculate the number of changed files (for example due to a timeout), this will return `null`. We recommend using this field instead of `changedFiles`. */
+  changedFilesIfAvailable?: Maybe<Scalars['Int']>;
   /** The check suites associated with a commit. */
   checkSuites?: Maybe<CheckSuiteConnection>;
   /** Comments made on the commit. */
@@ -3159,6 +3230,29 @@ export type CreateIssuePayload = {
   issue?: Maybe<Issue>;
 };
 
+/** Autogenerated input type of CreateLinkedBranch */
+export type CreateLinkedBranchInput = {
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** ID of the issue to link to. */
+  issueId: Scalars['ID'];
+  /** The name of the new branch. Defaults to issue number and title. */
+  name?: InputMaybe<Scalars['String']>;
+  /** The commit SHA to base the new branch on. */
+  oid: Scalars['GitObjectID'];
+  /** ID of the repository to create the branch in. Defaults to the issue repository. */
+  repositoryId?: InputMaybe<Scalars['ID']>;
+};
+
+/** Autogenerated return type of CreateLinkedBranch */
+export type CreateLinkedBranchPayload = {
+  __typename?: 'CreateLinkedBranchPayload';
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The new branch issue reference. */
+  linkedBranch?: Maybe<LinkedBranch>;
+};
+
 /** Autogenerated input type of CreateMigrationSource */
 export type CreateMigrationSourceInput = {
   /** The Octoshift migration source access token. */
@@ -3876,6 +3970,23 @@ export type DeleteIssuePayload = {
   repository?: Maybe<Repository>;
 };
 
+/** Autogenerated input type of DeleteLinkedBranch */
+export type DeleteLinkedBranchInput = {
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The ID of the linked branch */
+  linkedBranchId: Scalars['ID'];
+};
+
+/** Autogenerated return type of DeleteLinkedBranch */
+export type DeleteLinkedBranchPayload = {
+  __typename?: 'DeleteLinkedBranchPayload';
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The issue the linked branch was unlinked from. */
+  issue?: Maybe<Issue>;
+};
+
 /** Autogenerated input type of DeleteProjectCard */
 export type DeleteProjectCardInput = {
   /** The id of the card to delete. */
@@ -3929,7 +4040,7 @@ export type DeleteProjectNextItemInput = {
   /**
    * The ID of the item to be removed. This field is required.
    *
-   * **Upcoming Change on 2022-10-01 UTC**
+   * **Upcoming Change on 2023-01-01 UTC**
    * **Description:** `itemId` will be removed. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement.
    * **Reason:** The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API.
    *
@@ -3938,7 +4049,7 @@ export type DeleteProjectNextItemInput = {
   /**
    * The ID of the Project from which the item should be removed. This field is required.
    *
-   * **Upcoming Change on 2022-10-01 UTC**
+   * **Upcoming Change on 2023-01-01 UTC**
    * **Description:** `projectId` will be removed. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement.
    * **Reason:** The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API.
    *
@@ -3953,7 +4064,7 @@ export type DeleteProjectNextItemPayload = {
   clientMutationId?: Maybe<Scalars['String']>;
   /**
    * The ID of the deleted item.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   deletedItemId?: Maybe<Scalars['ID']>;
 };
@@ -4001,6 +4112,8 @@ export type DeletePullRequestReviewCommentPayload = {
   clientMutationId?: Maybe<Scalars['String']>;
   /** The pull request review the deleted comment belonged to. */
   pullRequestReview?: Maybe<PullRequestReview>;
+  /** The deleted pull request review comment. */
+  pullRequestReviewComment?: Maybe<PullRequestReviewComment>;
 };
 
 /** Autogenerated input type of DeletePullRequestReview */
@@ -4134,6 +4247,8 @@ export enum DependencyGraphEcosystem {
   Nuget = 'NUGET',
   /** Python packages hosted at PyPI.org */
   Pip = 'PIP',
+  /** Dart packages hosted at pub.dev */
+  Pub = 'PUB',
   /** Ruby gems hosted at RubyGems.org */
   Rubygems = 'RUBYGEMS',
   /** Rust crates */
@@ -5233,6 +5348,7 @@ export type EnterpriseMembersArgs = {
   before?: InputMaybe<Scalars['String']>;
   deployment?: InputMaybe<EnterpriseUserDeployment>;
   first?: InputMaybe<Scalars['Int']>;
+  hasTwoFactorEnabled?: InputMaybe<Scalars['Boolean']>;
   last?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<EnterpriseMemberOrder>;
   organizationLogins?: InputMaybe<Array<Scalars['String']>>;
@@ -5336,6 +5452,22 @@ export enum EnterpriseAdministratorRole {
   BillingManager = 'BILLING_MANAGER',
   /** Represents an owner of the enterprise account. */
   Owner = 'OWNER'
+}
+
+/** The possible values for the enterprise allow private repository forking policy value. */
+export enum EnterpriseAllowPrivateRepositoryForkingPolicyValue {
+  /** Members can fork a repository to an organization within this enterprise. */
+  EnterpriseOrganizations = 'ENTERPRISE_ORGANIZATIONS',
+  /** Members can fork a repository to their enterprise-managed user account or an organization inside this enterprise. */
+  EnterpriseOrganizationsUserAccounts = 'ENTERPRISE_ORGANIZATIONS_USER_ACCOUNTS',
+  /** Members can fork a repository to their user account or an organization, either inside or outside of this enterprise. */
+  Everywhere = 'EVERYWHERE',
+  /** Members can fork a repository only within the same organization (intra-org). */
+  SameOrganization = 'SAME_ORGANIZATION',
+  /** Members can fork a repository to their user account or within the same organization. */
+  SameOrganizationUserAccounts = 'SAME_ORGANIZATION_USER_ACCOUNTS',
+  /** Members can fork a repository to their user account. */
+  UserAccounts = 'USER_ACCOUNTS'
 }
 
 /** Metadata for an audit entry containing enterprise account information. */
@@ -5573,6 +5705,8 @@ export type EnterpriseOwnerInfo = {
   allowPrivateRepositoryForkingSetting: EnterpriseEnabledDisabledSettingValue;
   /** A list of enterprise organizations configured with the provided private repository forking setting value. */
   allowPrivateRepositoryForkingSettingOrganizations: OrganizationConnection;
+  /** The value for the allow private repository forking policy on the enterprise. */
+  allowPrivateRepositoryForkingSettingPolicyValue?: Maybe<EnterpriseAllowPrivateRepositoryForkingPolicyValue>;
   /** The setting value for base repository permissions for organizations in this enterprise. */
   defaultRepositoryPermissionSetting: EnterpriseDefaultRepositoryPermissionSettingValue;
   /** A list of enterprise organizations configured with the provided base repository permission. */
@@ -5669,6 +5803,7 @@ export type EnterpriseOwnerInfoAdminsArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
+  hasTwoFactorEnabled?: InputMaybe<Scalars['Boolean']>;
   last?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<EnterpriseMemberOrder>;
   organizationLogins?: InputMaybe<Array<Scalars['String']>>;
@@ -7351,6 +7486,8 @@ export type Issue = Assignable & Closable & Comment & Labelable & Lockable & Nod
   labels?: Maybe<LabelConnection>;
   /** The moment the editor made the last edit */
   lastEditedAt?: Maybe<Scalars['DateTime']>;
+  /** Branches linked to this issue. */
+  linkedBranches: LinkedBranchConnection;
   /** `true` if the object is locked */
   locked: Scalars['Boolean'];
   /** Identifies the milestone associated with the issue. */
@@ -7365,7 +7502,7 @@ export type Issue = Assignable & Closable & Comment & Labelable & Lockable & Nod
   projectItems: ProjectV2ItemConnection;
   /**
    * Find a project by project (beta) number.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   projectNext?: Maybe<ProjectNext>;
   /** List of project (beta) items associated with this issue. */
@@ -7374,7 +7511,7 @@ export type Issue = Assignable & Closable & Comment & Labelable & Lockable & Nod
   projectV2?: Maybe<ProjectV2>;
   /**
    * A list of projects (beta) under the owner.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   projectsNext: ProjectNextConnection;
   /** A list of projects under the owner. */
@@ -7463,6 +7600,15 @@ export type IssueLabelsArgs = {
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<LabelOrder>;
+};
+
+
+/** An Issue is a place to discuss ideas, enhancements, tasks, and bugs for a project. */
+export type IssueLinkedBranchesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -8233,6 +8379,36 @@ export type LinkRepositoryToProjectPayload = {
   repository?: Maybe<Repository>;
 };
 
+/** A branch linked to an issue. */
+export type LinkedBranch = Node & {
+  __typename?: 'LinkedBranch';
+  id: Scalars['ID'];
+  /** The branch's ref. */
+  ref?: Maybe<Ref>;
+};
+
+/** The connection type for LinkedBranch. */
+export type LinkedBranchConnection = {
+  __typename?: 'LinkedBranchConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<LinkedBranchEdge>>>;
+  /** A list of nodes. */
+  nodes?: Maybe<Array<Maybe<LinkedBranch>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** An edge in a connection. */
+export type LinkedBranchEdge = {
+  __typename?: 'LinkedBranchEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge. */
+  node?: Maybe<LinkedBranch>;
+};
+
 /** Autogenerated input type of LockLockable */
 export type LockLockableInput = {
   /** A unique identifier for the client performing the mutation. */
@@ -8770,6 +8946,24 @@ export type MergeBranchPayload = {
   mergeCommit?: Maybe<Commit>;
 };
 
+/** The possible default commit messages for merges. */
+export enum MergeCommitMessage {
+  /** Default to a blank commit message. */
+  Blank = 'BLANK',
+  /** Default to the pull request's body. */
+  PrBody = 'PR_BODY',
+  /** Default to the pull request's title. */
+  PrTitle = 'PR_TITLE'
+}
+
+/** The possible default commit titles for merges. */
+export enum MergeCommitTitle {
+  /** Default to the classic title for a merge message (e.g., Merge pull request #123 from branch-name). */
+  MergeMessage = 'MERGE_MESSAGE',
+  /** Default to the pull request's title. */
+  PrTitle = 'PR_TITLE'
+}
+
 /** Autogenerated input type of MergePullRequest */
 export type MergePullRequestInput = {
   /** The email address to associate with this merge. */
@@ -8837,6 +9031,8 @@ export type Migration = {
   continueOnError: Scalars['Boolean'];
   /** Identifies the date and time when the object was created. */
   createdAt: Scalars['DateTime'];
+  /** Identifies the primary key from the database. */
+  databaseId?: Maybe<Scalars['String']>;
   /** The reason the migration failed. */
   failureReason?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
@@ -9132,12 +9328,12 @@ export type Mutation = {
   addProjectColumn?: Maybe<AddProjectColumnPayload>;
   /**
    * Creates a new draft issue and add it to a Project.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   addProjectDraftIssue?: Maybe<AddProjectDraftIssuePayload>;
   /**
    * Adds an existing item (Issue or PullRequest) to a Project.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   addProjectNextItem?: Maybe<AddProjectNextItemPayload>;
   /** Creates a new draft issue and add it to a Project. */
@@ -9172,6 +9368,8 @@ export type Mutation = {
   changeUserStatus?: Maybe<ChangeUserStatusPayload>;
   /** Clears all labels from a labelable object. */
   clearLabelsFromLabelable?: Maybe<ClearLabelsFromLabelablePayload>;
+  /** This mutation clears the value of a field for an item in a Project. Currently only text, number, date, assignees, labels, single-select, iteration and milestone fields are supported. */
+  clearProjectV2ItemFieldValue?: Maybe<ClearProjectV2ItemFieldValuePayload>;
   /** Creates a new project by cloning configuration from an existing project. */
   cloneProject?: Maybe<CloneProjectPayload>;
   /** Create a new repository with the same files and directory structure as a template repository. */
@@ -9246,6 +9444,8 @@ export type Mutation = {
   createIpAllowListEntry?: Maybe<CreateIpAllowListEntryPayload>;
   /** Creates a new issue. */
   createIssue?: Maybe<CreateIssuePayload>;
+  /** Create a branch linked to an issue. */
+  createLinkedBranch?: Maybe<CreateLinkedBranchPayload>;
   /** Creates an Octoshift migration source. */
   createMigrationSource?: Maybe<CreateMigrationSourcePayload>;
   /** Creates a new project. */
@@ -9284,6 +9484,8 @@ export type Mutation = {
   deleteIssue?: Maybe<DeleteIssuePayload>;
   /** Deletes an IssueComment object. */
   deleteIssueComment?: Maybe<DeleteIssueCommentPayload>;
+  /** Unlink a branch from an issue. */
+  deleteLinkedBranch?: Maybe<DeleteLinkedBranchPayload>;
   /** Deletes a project. */
   deleteProject?: Maybe<DeleteProjectPayload>;
   /** Deletes a project card. */
@@ -9292,7 +9494,7 @@ export type Mutation = {
   deleteProjectColumn?: Maybe<DeleteProjectColumnPayload>;
   /**
    * Deletes an item from a Project.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   deleteProjectNextItem?: Maybe<DeleteProjectNextItemPayload>;
   /** Deletes an item from a Project. */
@@ -9495,17 +9697,17 @@ export type Mutation = {
   updateProjectColumn?: Maybe<UpdateProjectColumnPayload>;
   /**
    * Updates a draft issue within a Project.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   updateProjectDraftIssue?: Maybe<UpdateProjectDraftIssuePayload>;
   /**
    * Updates an existing project (beta).
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   updateProjectNext?: Maybe<UpdateProjectNextPayload>;
   /**
    * Updates a field of an item from a Project.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   updateProjectNextItemField?: Maybe<UpdateProjectNextItemFieldPayload>;
   /** Updates an existing project (beta). */
@@ -9722,6 +9924,12 @@ export type MutationClearLabelsFromLabelableArgs = {
 
 
 /** The root query for implementing GraphQL mutations. */
+export type MutationClearProjectV2ItemFieldValueArgs = {
+  input: ClearProjectV2ItemFieldValueInput;
+};
+
+
+/** The root query for implementing GraphQL mutations. */
 export type MutationCloneProjectArgs = {
   input: CloneProjectInput;
 };
@@ -9808,6 +10016,12 @@ export type MutationCreateIpAllowListEntryArgs = {
 /** The root query for implementing GraphQL mutations. */
 export type MutationCreateIssueArgs = {
   input: CreateIssueInput;
+};
+
+
+/** The root query for implementing GraphQL mutations. */
+export type MutationCreateLinkedBranchArgs = {
+  input: CreateLinkedBranchInput;
 };
 
 
@@ -9922,6 +10136,12 @@ export type MutationDeleteIssueArgs = {
 /** The root query for implementing GraphQL mutations. */
 export type MutationDeleteIssueCommentArgs = {
   input: DeleteIssueCommentInput;
+};
+
+
+/** The root query for implementing GraphQL mutations. */
+export type MutationDeleteLinkedBranchArgs = {
+  input: DeleteLinkedBranchInput;
 };
 
 
@@ -12214,7 +12434,7 @@ export type Organization = Actor & MemberStatusable & Node & PackageOwner & Prof
   project?: Maybe<Project>;
   /**
    * Find a project by project (beta) number.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   projectNext?: Maybe<ProjectNext>;
   /** Find a project by number. */
@@ -12223,7 +12443,7 @@ export type Organization = Actor & MemberStatusable & Node & PackageOwner & Prof
   projects: ProjectConnection;
   /**
    * A list of projects (beta) under the owner.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   projectsNext: ProjectNextConnection;
   /** The HTTP path listing organization's projects */
@@ -13842,92 +14062,92 @@ export type ProjectNext = Closable & Node & Updatable & {
   __typename?: 'ProjectNext';
   /**
    * Returns true if the project is closed.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   closed: Scalars['Boolean'];
   /** Identifies the date and time when the object was closed. */
   closedAt?: Maybe<Scalars['DateTime']>;
   /**
    * Identifies the date and time when the object was created.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   createdAt: Scalars['DateTime'];
   /**
    * The actor who originally created the project.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   creator?: Maybe<Actor>;
   /**
    * Identifies the primary key from the database.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   databaseId?: Maybe<Scalars['Int']>;
   /**
    * The project's description.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   description?: Maybe<Scalars['String']>;
   /**
    * List of fields in the project
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   fields: ProjectNextFieldConnection;
   id: Scalars['ID'];
   /**
    * List of items in the project
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   items: ProjectNextItemConnection;
   /**
    * The project's number.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   number: Scalars['Int'];
   /**
    * The project's owner. Currently limited to organizations and users.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   owner: ProjectNextOwner;
   /**
    * Returns true if the project is public.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   public: Scalars['Boolean'];
   /**
    * The repositories the project is linked to.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   repositories: RepositoryConnection;
   /**
    * The HTTP path for this project
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   resourcePath: Scalars['URI'];
   /**
    * The project's short description.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   shortDescription?: Maybe<Scalars['String']>;
   /**
    * The project's name.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   title?: Maybe<Scalars['String']>;
   /**
    * Identifies the date and time when the object was last updated.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   updatedAt: Scalars['DateTime'];
   /**
    * The HTTP URL for this project
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   url: Scalars['URI'];
   /** Check if the current viewer can update this object. */
   viewerCanUpdate: Scalars['Boolean'];
   /**
    * List of views in the project
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   views: ProjectViewConnection;
 };
@@ -13995,38 +14215,38 @@ export type ProjectNextField = Node & ProjectNextFieldCommon & {
   __typename?: 'ProjectNextField';
   /**
    * Identifies the date and time when the object was created.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   createdAt: Scalars['DateTime'];
   /**
    * The field's type.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   dataType: ProjectNextFieldType;
   /**
    * Identifies the primary key from the database.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   databaseId?: Maybe<Scalars['Int']>;
   id: Scalars['ID'];
   /**
    * The project field's name.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   name: Scalars['String'];
   /**
    * The project that contains this field.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   project: ProjectNext;
   /**
    * The field's settings.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   settings?: Maybe<Scalars['String']>;
   /**
    * Identifies the date and time when the object was last updated.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   updatedAt: Scalars['DateTime'];
 };
@@ -14035,39 +14255,39 @@ export type ProjectNextField = Node & ProjectNextFieldCommon & {
 export type ProjectNextFieldCommon = {
   /**
    * Identifies the date and time when the object was created.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   createdAt: Scalars['DateTime'];
   /**
    * The field's type.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   dataType: ProjectNextFieldType;
   /**
    * Identifies the primary key from the database.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   databaseId?: Maybe<Scalars['Int']>;
-  /** @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC. */
+  /** @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC. */
   id: Scalars['ID'];
   /**
    * The project field's name.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   name: Scalars['String'];
   /**
    * The project that contains this field.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   project: ProjectNext;
   /**
    * The field's settings.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   settings?: Maybe<Scalars['String']>;
   /**
    * Identifies the date and time when the object was last updated.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   updatedAt: Scalars['DateTime'];
 };
@@ -14098,67 +14318,67 @@ export type ProjectNextFieldEdge = {
 export enum ProjectNextFieldType {
   /**
    * Assignees
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   Assignees = 'ASSIGNEES',
   /**
    * Date
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   Date = 'DATE',
   /**
    * Iteration
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   Iteration = 'ITERATION',
   /**
    * Labels
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   Labels = 'LABELS',
   /**
    * Linked Pull Requests
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   LinkedPullRequests = 'LINKED_PULL_REQUESTS',
   /**
    * Milestone
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   Milestone = 'MILESTONE',
   /**
    * Number
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   Number = 'NUMBER',
   /**
    * Repository
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   Repository = 'REPOSITORY',
   /**
    * Reviewers
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   Reviewers = 'REVIEWERS',
   /**
    * Single Select
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   SingleSelect = 'SINGLE_SELECT',
   /**
    * Text
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   Text = 'TEXT',
   /**
    * Title
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   Title = 'TITLE',
   /**
    * Tracks
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   Tracks = 'TRACKS'
 }
@@ -14168,53 +14388,53 @@ export type ProjectNextItem = Node & {
   __typename?: 'ProjectNextItem';
   /**
    * The content of the referenced draft issue, issue, or pull request
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   content?: Maybe<ProjectNextItemContent>;
   /**
    * Identifies the date and time when the object was created.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   createdAt: Scalars['DateTime'];
   /**
    * The actor who created the item.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   creator?: Maybe<Actor>;
   /**
    * Identifies the primary key from the database.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   databaseId?: Maybe<Scalars['Int']>;
   /**
    * List of field values
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   fieldValues: ProjectNextItemFieldValueConnection;
   id: Scalars['ID'];
   /**
    * Whether the item is archived.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   isArchived: Scalars['Boolean'];
   /**
    * The project that contains this item.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   project: ProjectNext;
   /**
    * The title of the item
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   title?: Maybe<Scalars['String']>;
   /**
    * The type of the item.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   type: ProjectItemType;
   /**
    * Identifies the date and time when the object was last updated.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   updatedAt: Scalars['DateTime'];
 };
@@ -14258,38 +14478,38 @@ export type ProjectNextItemFieldValue = Node & {
   __typename?: 'ProjectNextItemFieldValue';
   /**
    * Identifies the date and time when the object was created.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   createdAt: Scalars['DateTime'];
   /**
    * The actor who created the item.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   creator?: Maybe<Actor>;
   /**
    * Identifies the primary key from the database.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   databaseId?: Maybe<Scalars['Int']>;
   id: Scalars['ID'];
   /**
    * The project field that contains this value.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   projectField: ProjectNextField;
   /**
    * The project item that contains this value.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   projectItem: ProjectNextItem;
   /**
    * Identifies the date and time when the object was last updated.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   updatedAt: Scalars['DateTime'];
   /**
    * The value of a field
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   value?: Maybe<Scalars['String']>;
 };
@@ -14320,22 +14540,22 @@ export type ProjectNextItemFieldValueEdge = {
 export enum ProjectNextOrderField {
   /**
    * The project's date and time of creation
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   CreatedAt = 'CREATED_AT',
   /**
    * The project's number
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   Number = 'NUMBER',
   /**
    * The project's title
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   Title = 'TITLE',
   /**
    * The project's date and time of update
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   UpdatedAt = 'UPDATED_AT'
 }
@@ -14345,12 +14565,12 @@ export type ProjectNextOwner = {
   id: Scalars['ID'];
   /**
    * Find a project by project (beta) number.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   projectNext?: Maybe<ProjectNext>;
   /**
    * A list of projects (beta) under the owner.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   projectsNext: ProjectNextConnection;
 };
@@ -14502,6 +14722,8 @@ export type ProjectV2 = Closable & Node & Updatable & {
   updatedAt: Scalars['DateTime'];
   /** The HTTP URL for this project */
   url: Scalars['URI'];
+  /** A view of the project */
+  view?: Maybe<ProjectV2View>;
   /** Check if the current viewer can update this object. */
   viewerCanUpdate: Scalars['Boolean'];
   /** List of views in the project */
@@ -14542,6 +14764,12 @@ export type ProjectV2RepositoriesArgs = {
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<RepositoryOrder>;
+};
+
+
+/** New projects that manage issues, pull requests and drafts using tables and boards. */
+export type ProjectV2ViewArgs = {
+  number: Scalars['Int'];
 };
 
 
@@ -15250,10 +15478,17 @@ export type ProjectV2View = Node & {
   createdAt: Scalars['DateTime'];
   /** Identifies the primary key from the database. */
   databaseId?: Maybe<Scalars['Int']>;
+  /** The view's visible fields. */
+  fields?: Maybe<ProjectV2FieldConfigurationConnection>;
   /** The project view's filter. */
   filter?: Maybe<Scalars['String']>;
-  /** The view's group-by field. */
+  /**
+   * The view's group-by field.
+   * @deprecated The `ProjectV2View#order_by` API is deprecated in favour of the more capable `ProjectV2View#group_by_field` API. Check out the `ProjectV2View#group_by_fields` API as an example for the more capable alternative. Removal on 2023-04-01 UTC.
+   */
   groupBy?: Maybe<ProjectV2FieldConnection>;
+  /** The view's group-by field. */
+  groupByFields?: Maybe<ProjectV2FieldConfigurationConnection>;
   id: Scalars['ID'];
   /** The project view's layout. */
   layout: ProjectV2ViewLayout;
@@ -15269,13 +15504,36 @@ export type ProjectV2View = Node & {
   updatedAt: Scalars['DateTime'];
   /** The view's vertical-group-by field. */
   verticalGroupBy?: Maybe<ProjectV2FieldConnection>;
-  /** The view's visible fields. */
+  /**
+   * The view's visible fields.
+   * @deprecated The `ProjectV2View#visibleFields` API is deprecated in favour of the more capable `ProjectV2View#fields` API. Check out the `ProjectV2View#fields` API as an example for the more capable alternative. Removal on 2023-01-01 UTC.
+   */
   visibleFields?: Maybe<ProjectV2FieldConnection>;
 };
 
 
 /** A view within a ProjectV2. */
+export type ProjectV2ViewFieldsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<ProjectV2FieldOrder>;
+};
+
+
+/** A view within a ProjectV2. */
 export type ProjectV2ViewGroupByArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<ProjectV2FieldOrder>;
+};
+
+
+/** A view within a ProjectV2. */
+export type ProjectV2ViewGroupByFieldsArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
@@ -15365,63 +15623,63 @@ export type ProjectView = Node & {
   __typename?: 'ProjectView';
   /**
    * Identifies the date and time when the object was created.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   createdAt: Scalars['DateTime'];
   /**
    * Identifies the primary key from the database.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   databaseId?: Maybe<Scalars['Int']>;
   /**
    * The project view's filter.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   filter?: Maybe<Scalars['String']>;
   /**
    * The view's group-by field.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   groupBy?: Maybe<Array<Scalars['Int']>>;
   id: Scalars['ID'];
   /**
    * The project view's layout.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   layout: ProjectViewLayout;
   /**
    * The project view's name.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   name: Scalars['String'];
   /**
    * The project view's number.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   number: Scalars['Int'];
   /**
    * The project that contains this view.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   project: ProjectNext;
   /**
    * The view's sort-by config.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   sortBy?: Maybe<Array<SortBy>>;
   /**
    * Identifies the date and time when the object was last updated.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   updatedAt: Scalars['DateTime'];
   /**
    * The view's vertical-group-by field.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   verticalGroupBy?: Maybe<Array<Scalars['Int']>>;
   /**
    * The view's visible fields.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   visibleFields?: Maybe<Array<Scalars['Int']>>;
 };
@@ -15612,19 +15870,19 @@ export type PullRequest = Assignable & Closable & Comment & Labelable & Lockable
   projectItems: ProjectV2ItemConnection;
   /**
    * Find a project by project (beta) number.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   projectNext?: Maybe<ProjectNext>;
   /**
    * List of project (beta) items associated with this pull request.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   projectNextItems: ProjectNextItemConnection;
   /** Find a project by number. */
   projectV2?: Maybe<ProjectV2>;
   /**
    * A list of projects (beta) under the owner.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   projectsNext: ProjectNextConnection;
   /** A list of projects under the owner. */
@@ -16538,6 +16796,8 @@ export type PullRequestThread = Node & {
   __typename?: 'PullRequestThread';
   /** A list of pull request comments associated with the thread. */
   comments: PullRequestReviewCommentConnection;
+  /** The side of the diff on which this thread was placed. */
+  diffSide: DiffSide;
   id: Scalars['ID'];
   /** Whether or not the thread has been collapsed (resolved) */
   isCollapsed: Scalars['Boolean'];
@@ -16545,12 +16805,18 @@ export type PullRequestThread = Node & {
   isOutdated: Scalars['Boolean'];
   /** Whether this thread has been resolved */
   isResolved: Scalars['Boolean'];
+  /** The line in the file to which this thread refers */
+  line?: Maybe<Scalars['Int']>;
   /** Identifies the pull request associated with this thread. */
   pullRequest: PullRequest;
   /** Identifies the repository associated with this thread. */
   repository: Repository;
   /** The user who resolved this thread */
   resolvedBy?: Maybe<User>;
+  /** The side of the diff that the first line of the thread starts on (multi-line only) */
+  startDiffSide?: Maybe<DiffSide>;
+  /** The line of the first file diff in the thread. */
+  startLine?: Maybe<Scalars['Int']>;
   /** Indicates whether the current viewer can reply to this thread. */
   viewerCanReply: Scalars['Boolean'];
   /** Whether or not the viewer can resolve this thread */
@@ -16847,7 +17113,7 @@ export type Query = {
   repositoryOwner?: Maybe<RepositoryOwner>;
   /** Lookup resource by a URL. */
   resource?: Maybe<UniformResourceLocatable>;
-  /** Perform a search across resources. */
+  /** Perform a search across resources, returning a maximum of 1,000 results. */
   search: SearchResultItemConnection;
   /** GitHub Security Advisories */
   securityAdvisories: SecurityAdvisoryConnection;
@@ -19043,6 +19309,10 @@ export type Repository = Node & PackageOwner & ProjectOwner & ProjectV2Recent & 
   mentionableUsers: UserConnection;
   /** Whether or not PRs are merged with a merge commit on this repository. */
   mergeCommitAllowed: Scalars['Boolean'];
+  /** How the default commit message will be generated when merging a pull request. */
+  mergeCommitMessage: MergeCommitMessage;
+  /** How the default commit title will be generated when merging a pull request. */
+  mergeCommitTitle: MergeCommitTitle;
   /** Returns a single milestone from the current repository by number. */
   milestone?: Maybe<Milestone>;
   /** A list of milestones associated with the repository. */
@@ -19073,7 +19343,7 @@ export type Repository = Node & PackageOwner & ProjectOwner & ProjectV2Recent & 
   project?: Maybe<Project>;
   /**
    * Finds and returns the Project (beta) according to the provided Project (beta) number.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   projectNext?: Maybe<ProjectNext>;
   /** Finds and returns the Project according to the provided Project number. */
@@ -19082,7 +19352,7 @@ export type Repository = Node & PackageOwner & ProjectOwner & ProjectV2Recent & 
   projects: ProjectConnection;
   /**
    * List of projects (beta) linked to this repository.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   projectsNext: ProjectNextConnection;
   /** The HTTP path listing the repository's projects */
@@ -19121,6 +19391,10 @@ export type Repository = Node & PackageOwner & ProjectOwner & ProjectV2Recent & 
   shortDescriptionHTML: Scalars['HTML'];
   /** Whether or not squash-merging is enabled on this repository. */
   squashMergeAllowed: Scalars['Boolean'];
+  /** How the default commit message will be generated when squash merging a pull request. */
+  squashMergeCommitMessage: SquashMergeCommitMessage;
+  /** How the default commit title will be generated when squash merging a pull request. */
+  squashMergeCommitTitle: SquashMergeCommitTitle;
   /** Whether a squash merge commit can use the pull request title as default. */
   squashPrTitleUsedAsDefault: Scalars['Boolean'];
   /** The SSH URL to clone this repository */
@@ -19934,6 +20208,8 @@ export type RepositoryMigration = Migration & Node & {
   continueOnError: Scalars['Boolean'];
   /** Identifies the date and time when the object was created. */
   createdAt: Scalars['DateTime'];
+  /** Identifies the primary key from the database. */
+  databaseId?: Maybe<Scalars['String']>;
   /** The reason the migration failed. */
   failureReason?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
@@ -20742,26 +21018,26 @@ export enum SavedReplyOrderField {
 /** The results of a search. */
 export type SearchResultItem = App | Discussion | Issue | MarketplaceListing | Organization | PullRequest | Repository | User;
 
-/** A list of results that matched against a search query. */
+/** A list of results that matched against a search query. Regardless of the number of matches, a maximum of 1,000 results will be available across all types, potentially split across many pages. */
 export type SearchResultItemConnection = {
   __typename?: 'SearchResultItemConnection';
-  /** The number of pieces of code that matched the search query. */
+  /** The total number of pieces of code that matched the search query. Regardless of the total number of matches, a maximum of 1,000 results will be available across all types. */
   codeCount: Scalars['Int'];
-  /** The number of discussions that matched the search query. */
+  /** The total number of discussions that matched the search query. Regardless of the total number of matches, a maximum of 1,000 results will be available across all types. */
   discussionCount: Scalars['Int'];
   /** A list of edges. */
   edges?: Maybe<Array<Maybe<SearchResultItemEdge>>>;
-  /** The number of issues that matched the search query. */
+  /** The total number of issues that matched the search query. Regardless of the total number of matches, a maximum of 1,000 results will be available across all types. */
   issueCount: Scalars['Int'];
   /** A list of nodes. */
   nodes?: Maybe<Array<Maybe<SearchResultItem>>>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
-  /** The number of repositories that matched the search query. */
+  /** The total number of repositories that matched the search query. Regardless of the total number of matches, a maximum of 1,000 results will be available across all types. */
   repositoryCount: Scalars['Int'];
-  /** The number of users that matched the search query. */
+  /** The total number of users that matched the search query. Regardless of the total number of matches, a maximum of 1,000 results will be available across all types. */
   userCount: Scalars['Int'];
-  /** The number of wiki pages that matched the search query. */
+  /** The total number of wiki pages that matched the search query. Regardless of the total number of matches, a maximum of 1,000 results will be available across all types. */
   wikiCount: Scalars['Int'];
 };
 
@@ -20890,6 +21166,8 @@ export enum SecurityAdvisoryEcosystem {
   Nuget = 'NUGET',
   /** Python packages hosted at PyPI.org */
   Pip = 'PIP',
+  /** Dart packages hosted at pub.dev */
+  Pub = 'PUB',
   /** Ruby gems hosted at RubyGems.org */
   Rubygems = 'RUBYGEMS',
   /** Rust crates */
@@ -21459,6 +21737,10 @@ export type SponsorsListing = Node & {
   activeGoal?: Maybe<SponsorsGoal>;
   /** Identifies the date and time when the object was created. */
   createdAt: Scalars['DateTime'];
+  /** The HTTP path for the Sponsors dashboard for this Sponsors listing. */
+  dashboardResourcePath: Scalars['URI'];
+  /** The HTTP URL for the Sponsors dashboard for this Sponsors listing. */
+  dashboardUrl: Scalars['URI'];
   /** The full description of the listing. */
   fullDescription: Scalars['String'];
   /** The full description of the listing rendered to HTML. */
@@ -21470,6 +21752,8 @@ export type SponsorsListing = Node & {
   name: Scalars['String'];
   /** A future date on which this listing is eligible to receive a payout. */
   nextPayoutDate?: Maybe<Scalars['Date']>;
+  /** The HTTP path for this Sponsors listing. */
+  resourcePath: Scalars['URI'];
   /** The short description of the listing. */
   shortDescription: Scalars['String'];
   /** The short name of the listing. */
@@ -21478,6 +21762,8 @@ export type SponsorsListing = Node & {
   sponsorable: Sponsorable;
   /** The published tiers for this GitHub Sponsors listing. */
   tiers?: Maybe<SponsorsTierConnection>;
+  /** The HTTP URL for this Sponsors listing. */
+  url: Scalars['URI'];
 };
 
 
@@ -21710,6 +21996,45 @@ export enum SponsorshipPrivacy {
   Public = 'PUBLIC'
 }
 
+/** The possible default commit messages for squash merges. */
+export enum SquashMergeCommitMessage {
+  /** Default to a blank commit message. */
+  Blank = 'BLANK',
+  /** Default to the branch's commit messages. */
+  CommitMessages = 'COMMIT_MESSAGES',
+  /** Default to the pull request's body. */
+  PrBody = 'PR_BODY'
+}
+
+/** The possible default commit titles for squash merges. */
+export enum SquashMergeCommitTitle {
+  /** Default to the commit's title (if only one commit) or the pull request's title (when more than one commit). */
+  CommitOrPrTitle = 'COMMIT_OR_PR_TITLE',
+  /** Default to the pull request's title. */
+  PrTitle = 'PR_TITLE'
+}
+
+/** Represents an SSH signature on a Commit or Tag. */
+export type SshSignature = GitSignature & {
+  __typename?: 'SshSignature';
+  /** Email used to sign this object. */
+  email: Scalars['String'];
+  /** True if the signature is valid and verified by GitHub. */
+  isValid: Scalars['Boolean'];
+  /** Hex-encoded fingerprint of the key that signed this object. */
+  keyFingerprint?: Maybe<Scalars['String']>;
+  /** Payload for GPG signing object. Raw ODB object without the signature header. */
+  payload: Scalars['String'];
+  /** ASCII-armored signature header from object. */
+  signature: Scalars['String'];
+  /** GitHub user corresponding to the email signing this commit. */
+  signer?: Maybe<User>;
+  /** The state of this signature. `VALID` if signature is valid and verified by GitHub, otherwise represents reason why signature is considered invalid. */
+  state: GitSignatureState;
+  /** True if the signature was made with GitHub's signing key. */
+  wasSignedByGitHub: Scalars['Boolean'];
+};
+
 /** Ways in which star connections can be ordered. */
 export type StarOrder = {
   /** The direction in which to order nodes. */
@@ -21893,12 +22218,20 @@ export type StatusCheckRollupContext = CheckRun | StatusContext;
 /** The connection type for StatusCheckRollupContext. */
 export type StatusCheckRollupContextConnection = {
   __typename?: 'StatusCheckRollupContextConnection';
+  /** The number of check runs in this rollup. */
+  checkRunCount: Scalars['Int'];
+  /** Counts of check runs by state. */
+  checkRunCountsByState?: Maybe<Array<CheckRunStateCount>>;
   /** A list of edges. */
   edges?: Maybe<Array<Maybe<StatusCheckRollupContextEdge>>>;
   /** A list of nodes. */
   nodes?: Maybe<Array<Maybe<StatusCheckRollupContext>>>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
+  /** The number of status contexts in this rollup. */
+  statusContextCount: Scalars['Int'];
+  /** Counts of status contexts by state. */
+  statusContextCountsByState?: Maybe<Array<StatusContextStateCount>>;
   /** Identifies the total count of items in the connection. */
   totalCount: Scalars['Int'];
 };
@@ -21947,6 +22280,15 @@ export type StatusContextAvatarUrlArgs = {
 export type StatusContextIsRequiredArgs = {
   pullRequestId?: InputMaybe<Scalars['ID']>;
   pullRequestNumber?: InputMaybe<Scalars['Int']>;
+};
+
+/** Represents a count of the state of a status context. */
+export type StatusContextStateCount = {
+  __typename?: 'StatusContextStateCount';
+  /** The number of statuses with this state. */
+  count: Scalars['Int'];
+  /** The state of a status context. */
+  state: StatusState;
 };
 
 /** The possible commit status states. */
@@ -23660,6 +24002,8 @@ export type UpdateEnterpriseAllowPrivateRepositoryForkingSettingInput = {
   clientMutationId?: InputMaybe<Scalars['String']>;
   /** The ID of the enterprise on which to set the allow private repository forking setting. */
   enterpriseId: Scalars['ID'];
+  /** The value for the allow private repository forking policy on the enterprise. */
+  policyValue?: InputMaybe<EnterpriseAllowPrivateRepositoryForkingPolicyValue>;
   /** The value for the allow private repository forking setting on the enterprise. */
   settingValue: EnterpriseEnabledDisabledSettingValue;
 };
@@ -24283,7 +24627,7 @@ export type UpdateProjectNextInput = {
   /**
    * Set the project to closed or open.
    *
-   * **Upcoming Change on 2022-10-01 UTC**
+   * **Upcoming Change on 2023-01-01 UTC**
    * **Description:** `closed` will be removed. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement.
    * **Reason:** The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API.
    *
@@ -24292,7 +24636,7 @@ export type UpdateProjectNextInput = {
   /**
    * Set the readme description of the project.
    *
-   * **Upcoming Change on 2022-10-01 UTC**
+   * **Upcoming Change on 2023-01-01 UTC**
    * **Description:** `description` will be removed. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement.
    * **Reason:** The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API.
    *
@@ -24301,7 +24645,7 @@ export type UpdateProjectNextInput = {
   /**
    * The ID of the Project to update. This field is required.
    *
-   * **Upcoming Change on 2022-10-01 UTC**
+   * **Upcoming Change on 2023-01-01 UTC**
    * **Description:** `projectId` will be removed. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement.
    * **Reason:** The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API.
    *
@@ -24310,7 +24654,7 @@ export type UpdateProjectNextInput = {
   /**
    * Set the project to public or private.
    *
-   * **Upcoming Change on 2022-10-01 UTC**
+   * **Upcoming Change on 2023-01-01 UTC**
    * **Description:** `public` will be removed. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement.
    * **Reason:** The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API.
    *
@@ -24319,7 +24663,7 @@ export type UpdateProjectNextInput = {
   /**
    * Set the short description of the project.
    *
-   * **Upcoming Change on 2022-10-01 UTC**
+   * **Upcoming Change on 2023-01-01 UTC**
    * **Description:** `shortDescription` will be removed. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement.
    * **Reason:** The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API.
    *
@@ -24328,7 +24672,7 @@ export type UpdateProjectNextInput = {
   /**
    * Set the title of the project.
    *
-   * **Upcoming Change on 2022-10-01 UTC**
+   * **Upcoming Change on 2023-01-01 UTC**
    * **Description:** `title` will be removed. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement.
    * **Reason:** The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API.
    *
@@ -24343,7 +24687,7 @@ export type UpdateProjectNextItemFieldInput = {
   /**
    * The id of the field to be updated.
    *
-   * **Upcoming Change on 2022-10-01 UTC**
+   * **Upcoming Change on 2023-01-01 UTC**
    * **Description:** `fieldId` will be removed. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement.
    * **Reason:** The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API.
    *
@@ -24352,7 +24696,7 @@ export type UpdateProjectNextItemFieldInput = {
   /**
    * The id of the item to be updated. This field is required.
    *
-   * **Upcoming Change on 2022-10-01 UTC**
+   * **Upcoming Change on 2023-01-01 UTC**
    * **Description:** `itemId` will be removed. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement.
    * **Reason:** The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API.
    *
@@ -24363,7 +24707,7 @@ export type UpdateProjectNextItemFieldInput = {
   /**
    * The value which will be set on the field. This field is required.
    *
-   * **Upcoming Change on 2022-10-01 UTC**
+   * **Upcoming Change on 2023-01-01 UTC**
    * **Description:** `value` will be removed. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement.
    * **Reason:** The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API.
    *
@@ -24378,7 +24722,7 @@ export type UpdateProjectNextItemFieldPayload = {
   clientMutationId?: Maybe<Scalars['String']>;
   /**
    * The updated item.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   projectNextItem?: Maybe<ProjectNextItem>;
 };
@@ -24390,7 +24734,7 @@ export type UpdateProjectNextPayload = {
   clientMutationId?: Maybe<Scalars['String']>;
   /**
    * The updated Project.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   projectNext?: Maybe<ProjectNext>;
 };
@@ -24914,7 +25258,7 @@ export type User = Actor & Node & PackageOwner & ProfileOwner & ProjectNextOwner
   project?: Maybe<Project>;
   /**
    * Find a project by project (beta) number.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   projectNext?: Maybe<ProjectNext>;
   /** Find a project by number. */
@@ -24923,7 +25267,7 @@ export type User = Actor & Node & PackageOwner & ProfileOwner & ProjectNextOwner
   projects: ProjectConnection;
   /**
    * A list of projects (beta) under the owner.
-   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2022-10-01 UTC.
+   * @deprecated The `ProjectNext` API is deprecated in favour of the more capable `ProjectV2` API. Follow the ProjectV2 guide at https://github.blog/changelog/2022-06-23-the-new-github-issues-june-23rd-update/, to find a suitable replacement. Removal on 2023-01-01 UTC.
    */
   projectsNext: ProjectNextConnection;
   /** The HTTP path listing user's projects */
@@ -25710,8 +26054,20 @@ export type Workflow = Node & {
   id: Scalars['ID'];
   /** The name of the workflow. */
   name: Scalars['String'];
+  /** The runs of the workflow. */
+  runs: WorkflowRunConnection;
   /** Identifies the date and time when the object was last updated. */
   updatedAt: Scalars['DateTime'];
+};
+
+
+/** A workflow contains meta information about an Actions workflow file. */
+export type WorkflowRunsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<WorkflowRunOrder>;
 };
 
 /** A workflow run. */
@@ -25757,6 +26113,42 @@ export type WorkflowRunPendingDeploymentRequestsArgs = {
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
 };
+
+/** The connection type for WorkflowRun. */
+export type WorkflowRunConnection = {
+  __typename?: 'WorkflowRunConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<WorkflowRunEdge>>>;
+  /** A list of nodes. */
+  nodes?: Maybe<Array<Maybe<WorkflowRun>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** An edge in a connection. */
+export type WorkflowRunEdge = {
+  __typename?: 'WorkflowRunEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge. */
+  node?: Maybe<WorkflowRun>;
+};
+
+/** Ways in which lists of workflow runs can be ordered upon return. */
+export type WorkflowRunOrder = {
+  /** The direction in which to order workflow runs by the specified field. */
+  direction: OrderDirection;
+  /** The field by which to order workflows. */
+  field: WorkflowRunOrderField;
+};
+
+/** Properties by which workflow run connections can be ordered. */
+export enum WorkflowRunOrderField {
+  /** Order workflow runs by most recently created */
+  CreatedAt = 'CREATED_AT'
+}
 
 
 
@@ -25944,6 +26336,8 @@ export type ResolversTypes = {
   CheckRunFilter: CheckRunFilter;
   CheckRunOutput: CheckRunOutput;
   CheckRunOutputImage: CheckRunOutputImage;
+  CheckRunState: CheckRunState;
+  CheckRunStateCount: ResolverTypeWrapper<CheckRunStateCount>;
   CheckRunType: CheckRunType;
   CheckStatusState: CheckStatusState;
   CheckStep: ResolverTypeWrapper<CheckStep>;
@@ -25956,6 +26350,8 @@ export type ResolversTypes = {
   CheckSuiteFilter: CheckSuiteFilter;
   ClearLabelsFromLabelableInput: ClearLabelsFromLabelableInput;
   ClearLabelsFromLabelablePayload: ResolverTypeWrapper<ClearLabelsFromLabelablePayload>;
+  ClearProjectV2ItemFieldValueInput: ClearProjectV2ItemFieldValueInput;
+  ClearProjectV2ItemFieldValuePayload: ResolverTypeWrapper<ClearProjectV2ItemFieldValuePayload>;
   CloneProjectInput: CloneProjectInput;
   CloneProjectPayload: ResolverTypeWrapper<CloneProjectPayload>;
   CloneTemplateRepositoryInput: CloneTemplateRepositoryInput;
@@ -26021,6 +26417,8 @@ export type ResolversTypes = {
   CreateIpAllowListEntryPayload: ResolverTypeWrapper<CreateIpAllowListEntryPayload>;
   CreateIssueInput: CreateIssueInput;
   CreateIssuePayload: ResolverTypeWrapper<CreateIssuePayload>;
+  CreateLinkedBranchInput: CreateLinkedBranchInput;
+  CreateLinkedBranchPayload: ResolverTypeWrapper<CreateLinkedBranchPayload>;
   CreateMigrationSourceInput: CreateMigrationSourceInput;
   CreateMigrationSourcePayload: ResolverTypeWrapper<CreateMigrationSourcePayload>;
   CreateProjectInput: CreateProjectInput;
@@ -26082,6 +26480,8 @@ export type ResolversTypes = {
   DeleteIssueCommentPayload: ResolverTypeWrapper<DeleteIssueCommentPayload>;
   DeleteIssueInput: DeleteIssueInput;
   DeleteIssuePayload: ResolverTypeWrapper<DeleteIssuePayload>;
+  DeleteLinkedBranchInput: DeleteLinkedBranchInput;
+  DeleteLinkedBranchPayload: ResolverTypeWrapper<DeleteLinkedBranchPayload>;
   DeleteProjectCardInput: DeleteProjectCardInput;
   DeleteProjectCardPayload: ResolverTypeWrapper<DeleteProjectCardPayload>;
   DeleteProjectColumnInput: DeleteProjectColumnInput;
@@ -26177,6 +26577,7 @@ export type ResolversTypes = {
   EnterpriseAdministratorInvitationOrder: EnterpriseAdministratorInvitationOrder;
   EnterpriseAdministratorInvitationOrderField: EnterpriseAdministratorInvitationOrderField;
   EnterpriseAdministratorRole: EnterpriseAdministratorRole;
+  EnterpriseAllowPrivateRepositoryForkingPolicyValue: EnterpriseAllowPrivateRepositoryForkingPolicyValue;
   EnterpriseAuditEntryData: ResolversTypes['MembersCanDeleteReposClearAuditEntry'] | ResolversTypes['MembersCanDeleteReposDisableAuditEntry'] | ResolversTypes['MembersCanDeleteReposEnableAuditEntry'] | ResolversTypes['OrgInviteToBusinessAuditEntry'] | ResolversTypes['PrivateRepositoryForkingDisableAuditEntry'] | ResolversTypes['PrivateRepositoryForkingEnableAuditEntry'] | ResolversTypes['RepositoryVisibilityChangeDisableAuditEntry'] | ResolversTypes['RepositoryVisibilityChangeEnableAuditEntry'];
   EnterpriseBillingInfo: ResolverTypeWrapper<EnterpriseBillingInfo>;
   EnterpriseDefaultRepositoryPermissionSettingValue: EnterpriseDefaultRepositoryPermissionSettingValue;
@@ -26264,7 +26665,7 @@ export type ResolversTypes = {
   GitObject: ResolversTypes['Blob'] | ResolversTypes['Commit'] | ResolversTypes['Tag'] | ResolversTypes['Tree'];
   GitObjectID: ResolverTypeWrapper<Scalars['GitObjectID']>;
   GitSSHRemote: ResolverTypeWrapper<Scalars['GitSSHRemote']>;
-  GitSignature: ResolversTypes['GpgSignature'] | ResolversTypes['SmimeSignature'] | ResolversTypes['UnknownSignature'];
+  GitSignature: ResolversTypes['GpgSignature'] | ResolversTypes['SmimeSignature'] | ResolversTypes['SshSignature'] | ResolversTypes['UnknownSignature'];
   GitSignatureState: GitSignatureState;
   GitTimestamp: ResolverTypeWrapper<Scalars['GitTimestamp']>;
   GpgSignature: ResolverTypeWrapper<GpgSignature>;
@@ -26332,6 +26733,9 @@ export type ResolversTypes = {
   LicenseRule: ResolverTypeWrapper<LicenseRule>;
   LinkRepositoryToProjectInput: LinkRepositoryToProjectInput;
   LinkRepositoryToProjectPayload: ResolverTypeWrapper<LinkRepositoryToProjectPayload>;
+  LinkedBranch: ResolverTypeWrapper<LinkedBranch>;
+  LinkedBranchConnection: ResolverTypeWrapper<LinkedBranchConnection>;
+  LinkedBranchEdge: ResolverTypeWrapper<LinkedBranchEdge>;
   LockLockableInput: LockLockableInput;
   LockLockablePayload: ResolverTypeWrapper<LockLockablePayload>;
   LockReason: LockReason;
@@ -26356,6 +26760,8 @@ export type ResolversTypes = {
   MentionedEvent: ResolverTypeWrapper<MentionedEvent>;
   MergeBranchInput: MergeBranchInput;
   MergeBranchPayload: ResolverTypeWrapper<MergeBranchPayload>;
+  MergeCommitMessage: MergeCommitMessage;
+  MergeCommitTitle: MergeCommitTitle;
   MergePullRequestInput: MergePullRequestInput;
   MergePullRequestPayload: ResolverTypeWrapper<MergePullRequestPayload>;
   MergeableState: MergeableState;
@@ -26381,7 +26787,7 @@ export type ResolversTypes = {
   MoveProjectColumnPayload: ResolverTypeWrapper<MoveProjectColumnPayload>;
   MovedColumnsInProjectEvent: ResolverTypeWrapper<MovedColumnsInProjectEvent>;
   Mutation: ResolverTypeWrapper<{}>;
-  Node: ResolversTypes['AddedToProjectEvent'] | ResolversTypes['App'] | ResolversTypes['AssignedEvent'] | ResolversTypes['AutoMergeDisabledEvent'] | ResolversTypes['AutoMergeEnabledEvent'] | ResolversTypes['AutoRebaseEnabledEvent'] | ResolversTypes['AutoSquashEnabledEvent'] | ResolversTypes['AutomaticBaseChangeFailedEvent'] | ResolversTypes['AutomaticBaseChangeSucceededEvent'] | ResolversTypes['BaseRefChangedEvent'] | ResolversTypes['BaseRefDeletedEvent'] | ResolversTypes['BaseRefForcePushedEvent'] | ResolversTypes['Blob'] | ResolversTypes['Bot'] | ResolversTypes['BranchProtectionRule'] | ResolversTypes['BypassForcePushAllowance'] | ResolversTypes['BypassPullRequestAllowance'] | ResolversTypes['CWE'] | ResolversTypes['CheckRun'] | ResolversTypes['CheckSuite'] | ResolversTypes['ClosedEvent'] | ResolversTypes['CodeOfConduct'] | ResolversTypes['CommentDeletedEvent'] | ResolversTypes['Commit'] | ResolversTypes['CommitComment'] | ResolversTypes['CommitCommentThread'] | ResolversTypes['ConnectedEvent'] | ResolversTypes['ConvertToDraftEvent'] | ResolversTypes['ConvertedNoteToIssueEvent'] | ResolversTypes['ConvertedToDiscussionEvent'] | ResolversTypes['CrossReferencedEvent'] | ResolversTypes['DemilestonedEvent'] | ResolversTypes['DeployKey'] | ResolversTypes['DeployedEvent'] | ResolversTypes['Deployment'] | ResolversTypes['DeploymentEnvironmentChangedEvent'] | ResolversTypes['DeploymentReview'] | ResolversTypes['DeploymentStatus'] | ResolversTypes['DisconnectedEvent'] | ResolversTypes['Discussion'] | ResolversTypes['DiscussionCategory'] | ResolversTypes['DiscussionComment'] | ResolversTypes['DiscussionPoll'] | ResolversTypes['DiscussionPollOption'] | ResolversTypes['DraftIssue'] | ResolversTypes['Enterprise'] | ResolversTypes['EnterpriseAdministratorInvitation'] | ResolversTypes['EnterpriseIdentityProvider'] | ResolversTypes['EnterpriseRepositoryInfo'] | ResolversTypes['EnterpriseServerInstallation'] | ResolversTypes['EnterpriseServerUserAccount'] | ResolversTypes['EnterpriseServerUserAccountEmail'] | ResolversTypes['EnterpriseServerUserAccountsUpload'] | ResolversTypes['EnterpriseUserAccount'] | ResolversTypes['Environment'] | ResolversTypes['ExternalIdentity'] | ResolversTypes['Gist'] | ResolversTypes['GistComment'] | ResolversTypes['HeadRefDeletedEvent'] | ResolversTypes['HeadRefForcePushedEvent'] | ResolversTypes['HeadRefRestoredEvent'] | ResolversTypes['IpAllowListEntry'] | ResolversTypes['Issue'] | ResolversTypes['IssueComment'] | ResolversTypes['Label'] | ResolversTypes['LabeledEvent'] | ResolversTypes['Language'] | ResolversTypes['License'] | ResolversTypes['LockedEvent'] | ResolversTypes['Mannequin'] | ResolversTypes['MarkedAsDuplicateEvent'] | ResolversTypes['MarketplaceCategory'] | ResolversTypes['MarketplaceListing'] | ResolversTypes['MembersCanDeleteReposClearAuditEntry'] | ResolversTypes['MembersCanDeleteReposDisableAuditEntry'] | ResolversTypes['MembersCanDeleteReposEnableAuditEntry'] | ResolversTypes['MentionedEvent'] | ResolversTypes['MergedEvent'] | ResolversTypes['MigrationSource'] | ResolversTypes['Milestone'] | ResolversTypes['MilestonedEvent'] | ResolversTypes['MovedColumnsInProjectEvent'] | ResolversTypes['OIDCProvider'] | ResolversTypes['OauthApplicationCreateAuditEntry'] | ResolversTypes['OrgAddBillingManagerAuditEntry'] | ResolversTypes['OrgAddMemberAuditEntry'] | ResolversTypes['OrgBlockUserAuditEntry'] | ResolversTypes['OrgConfigDisableCollaboratorsOnlyAuditEntry'] | ResolversTypes['OrgConfigEnableCollaboratorsOnlyAuditEntry'] | ResolversTypes['OrgCreateAuditEntry'] | ResolversTypes['OrgDisableOauthAppRestrictionsAuditEntry'] | ResolversTypes['OrgDisableSamlAuditEntry'] | ResolversTypes['OrgDisableTwoFactorRequirementAuditEntry'] | ResolversTypes['OrgEnableOauthAppRestrictionsAuditEntry'] | ResolversTypes['OrgEnableSamlAuditEntry'] | ResolversTypes['OrgEnableTwoFactorRequirementAuditEntry'] | ResolversTypes['OrgInviteMemberAuditEntry'] | ResolversTypes['OrgInviteToBusinessAuditEntry'] | ResolversTypes['OrgOauthAppAccessApprovedAuditEntry'] | ResolversTypes['OrgOauthAppAccessDeniedAuditEntry'] | ResolversTypes['OrgOauthAppAccessRequestedAuditEntry'] | ResolversTypes['OrgRemoveBillingManagerAuditEntry'] | ResolversTypes['OrgRemoveMemberAuditEntry'] | ResolversTypes['OrgRemoveOutsideCollaboratorAuditEntry'] | ResolversTypes['OrgRestoreMemberAuditEntry'] | ResolversTypes['OrgUnblockUserAuditEntry'] | ResolversTypes['OrgUpdateDefaultRepositoryPermissionAuditEntry'] | ResolversTypes['OrgUpdateMemberAuditEntry'] | ResolversTypes['OrgUpdateMemberRepositoryCreationPermissionAuditEntry'] | ResolversTypes['OrgUpdateMemberRepositoryInvitationPermissionAuditEntry'] | ResolversTypes['Organization'] | ResolversTypes['OrganizationIdentityProvider'] | ResolversTypes['OrganizationInvitation'] | ResolversTypes['Package'] | ResolversTypes['PackageFile'] | ResolversTypes['PackageTag'] | ResolversTypes['PackageVersion'] | ResolversTypes['PinnedDiscussion'] | ResolversTypes['PinnedEvent'] | ResolversTypes['PinnedIssue'] | ResolversTypes['PrivateRepositoryForkingDisableAuditEntry'] | ResolversTypes['PrivateRepositoryForkingEnableAuditEntry'] | ResolversTypes['Project'] | ResolversTypes['ProjectCard'] | ResolversTypes['ProjectColumn'] | ResolversTypes['ProjectNext'] | ResolversTypes['ProjectNextField'] | ResolversTypes['ProjectNextItem'] | ResolversTypes['ProjectNextItemFieldValue'] | ResolversTypes['ProjectV2'] | ResolversTypes['ProjectV2Field'] | ResolversTypes['ProjectV2Item'] | ResolversTypes['ProjectV2ItemFieldDateValue'] | ResolversTypes['ProjectV2ItemFieldIterationValue'] | ResolversTypes['ProjectV2ItemFieldNumberValue'] | ResolversTypes['ProjectV2ItemFieldSingleSelectValue'] | ResolversTypes['ProjectV2ItemFieldTextValue'] | ResolversTypes['ProjectV2IterationField'] | ResolversTypes['ProjectV2SingleSelectField'] | ResolversTypes['ProjectV2View'] | ResolversTypes['ProjectView'] | ResolversTypes['PublicKey'] | ResolversTypes['PullRequest'] | ResolversTypes['PullRequestCommit'] | ResolversTypes['PullRequestCommitCommentThread'] | ResolversTypes['PullRequestReview'] | ResolversTypes['PullRequestReviewComment'] | ResolversTypes['PullRequestReviewThread'] | ResolversTypes['PullRequestThread'] | ResolversTypes['Push'] | ResolversTypes['PushAllowance'] | ResolversTypes['Reaction'] | ResolversTypes['ReadyForReviewEvent'] | ResolversTypes['Ref'] | ResolversTypes['ReferencedEvent'] | ResolversTypes['Release'] | ResolversTypes['ReleaseAsset'] | ResolversTypes['RemovedFromProjectEvent'] | ResolversTypes['RenamedTitleEvent'] | ResolversTypes['ReopenedEvent'] | ResolversTypes['RepoAccessAuditEntry'] | ResolversTypes['RepoAddMemberAuditEntry'] | ResolversTypes['RepoAddTopicAuditEntry'] | ResolversTypes['RepoArchivedAuditEntry'] | ResolversTypes['RepoChangeMergeSettingAuditEntry'] | ResolversTypes['RepoConfigDisableAnonymousGitAccessAuditEntry'] | ResolversTypes['RepoConfigDisableCollaboratorsOnlyAuditEntry'] | ResolversTypes['RepoConfigDisableContributorsOnlyAuditEntry'] | ResolversTypes['RepoConfigDisableSockpuppetDisallowedAuditEntry'] | ResolversTypes['RepoConfigEnableAnonymousGitAccessAuditEntry'] | ResolversTypes['RepoConfigEnableCollaboratorsOnlyAuditEntry'] | ResolversTypes['RepoConfigEnableContributorsOnlyAuditEntry'] | ResolversTypes['RepoConfigEnableSockpuppetDisallowedAuditEntry'] | ResolversTypes['RepoConfigLockAnonymousGitAccessAuditEntry'] | ResolversTypes['RepoConfigUnlockAnonymousGitAccessAuditEntry'] | ResolversTypes['RepoCreateAuditEntry'] | ResolversTypes['RepoDestroyAuditEntry'] | ResolversTypes['RepoRemoveMemberAuditEntry'] | ResolversTypes['RepoRemoveTopicAuditEntry'] | ResolversTypes['Repository'] | ResolversTypes['RepositoryInvitation'] | ResolversTypes['RepositoryMigration'] | ResolversTypes['RepositoryTopic'] | ResolversTypes['RepositoryVisibilityChangeDisableAuditEntry'] | ResolversTypes['RepositoryVisibilityChangeEnableAuditEntry'] | ResolversTypes['RepositoryVulnerabilityAlert'] | ResolversTypes['ReviewDismissalAllowance'] | ResolversTypes['ReviewDismissedEvent'] | ResolversTypes['ReviewRequest'] | ResolversTypes['ReviewRequestRemovedEvent'] | ResolversTypes['ReviewRequestedEvent'] | ResolversTypes['SavedReply'] | ResolversTypes['SecurityAdvisory'] | ResolversTypes['SponsorsActivity'] | ResolversTypes['SponsorsListing'] | ResolversTypes['SponsorsTier'] | ResolversTypes['Sponsorship'] | ResolversTypes['SponsorshipNewsletter'] | ResolversTypes['Status'] | ResolversTypes['StatusCheckRollup'] | ResolversTypes['StatusContext'] | ResolversTypes['SubscribedEvent'] | ResolversTypes['Tag'] | ResolversTypes['Team'] | ResolversTypes['TeamAddMemberAuditEntry'] | ResolversTypes['TeamAddRepositoryAuditEntry'] | ResolversTypes['TeamChangeParentTeamAuditEntry'] | ResolversTypes['TeamDiscussion'] | ResolversTypes['TeamDiscussionComment'] | ResolversTypes['TeamRemoveMemberAuditEntry'] | ResolversTypes['TeamRemoveRepositoryAuditEntry'] | ResolversTypes['Topic'] | ResolversTypes['TransferredEvent'] | ResolversTypes['Tree'] | ResolversTypes['UnassignedEvent'] | ResolversTypes['UnlabeledEvent'] | ResolversTypes['UnlockedEvent'] | ResolversTypes['UnmarkedAsDuplicateEvent'] | ResolversTypes['UnpinnedEvent'] | ResolversTypes['UnsubscribedEvent'] | ResolversTypes['User'] | ResolversTypes['UserBlockedEvent'] | ResolversTypes['UserContentEdit'] | ResolversTypes['UserStatus'] | ResolversTypes['VerifiableDomain'] | ResolversTypes['Workflow'] | ResolversTypes['WorkflowRun'];
+  Node: ResolversTypes['AddedToProjectEvent'] | ResolversTypes['App'] | ResolversTypes['AssignedEvent'] | ResolversTypes['AutoMergeDisabledEvent'] | ResolversTypes['AutoMergeEnabledEvent'] | ResolversTypes['AutoRebaseEnabledEvent'] | ResolversTypes['AutoSquashEnabledEvent'] | ResolversTypes['AutomaticBaseChangeFailedEvent'] | ResolversTypes['AutomaticBaseChangeSucceededEvent'] | ResolversTypes['BaseRefChangedEvent'] | ResolversTypes['BaseRefDeletedEvent'] | ResolversTypes['BaseRefForcePushedEvent'] | ResolversTypes['Blob'] | ResolversTypes['Bot'] | ResolversTypes['BranchProtectionRule'] | ResolversTypes['BypassForcePushAllowance'] | ResolversTypes['BypassPullRequestAllowance'] | ResolversTypes['CWE'] | ResolversTypes['CheckRun'] | ResolversTypes['CheckSuite'] | ResolversTypes['ClosedEvent'] | ResolversTypes['CodeOfConduct'] | ResolversTypes['CommentDeletedEvent'] | ResolversTypes['Commit'] | ResolversTypes['CommitComment'] | ResolversTypes['CommitCommentThread'] | ResolversTypes['ConnectedEvent'] | ResolversTypes['ConvertToDraftEvent'] | ResolversTypes['ConvertedNoteToIssueEvent'] | ResolversTypes['ConvertedToDiscussionEvent'] | ResolversTypes['CrossReferencedEvent'] | ResolversTypes['DemilestonedEvent'] | ResolversTypes['DeployKey'] | ResolversTypes['DeployedEvent'] | ResolversTypes['Deployment'] | ResolversTypes['DeploymentEnvironmentChangedEvent'] | ResolversTypes['DeploymentReview'] | ResolversTypes['DeploymentStatus'] | ResolversTypes['DisconnectedEvent'] | ResolversTypes['Discussion'] | ResolversTypes['DiscussionCategory'] | ResolversTypes['DiscussionComment'] | ResolversTypes['DiscussionPoll'] | ResolversTypes['DiscussionPollOption'] | ResolversTypes['DraftIssue'] | ResolversTypes['Enterprise'] | ResolversTypes['EnterpriseAdministratorInvitation'] | ResolversTypes['EnterpriseIdentityProvider'] | ResolversTypes['EnterpriseRepositoryInfo'] | ResolversTypes['EnterpriseServerInstallation'] | ResolversTypes['EnterpriseServerUserAccount'] | ResolversTypes['EnterpriseServerUserAccountEmail'] | ResolversTypes['EnterpriseServerUserAccountsUpload'] | ResolversTypes['EnterpriseUserAccount'] | ResolversTypes['Environment'] | ResolversTypes['ExternalIdentity'] | ResolversTypes['Gist'] | ResolversTypes['GistComment'] | ResolversTypes['HeadRefDeletedEvent'] | ResolversTypes['HeadRefForcePushedEvent'] | ResolversTypes['HeadRefRestoredEvent'] | ResolversTypes['IpAllowListEntry'] | ResolversTypes['Issue'] | ResolversTypes['IssueComment'] | ResolversTypes['Label'] | ResolversTypes['LabeledEvent'] | ResolversTypes['Language'] | ResolversTypes['License'] | ResolversTypes['LinkedBranch'] | ResolversTypes['LockedEvent'] | ResolversTypes['Mannequin'] | ResolversTypes['MarkedAsDuplicateEvent'] | ResolversTypes['MarketplaceCategory'] | ResolversTypes['MarketplaceListing'] | ResolversTypes['MembersCanDeleteReposClearAuditEntry'] | ResolversTypes['MembersCanDeleteReposDisableAuditEntry'] | ResolversTypes['MembersCanDeleteReposEnableAuditEntry'] | ResolversTypes['MentionedEvent'] | ResolversTypes['MergedEvent'] | ResolversTypes['MigrationSource'] | ResolversTypes['Milestone'] | ResolversTypes['MilestonedEvent'] | ResolversTypes['MovedColumnsInProjectEvent'] | ResolversTypes['OIDCProvider'] | ResolversTypes['OauthApplicationCreateAuditEntry'] | ResolversTypes['OrgAddBillingManagerAuditEntry'] | ResolversTypes['OrgAddMemberAuditEntry'] | ResolversTypes['OrgBlockUserAuditEntry'] | ResolversTypes['OrgConfigDisableCollaboratorsOnlyAuditEntry'] | ResolversTypes['OrgConfigEnableCollaboratorsOnlyAuditEntry'] | ResolversTypes['OrgCreateAuditEntry'] | ResolversTypes['OrgDisableOauthAppRestrictionsAuditEntry'] | ResolversTypes['OrgDisableSamlAuditEntry'] | ResolversTypes['OrgDisableTwoFactorRequirementAuditEntry'] | ResolversTypes['OrgEnableOauthAppRestrictionsAuditEntry'] | ResolversTypes['OrgEnableSamlAuditEntry'] | ResolversTypes['OrgEnableTwoFactorRequirementAuditEntry'] | ResolversTypes['OrgInviteMemberAuditEntry'] | ResolversTypes['OrgInviteToBusinessAuditEntry'] | ResolversTypes['OrgOauthAppAccessApprovedAuditEntry'] | ResolversTypes['OrgOauthAppAccessDeniedAuditEntry'] | ResolversTypes['OrgOauthAppAccessRequestedAuditEntry'] | ResolversTypes['OrgRemoveBillingManagerAuditEntry'] | ResolversTypes['OrgRemoveMemberAuditEntry'] | ResolversTypes['OrgRemoveOutsideCollaboratorAuditEntry'] | ResolversTypes['OrgRestoreMemberAuditEntry'] | ResolversTypes['OrgUnblockUserAuditEntry'] | ResolversTypes['OrgUpdateDefaultRepositoryPermissionAuditEntry'] | ResolversTypes['OrgUpdateMemberAuditEntry'] | ResolversTypes['OrgUpdateMemberRepositoryCreationPermissionAuditEntry'] | ResolversTypes['OrgUpdateMemberRepositoryInvitationPermissionAuditEntry'] | ResolversTypes['Organization'] | ResolversTypes['OrganizationIdentityProvider'] | ResolversTypes['OrganizationInvitation'] | ResolversTypes['Package'] | ResolversTypes['PackageFile'] | ResolversTypes['PackageTag'] | ResolversTypes['PackageVersion'] | ResolversTypes['PinnedDiscussion'] | ResolversTypes['PinnedEvent'] | ResolversTypes['PinnedIssue'] | ResolversTypes['PrivateRepositoryForkingDisableAuditEntry'] | ResolversTypes['PrivateRepositoryForkingEnableAuditEntry'] | ResolversTypes['Project'] | ResolversTypes['ProjectCard'] | ResolversTypes['ProjectColumn'] | ResolversTypes['ProjectNext'] | ResolversTypes['ProjectNextField'] | ResolversTypes['ProjectNextItem'] | ResolversTypes['ProjectNextItemFieldValue'] | ResolversTypes['ProjectV2'] | ResolversTypes['ProjectV2Field'] | ResolversTypes['ProjectV2Item'] | ResolversTypes['ProjectV2ItemFieldDateValue'] | ResolversTypes['ProjectV2ItemFieldIterationValue'] | ResolversTypes['ProjectV2ItemFieldNumberValue'] | ResolversTypes['ProjectV2ItemFieldSingleSelectValue'] | ResolversTypes['ProjectV2ItemFieldTextValue'] | ResolversTypes['ProjectV2IterationField'] | ResolversTypes['ProjectV2SingleSelectField'] | ResolversTypes['ProjectV2View'] | ResolversTypes['ProjectView'] | ResolversTypes['PublicKey'] | ResolversTypes['PullRequest'] | ResolversTypes['PullRequestCommit'] | ResolversTypes['PullRequestCommitCommentThread'] | ResolversTypes['PullRequestReview'] | ResolversTypes['PullRequestReviewComment'] | ResolversTypes['PullRequestReviewThread'] | ResolversTypes['PullRequestThread'] | ResolversTypes['Push'] | ResolversTypes['PushAllowance'] | ResolversTypes['Reaction'] | ResolversTypes['ReadyForReviewEvent'] | ResolversTypes['Ref'] | ResolversTypes['ReferencedEvent'] | ResolversTypes['Release'] | ResolversTypes['ReleaseAsset'] | ResolversTypes['RemovedFromProjectEvent'] | ResolversTypes['RenamedTitleEvent'] | ResolversTypes['ReopenedEvent'] | ResolversTypes['RepoAccessAuditEntry'] | ResolversTypes['RepoAddMemberAuditEntry'] | ResolversTypes['RepoAddTopicAuditEntry'] | ResolversTypes['RepoArchivedAuditEntry'] | ResolversTypes['RepoChangeMergeSettingAuditEntry'] | ResolversTypes['RepoConfigDisableAnonymousGitAccessAuditEntry'] | ResolversTypes['RepoConfigDisableCollaboratorsOnlyAuditEntry'] | ResolversTypes['RepoConfigDisableContributorsOnlyAuditEntry'] | ResolversTypes['RepoConfigDisableSockpuppetDisallowedAuditEntry'] | ResolversTypes['RepoConfigEnableAnonymousGitAccessAuditEntry'] | ResolversTypes['RepoConfigEnableCollaboratorsOnlyAuditEntry'] | ResolversTypes['RepoConfigEnableContributorsOnlyAuditEntry'] | ResolversTypes['RepoConfigEnableSockpuppetDisallowedAuditEntry'] | ResolversTypes['RepoConfigLockAnonymousGitAccessAuditEntry'] | ResolversTypes['RepoConfigUnlockAnonymousGitAccessAuditEntry'] | ResolversTypes['RepoCreateAuditEntry'] | ResolversTypes['RepoDestroyAuditEntry'] | ResolversTypes['RepoRemoveMemberAuditEntry'] | ResolversTypes['RepoRemoveTopicAuditEntry'] | ResolversTypes['Repository'] | ResolversTypes['RepositoryInvitation'] | ResolversTypes['RepositoryMigration'] | ResolversTypes['RepositoryTopic'] | ResolversTypes['RepositoryVisibilityChangeDisableAuditEntry'] | ResolversTypes['RepositoryVisibilityChangeEnableAuditEntry'] | ResolversTypes['RepositoryVulnerabilityAlert'] | ResolversTypes['ReviewDismissalAllowance'] | ResolversTypes['ReviewDismissedEvent'] | ResolversTypes['ReviewRequest'] | ResolversTypes['ReviewRequestRemovedEvent'] | ResolversTypes['ReviewRequestedEvent'] | ResolversTypes['SavedReply'] | ResolversTypes['SecurityAdvisory'] | ResolversTypes['SponsorsActivity'] | ResolversTypes['SponsorsListing'] | ResolversTypes['SponsorsTier'] | ResolversTypes['Sponsorship'] | ResolversTypes['SponsorshipNewsletter'] | ResolversTypes['Status'] | ResolversTypes['StatusCheckRollup'] | ResolversTypes['StatusContext'] | ResolversTypes['SubscribedEvent'] | ResolversTypes['Tag'] | ResolversTypes['Team'] | ResolversTypes['TeamAddMemberAuditEntry'] | ResolversTypes['TeamAddRepositoryAuditEntry'] | ResolversTypes['TeamChangeParentTeamAuditEntry'] | ResolversTypes['TeamDiscussion'] | ResolversTypes['TeamDiscussionComment'] | ResolversTypes['TeamRemoveMemberAuditEntry'] | ResolversTypes['TeamRemoveRepositoryAuditEntry'] | ResolversTypes['Topic'] | ResolversTypes['TransferredEvent'] | ResolversTypes['Tree'] | ResolversTypes['UnassignedEvent'] | ResolversTypes['UnlabeledEvent'] | ResolversTypes['UnlockedEvent'] | ResolversTypes['UnmarkedAsDuplicateEvent'] | ResolversTypes['UnpinnedEvent'] | ResolversTypes['UnsubscribedEvent'] | ResolversTypes['User'] | ResolversTypes['UserBlockedEvent'] | ResolversTypes['UserContentEdit'] | ResolversTypes['UserStatus'] | ResolversTypes['VerifiableDomain'] | ResolversTypes['Workflow'] | ResolversTypes['WorkflowRun'];
   NotificationRestrictionSettingValue: NotificationRestrictionSettingValue;
   OIDCProvider: ResolverTypeWrapper<OidcProvider>;
   OIDCProviderType: OidcProviderType;
@@ -26893,6 +27299,9 @@ export type ResolversTypes = {
   SponsorshipOrder: SponsorshipOrder;
   SponsorshipOrderField: SponsorshipOrderField;
   SponsorshipPrivacy: SponsorshipPrivacy;
+  SquashMergeCommitMessage: SquashMergeCommitMessage;
+  SquashMergeCommitTitle: SquashMergeCommitTitle;
+  SshSignature: ResolverTypeWrapper<SshSignature>;
   StarOrder: StarOrder;
   StarOrderField: StarOrderField;
   StargazerConnection: ResolverTypeWrapper<StargazerConnection>;
@@ -26908,6 +27317,7 @@ export type ResolversTypes = {
   StatusCheckRollupContextConnection: ResolverTypeWrapper<Omit<StatusCheckRollupContextConnection, 'nodes'> & { nodes?: Maybe<Array<Maybe<ResolversTypes['StatusCheckRollupContext']>>> }>;
   StatusCheckRollupContextEdge: ResolverTypeWrapper<Omit<StatusCheckRollupContextEdge, 'node'> & { node?: Maybe<ResolversTypes['StatusCheckRollupContext']> }>;
   StatusContext: ResolverTypeWrapper<StatusContext>;
+  StatusContextStateCount: ResolverTypeWrapper<StatusContextStateCount>;
   StatusState: StatusState;
   String: ResolverTypeWrapper<Scalars['String']>;
   SubmitPullRequestReviewInput: SubmitPullRequestReviewInput;
@@ -27131,6 +27541,10 @@ export type ResolversTypes = {
   Votable: ResolversTypes['Discussion'] | ResolversTypes['DiscussionComment'];
   Workflow: ResolverTypeWrapper<Workflow>;
   WorkflowRun: ResolverTypeWrapper<WorkflowRun>;
+  WorkflowRunConnection: ResolverTypeWrapper<WorkflowRunConnection>;
+  WorkflowRunEdge: ResolverTypeWrapper<WorkflowRunEdge>;
+  WorkflowRunOrder: WorkflowRunOrder;
+  WorkflowRunOrderField: WorkflowRunOrderField;
   X509Certificate: ResolverTypeWrapper<Scalars['X509Certificate']>;
 };
 
@@ -27249,6 +27663,7 @@ export type ResolversParentTypes = {
   CheckRunFilter: CheckRunFilter;
   CheckRunOutput: CheckRunOutput;
   CheckRunOutputImage: CheckRunOutputImage;
+  CheckRunStateCount: CheckRunStateCount;
   CheckStep: CheckStep;
   CheckStepConnection: CheckStepConnection;
   CheckStepEdge: CheckStepEdge;
@@ -27259,6 +27674,8 @@ export type ResolversParentTypes = {
   CheckSuiteFilter: CheckSuiteFilter;
   ClearLabelsFromLabelableInput: ClearLabelsFromLabelableInput;
   ClearLabelsFromLabelablePayload: ClearLabelsFromLabelablePayload;
+  ClearProjectV2ItemFieldValueInput: ClearProjectV2ItemFieldValueInput;
+  ClearProjectV2ItemFieldValuePayload: ClearProjectV2ItemFieldValuePayload;
   CloneProjectInput: CloneProjectInput;
   CloneProjectPayload: CloneProjectPayload;
   CloneTemplateRepositoryInput: CloneTemplateRepositoryInput;
@@ -27319,6 +27736,8 @@ export type ResolversParentTypes = {
   CreateIpAllowListEntryPayload: CreateIpAllowListEntryPayload;
   CreateIssueInput: CreateIssueInput;
   CreateIssuePayload: CreateIssuePayload;
+  CreateLinkedBranchInput: CreateLinkedBranchInput;
+  CreateLinkedBranchPayload: CreateLinkedBranchPayload;
   CreateMigrationSourceInput: CreateMigrationSourceInput;
   CreateMigrationSourcePayload: CreateMigrationSourcePayload;
   CreateProjectInput: CreateProjectInput;
@@ -27379,6 +27798,8 @@ export type ResolversParentTypes = {
   DeleteIssueCommentPayload: DeleteIssueCommentPayload;
   DeleteIssueInput: DeleteIssueInput;
   DeleteIssuePayload: DeleteIssuePayload;
+  DeleteLinkedBranchInput: DeleteLinkedBranchInput;
+  DeleteLinkedBranchPayload: DeleteLinkedBranchPayload;
   DeleteProjectCardInput: DeleteProjectCardInput;
   DeleteProjectCardPayload: DeleteProjectCardPayload;
   DeleteProjectColumnInput: DeleteProjectColumnInput;
@@ -27532,7 +27953,7 @@ export type ResolversParentTypes = {
   GitObject: ResolversParentTypes['Blob'] | ResolversParentTypes['Commit'] | ResolversParentTypes['Tag'] | ResolversParentTypes['Tree'];
   GitObjectID: Scalars['GitObjectID'];
   GitSSHRemote: Scalars['GitSSHRemote'];
-  GitSignature: ResolversParentTypes['GpgSignature'] | ResolversParentTypes['SmimeSignature'] | ResolversParentTypes['UnknownSignature'];
+  GitSignature: ResolversParentTypes['GpgSignature'] | ResolversParentTypes['SmimeSignature'] | ResolversParentTypes['SshSignature'] | ResolversParentTypes['UnknownSignature'];
   GitTimestamp: Scalars['GitTimestamp'];
   GpgSignature: GpgSignature;
   GrantEnterpriseOrganizationsMigratorRoleInput: GrantEnterpriseOrganizationsMigratorRoleInput;
@@ -27587,6 +28008,9 @@ export type ResolversParentTypes = {
   LicenseRule: LicenseRule;
   LinkRepositoryToProjectInput: LinkRepositoryToProjectInput;
   LinkRepositoryToProjectPayload: LinkRepositoryToProjectPayload;
+  LinkedBranch: LinkedBranch;
+  LinkedBranchConnection: LinkedBranchConnection;
+  LinkedBranchEdge: LinkedBranchEdge;
   LockLockableInput: LockLockableInput;
   LockLockablePayload: LockLockablePayload;
   Lockable: ResolversParentTypes['Discussion'] | ResolversParentTypes['Issue'] | ResolversParentTypes['PullRequest'];
@@ -27630,7 +28054,7 @@ export type ResolversParentTypes = {
   MoveProjectColumnPayload: MoveProjectColumnPayload;
   MovedColumnsInProjectEvent: MovedColumnsInProjectEvent;
   Mutation: {};
-  Node: ResolversParentTypes['AddedToProjectEvent'] | ResolversParentTypes['App'] | ResolversParentTypes['AssignedEvent'] | ResolversParentTypes['AutoMergeDisabledEvent'] | ResolversParentTypes['AutoMergeEnabledEvent'] | ResolversParentTypes['AutoRebaseEnabledEvent'] | ResolversParentTypes['AutoSquashEnabledEvent'] | ResolversParentTypes['AutomaticBaseChangeFailedEvent'] | ResolversParentTypes['AutomaticBaseChangeSucceededEvent'] | ResolversParentTypes['BaseRefChangedEvent'] | ResolversParentTypes['BaseRefDeletedEvent'] | ResolversParentTypes['BaseRefForcePushedEvent'] | ResolversParentTypes['Blob'] | ResolversParentTypes['Bot'] | ResolversParentTypes['BranchProtectionRule'] | ResolversParentTypes['BypassForcePushAllowance'] | ResolversParentTypes['BypassPullRequestAllowance'] | ResolversParentTypes['CWE'] | ResolversParentTypes['CheckRun'] | ResolversParentTypes['CheckSuite'] | ResolversParentTypes['ClosedEvent'] | ResolversParentTypes['CodeOfConduct'] | ResolversParentTypes['CommentDeletedEvent'] | ResolversParentTypes['Commit'] | ResolversParentTypes['CommitComment'] | ResolversParentTypes['CommitCommentThread'] | ResolversParentTypes['ConnectedEvent'] | ResolversParentTypes['ConvertToDraftEvent'] | ResolversParentTypes['ConvertedNoteToIssueEvent'] | ResolversParentTypes['ConvertedToDiscussionEvent'] | ResolversParentTypes['CrossReferencedEvent'] | ResolversParentTypes['DemilestonedEvent'] | ResolversParentTypes['DeployKey'] | ResolversParentTypes['DeployedEvent'] | ResolversParentTypes['Deployment'] | ResolversParentTypes['DeploymentEnvironmentChangedEvent'] | ResolversParentTypes['DeploymentReview'] | ResolversParentTypes['DeploymentStatus'] | ResolversParentTypes['DisconnectedEvent'] | ResolversParentTypes['Discussion'] | ResolversParentTypes['DiscussionCategory'] | ResolversParentTypes['DiscussionComment'] | ResolversParentTypes['DiscussionPoll'] | ResolversParentTypes['DiscussionPollOption'] | ResolversParentTypes['DraftIssue'] | ResolversParentTypes['Enterprise'] | ResolversParentTypes['EnterpriseAdministratorInvitation'] | ResolversParentTypes['EnterpriseIdentityProvider'] | ResolversParentTypes['EnterpriseRepositoryInfo'] | ResolversParentTypes['EnterpriseServerInstallation'] | ResolversParentTypes['EnterpriseServerUserAccount'] | ResolversParentTypes['EnterpriseServerUserAccountEmail'] | ResolversParentTypes['EnterpriseServerUserAccountsUpload'] | ResolversParentTypes['EnterpriseUserAccount'] | ResolversParentTypes['Environment'] | ResolversParentTypes['ExternalIdentity'] | ResolversParentTypes['Gist'] | ResolversParentTypes['GistComment'] | ResolversParentTypes['HeadRefDeletedEvent'] | ResolversParentTypes['HeadRefForcePushedEvent'] | ResolversParentTypes['HeadRefRestoredEvent'] | ResolversParentTypes['IpAllowListEntry'] | ResolversParentTypes['Issue'] | ResolversParentTypes['IssueComment'] | ResolversParentTypes['Label'] | ResolversParentTypes['LabeledEvent'] | ResolversParentTypes['Language'] | ResolversParentTypes['License'] | ResolversParentTypes['LockedEvent'] | ResolversParentTypes['Mannequin'] | ResolversParentTypes['MarkedAsDuplicateEvent'] | ResolversParentTypes['MarketplaceCategory'] | ResolversParentTypes['MarketplaceListing'] | ResolversParentTypes['MembersCanDeleteReposClearAuditEntry'] | ResolversParentTypes['MembersCanDeleteReposDisableAuditEntry'] | ResolversParentTypes['MembersCanDeleteReposEnableAuditEntry'] | ResolversParentTypes['MentionedEvent'] | ResolversParentTypes['MergedEvent'] | ResolversParentTypes['MigrationSource'] | ResolversParentTypes['Milestone'] | ResolversParentTypes['MilestonedEvent'] | ResolversParentTypes['MovedColumnsInProjectEvent'] | ResolversParentTypes['OIDCProvider'] | ResolversParentTypes['OauthApplicationCreateAuditEntry'] | ResolversParentTypes['OrgAddBillingManagerAuditEntry'] | ResolversParentTypes['OrgAddMemberAuditEntry'] | ResolversParentTypes['OrgBlockUserAuditEntry'] | ResolversParentTypes['OrgConfigDisableCollaboratorsOnlyAuditEntry'] | ResolversParentTypes['OrgConfigEnableCollaboratorsOnlyAuditEntry'] | ResolversParentTypes['OrgCreateAuditEntry'] | ResolversParentTypes['OrgDisableOauthAppRestrictionsAuditEntry'] | ResolversParentTypes['OrgDisableSamlAuditEntry'] | ResolversParentTypes['OrgDisableTwoFactorRequirementAuditEntry'] | ResolversParentTypes['OrgEnableOauthAppRestrictionsAuditEntry'] | ResolversParentTypes['OrgEnableSamlAuditEntry'] | ResolversParentTypes['OrgEnableTwoFactorRequirementAuditEntry'] | ResolversParentTypes['OrgInviteMemberAuditEntry'] | ResolversParentTypes['OrgInviteToBusinessAuditEntry'] | ResolversParentTypes['OrgOauthAppAccessApprovedAuditEntry'] | ResolversParentTypes['OrgOauthAppAccessDeniedAuditEntry'] | ResolversParentTypes['OrgOauthAppAccessRequestedAuditEntry'] | ResolversParentTypes['OrgRemoveBillingManagerAuditEntry'] | ResolversParentTypes['OrgRemoveMemberAuditEntry'] | ResolversParentTypes['OrgRemoveOutsideCollaboratorAuditEntry'] | ResolversParentTypes['OrgRestoreMemberAuditEntry'] | ResolversParentTypes['OrgUnblockUserAuditEntry'] | ResolversParentTypes['OrgUpdateDefaultRepositoryPermissionAuditEntry'] | ResolversParentTypes['OrgUpdateMemberAuditEntry'] | ResolversParentTypes['OrgUpdateMemberRepositoryCreationPermissionAuditEntry'] | ResolversParentTypes['OrgUpdateMemberRepositoryInvitationPermissionAuditEntry'] | ResolversParentTypes['Organization'] | ResolversParentTypes['OrganizationIdentityProvider'] | ResolversParentTypes['OrganizationInvitation'] | ResolversParentTypes['Package'] | ResolversParentTypes['PackageFile'] | ResolversParentTypes['PackageTag'] | ResolversParentTypes['PackageVersion'] | ResolversParentTypes['PinnedDiscussion'] | ResolversParentTypes['PinnedEvent'] | ResolversParentTypes['PinnedIssue'] | ResolversParentTypes['PrivateRepositoryForkingDisableAuditEntry'] | ResolversParentTypes['PrivateRepositoryForkingEnableAuditEntry'] | ResolversParentTypes['Project'] | ResolversParentTypes['ProjectCard'] | ResolversParentTypes['ProjectColumn'] | ResolversParentTypes['ProjectNext'] | ResolversParentTypes['ProjectNextField'] | ResolversParentTypes['ProjectNextItem'] | ResolversParentTypes['ProjectNextItemFieldValue'] | ResolversParentTypes['ProjectV2'] | ResolversParentTypes['ProjectV2Field'] | ResolversParentTypes['ProjectV2Item'] | ResolversParentTypes['ProjectV2ItemFieldDateValue'] | ResolversParentTypes['ProjectV2ItemFieldIterationValue'] | ResolversParentTypes['ProjectV2ItemFieldNumberValue'] | ResolversParentTypes['ProjectV2ItemFieldSingleSelectValue'] | ResolversParentTypes['ProjectV2ItemFieldTextValue'] | ResolversParentTypes['ProjectV2IterationField'] | ResolversParentTypes['ProjectV2SingleSelectField'] | ResolversParentTypes['ProjectV2View'] | ResolversParentTypes['ProjectView'] | ResolversParentTypes['PublicKey'] | ResolversParentTypes['PullRequest'] | ResolversParentTypes['PullRequestCommit'] | ResolversParentTypes['PullRequestCommitCommentThread'] | ResolversParentTypes['PullRequestReview'] | ResolversParentTypes['PullRequestReviewComment'] | ResolversParentTypes['PullRequestReviewThread'] | ResolversParentTypes['PullRequestThread'] | ResolversParentTypes['Push'] | ResolversParentTypes['PushAllowance'] | ResolversParentTypes['Reaction'] | ResolversParentTypes['ReadyForReviewEvent'] | ResolversParentTypes['Ref'] | ResolversParentTypes['ReferencedEvent'] | ResolversParentTypes['Release'] | ResolversParentTypes['ReleaseAsset'] | ResolversParentTypes['RemovedFromProjectEvent'] | ResolversParentTypes['RenamedTitleEvent'] | ResolversParentTypes['ReopenedEvent'] | ResolversParentTypes['RepoAccessAuditEntry'] | ResolversParentTypes['RepoAddMemberAuditEntry'] | ResolversParentTypes['RepoAddTopicAuditEntry'] | ResolversParentTypes['RepoArchivedAuditEntry'] | ResolversParentTypes['RepoChangeMergeSettingAuditEntry'] | ResolversParentTypes['RepoConfigDisableAnonymousGitAccessAuditEntry'] | ResolversParentTypes['RepoConfigDisableCollaboratorsOnlyAuditEntry'] | ResolversParentTypes['RepoConfigDisableContributorsOnlyAuditEntry'] | ResolversParentTypes['RepoConfigDisableSockpuppetDisallowedAuditEntry'] | ResolversParentTypes['RepoConfigEnableAnonymousGitAccessAuditEntry'] | ResolversParentTypes['RepoConfigEnableCollaboratorsOnlyAuditEntry'] | ResolversParentTypes['RepoConfigEnableContributorsOnlyAuditEntry'] | ResolversParentTypes['RepoConfigEnableSockpuppetDisallowedAuditEntry'] | ResolversParentTypes['RepoConfigLockAnonymousGitAccessAuditEntry'] | ResolversParentTypes['RepoConfigUnlockAnonymousGitAccessAuditEntry'] | ResolversParentTypes['RepoCreateAuditEntry'] | ResolversParentTypes['RepoDestroyAuditEntry'] | ResolversParentTypes['RepoRemoveMemberAuditEntry'] | ResolversParentTypes['RepoRemoveTopicAuditEntry'] | ResolversParentTypes['Repository'] | ResolversParentTypes['RepositoryInvitation'] | ResolversParentTypes['RepositoryMigration'] | ResolversParentTypes['RepositoryTopic'] | ResolversParentTypes['RepositoryVisibilityChangeDisableAuditEntry'] | ResolversParentTypes['RepositoryVisibilityChangeEnableAuditEntry'] | ResolversParentTypes['RepositoryVulnerabilityAlert'] | ResolversParentTypes['ReviewDismissalAllowance'] | ResolversParentTypes['ReviewDismissedEvent'] | ResolversParentTypes['ReviewRequest'] | ResolversParentTypes['ReviewRequestRemovedEvent'] | ResolversParentTypes['ReviewRequestedEvent'] | ResolversParentTypes['SavedReply'] | ResolversParentTypes['SecurityAdvisory'] | ResolversParentTypes['SponsorsActivity'] | ResolversParentTypes['SponsorsListing'] | ResolversParentTypes['SponsorsTier'] | ResolversParentTypes['Sponsorship'] | ResolversParentTypes['SponsorshipNewsletter'] | ResolversParentTypes['Status'] | ResolversParentTypes['StatusCheckRollup'] | ResolversParentTypes['StatusContext'] | ResolversParentTypes['SubscribedEvent'] | ResolversParentTypes['Tag'] | ResolversParentTypes['Team'] | ResolversParentTypes['TeamAddMemberAuditEntry'] | ResolversParentTypes['TeamAddRepositoryAuditEntry'] | ResolversParentTypes['TeamChangeParentTeamAuditEntry'] | ResolversParentTypes['TeamDiscussion'] | ResolversParentTypes['TeamDiscussionComment'] | ResolversParentTypes['TeamRemoveMemberAuditEntry'] | ResolversParentTypes['TeamRemoveRepositoryAuditEntry'] | ResolversParentTypes['Topic'] | ResolversParentTypes['TransferredEvent'] | ResolversParentTypes['Tree'] | ResolversParentTypes['UnassignedEvent'] | ResolversParentTypes['UnlabeledEvent'] | ResolversParentTypes['UnlockedEvent'] | ResolversParentTypes['UnmarkedAsDuplicateEvent'] | ResolversParentTypes['UnpinnedEvent'] | ResolversParentTypes['UnsubscribedEvent'] | ResolversParentTypes['User'] | ResolversParentTypes['UserBlockedEvent'] | ResolversParentTypes['UserContentEdit'] | ResolversParentTypes['UserStatus'] | ResolversParentTypes['VerifiableDomain'] | ResolversParentTypes['Workflow'] | ResolversParentTypes['WorkflowRun'];
+  Node: ResolversParentTypes['AddedToProjectEvent'] | ResolversParentTypes['App'] | ResolversParentTypes['AssignedEvent'] | ResolversParentTypes['AutoMergeDisabledEvent'] | ResolversParentTypes['AutoMergeEnabledEvent'] | ResolversParentTypes['AutoRebaseEnabledEvent'] | ResolversParentTypes['AutoSquashEnabledEvent'] | ResolversParentTypes['AutomaticBaseChangeFailedEvent'] | ResolversParentTypes['AutomaticBaseChangeSucceededEvent'] | ResolversParentTypes['BaseRefChangedEvent'] | ResolversParentTypes['BaseRefDeletedEvent'] | ResolversParentTypes['BaseRefForcePushedEvent'] | ResolversParentTypes['Blob'] | ResolversParentTypes['Bot'] | ResolversParentTypes['BranchProtectionRule'] | ResolversParentTypes['BypassForcePushAllowance'] | ResolversParentTypes['BypassPullRequestAllowance'] | ResolversParentTypes['CWE'] | ResolversParentTypes['CheckRun'] | ResolversParentTypes['CheckSuite'] | ResolversParentTypes['ClosedEvent'] | ResolversParentTypes['CodeOfConduct'] | ResolversParentTypes['CommentDeletedEvent'] | ResolversParentTypes['Commit'] | ResolversParentTypes['CommitComment'] | ResolversParentTypes['CommitCommentThread'] | ResolversParentTypes['ConnectedEvent'] | ResolversParentTypes['ConvertToDraftEvent'] | ResolversParentTypes['ConvertedNoteToIssueEvent'] | ResolversParentTypes['ConvertedToDiscussionEvent'] | ResolversParentTypes['CrossReferencedEvent'] | ResolversParentTypes['DemilestonedEvent'] | ResolversParentTypes['DeployKey'] | ResolversParentTypes['DeployedEvent'] | ResolversParentTypes['Deployment'] | ResolversParentTypes['DeploymentEnvironmentChangedEvent'] | ResolversParentTypes['DeploymentReview'] | ResolversParentTypes['DeploymentStatus'] | ResolversParentTypes['DisconnectedEvent'] | ResolversParentTypes['Discussion'] | ResolversParentTypes['DiscussionCategory'] | ResolversParentTypes['DiscussionComment'] | ResolversParentTypes['DiscussionPoll'] | ResolversParentTypes['DiscussionPollOption'] | ResolversParentTypes['DraftIssue'] | ResolversParentTypes['Enterprise'] | ResolversParentTypes['EnterpriseAdministratorInvitation'] | ResolversParentTypes['EnterpriseIdentityProvider'] | ResolversParentTypes['EnterpriseRepositoryInfo'] | ResolversParentTypes['EnterpriseServerInstallation'] | ResolversParentTypes['EnterpriseServerUserAccount'] | ResolversParentTypes['EnterpriseServerUserAccountEmail'] | ResolversParentTypes['EnterpriseServerUserAccountsUpload'] | ResolversParentTypes['EnterpriseUserAccount'] | ResolversParentTypes['Environment'] | ResolversParentTypes['ExternalIdentity'] | ResolversParentTypes['Gist'] | ResolversParentTypes['GistComment'] | ResolversParentTypes['HeadRefDeletedEvent'] | ResolversParentTypes['HeadRefForcePushedEvent'] | ResolversParentTypes['HeadRefRestoredEvent'] | ResolversParentTypes['IpAllowListEntry'] | ResolversParentTypes['Issue'] | ResolversParentTypes['IssueComment'] | ResolversParentTypes['Label'] | ResolversParentTypes['LabeledEvent'] | ResolversParentTypes['Language'] | ResolversParentTypes['License'] | ResolversParentTypes['LinkedBranch'] | ResolversParentTypes['LockedEvent'] | ResolversParentTypes['Mannequin'] | ResolversParentTypes['MarkedAsDuplicateEvent'] | ResolversParentTypes['MarketplaceCategory'] | ResolversParentTypes['MarketplaceListing'] | ResolversParentTypes['MembersCanDeleteReposClearAuditEntry'] | ResolversParentTypes['MembersCanDeleteReposDisableAuditEntry'] | ResolversParentTypes['MembersCanDeleteReposEnableAuditEntry'] | ResolversParentTypes['MentionedEvent'] | ResolversParentTypes['MergedEvent'] | ResolversParentTypes['MigrationSource'] | ResolversParentTypes['Milestone'] | ResolversParentTypes['MilestonedEvent'] | ResolversParentTypes['MovedColumnsInProjectEvent'] | ResolversParentTypes['OIDCProvider'] | ResolversParentTypes['OauthApplicationCreateAuditEntry'] | ResolversParentTypes['OrgAddBillingManagerAuditEntry'] | ResolversParentTypes['OrgAddMemberAuditEntry'] | ResolversParentTypes['OrgBlockUserAuditEntry'] | ResolversParentTypes['OrgConfigDisableCollaboratorsOnlyAuditEntry'] | ResolversParentTypes['OrgConfigEnableCollaboratorsOnlyAuditEntry'] | ResolversParentTypes['OrgCreateAuditEntry'] | ResolversParentTypes['OrgDisableOauthAppRestrictionsAuditEntry'] | ResolversParentTypes['OrgDisableSamlAuditEntry'] | ResolversParentTypes['OrgDisableTwoFactorRequirementAuditEntry'] | ResolversParentTypes['OrgEnableOauthAppRestrictionsAuditEntry'] | ResolversParentTypes['OrgEnableSamlAuditEntry'] | ResolversParentTypes['OrgEnableTwoFactorRequirementAuditEntry'] | ResolversParentTypes['OrgInviteMemberAuditEntry'] | ResolversParentTypes['OrgInviteToBusinessAuditEntry'] | ResolversParentTypes['OrgOauthAppAccessApprovedAuditEntry'] | ResolversParentTypes['OrgOauthAppAccessDeniedAuditEntry'] | ResolversParentTypes['OrgOauthAppAccessRequestedAuditEntry'] | ResolversParentTypes['OrgRemoveBillingManagerAuditEntry'] | ResolversParentTypes['OrgRemoveMemberAuditEntry'] | ResolversParentTypes['OrgRemoveOutsideCollaboratorAuditEntry'] | ResolversParentTypes['OrgRestoreMemberAuditEntry'] | ResolversParentTypes['OrgUnblockUserAuditEntry'] | ResolversParentTypes['OrgUpdateDefaultRepositoryPermissionAuditEntry'] | ResolversParentTypes['OrgUpdateMemberAuditEntry'] | ResolversParentTypes['OrgUpdateMemberRepositoryCreationPermissionAuditEntry'] | ResolversParentTypes['OrgUpdateMemberRepositoryInvitationPermissionAuditEntry'] | ResolversParentTypes['Organization'] | ResolversParentTypes['OrganizationIdentityProvider'] | ResolversParentTypes['OrganizationInvitation'] | ResolversParentTypes['Package'] | ResolversParentTypes['PackageFile'] | ResolversParentTypes['PackageTag'] | ResolversParentTypes['PackageVersion'] | ResolversParentTypes['PinnedDiscussion'] | ResolversParentTypes['PinnedEvent'] | ResolversParentTypes['PinnedIssue'] | ResolversParentTypes['PrivateRepositoryForkingDisableAuditEntry'] | ResolversParentTypes['PrivateRepositoryForkingEnableAuditEntry'] | ResolversParentTypes['Project'] | ResolversParentTypes['ProjectCard'] | ResolversParentTypes['ProjectColumn'] | ResolversParentTypes['ProjectNext'] | ResolversParentTypes['ProjectNextField'] | ResolversParentTypes['ProjectNextItem'] | ResolversParentTypes['ProjectNextItemFieldValue'] | ResolversParentTypes['ProjectV2'] | ResolversParentTypes['ProjectV2Field'] | ResolversParentTypes['ProjectV2Item'] | ResolversParentTypes['ProjectV2ItemFieldDateValue'] | ResolversParentTypes['ProjectV2ItemFieldIterationValue'] | ResolversParentTypes['ProjectV2ItemFieldNumberValue'] | ResolversParentTypes['ProjectV2ItemFieldSingleSelectValue'] | ResolversParentTypes['ProjectV2ItemFieldTextValue'] | ResolversParentTypes['ProjectV2IterationField'] | ResolversParentTypes['ProjectV2SingleSelectField'] | ResolversParentTypes['ProjectV2View'] | ResolversParentTypes['ProjectView'] | ResolversParentTypes['PublicKey'] | ResolversParentTypes['PullRequest'] | ResolversParentTypes['PullRequestCommit'] | ResolversParentTypes['PullRequestCommitCommentThread'] | ResolversParentTypes['PullRequestReview'] | ResolversParentTypes['PullRequestReviewComment'] | ResolversParentTypes['PullRequestReviewThread'] | ResolversParentTypes['PullRequestThread'] | ResolversParentTypes['Push'] | ResolversParentTypes['PushAllowance'] | ResolversParentTypes['Reaction'] | ResolversParentTypes['ReadyForReviewEvent'] | ResolversParentTypes['Ref'] | ResolversParentTypes['ReferencedEvent'] | ResolversParentTypes['Release'] | ResolversParentTypes['ReleaseAsset'] | ResolversParentTypes['RemovedFromProjectEvent'] | ResolversParentTypes['RenamedTitleEvent'] | ResolversParentTypes['ReopenedEvent'] | ResolversParentTypes['RepoAccessAuditEntry'] | ResolversParentTypes['RepoAddMemberAuditEntry'] | ResolversParentTypes['RepoAddTopicAuditEntry'] | ResolversParentTypes['RepoArchivedAuditEntry'] | ResolversParentTypes['RepoChangeMergeSettingAuditEntry'] | ResolversParentTypes['RepoConfigDisableAnonymousGitAccessAuditEntry'] | ResolversParentTypes['RepoConfigDisableCollaboratorsOnlyAuditEntry'] | ResolversParentTypes['RepoConfigDisableContributorsOnlyAuditEntry'] | ResolversParentTypes['RepoConfigDisableSockpuppetDisallowedAuditEntry'] | ResolversParentTypes['RepoConfigEnableAnonymousGitAccessAuditEntry'] | ResolversParentTypes['RepoConfigEnableCollaboratorsOnlyAuditEntry'] | ResolversParentTypes['RepoConfigEnableContributorsOnlyAuditEntry'] | ResolversParentTypes['RepoConfigEnableSockpuppetDisallowedAuditEntry'] | ResolversParentTypes['RepoConfigLockAnonymousGitAccessAuditEntry'] | ResolversParentTypes['RepoConfigUnlockAnonymousGitAccessAuditEntry'] | ResolversParentTypes['RepoCreateAuditEntry'] | ResolversParentTypes['RepoDestroyAuditEntry'] | ResolversParentTypes['RepoRemoveMemberAuditEntry'] | ResolversParentTypes['RepoRemoveTopicAuditEntry'] | ResolversParentTypes['Repository'] | ResolversParentTypes['RepositoryInvitation'] | ResolversParentTypes['RepositoryMigration'] | ResolversParentTypes['RepositoryTopic'] | ResolversParentTypes['RepositoryVisibilityChangeDisableAuditEntry'] | ResolversParentTypes['RepositoryVisibilityChangeEnableAuditEntry'] | ResolversParentTypes['RepositoryVulnerabilityAlert'] | ResolversParentTypes['ReviewDismissalAllowance'] | ResolversParentTypes['ReviewDismissedEvent'] | ResolversParentTypes['ReviewRequest'] | ResolversParentTypes['ReviewRequestRemovedEvent'] | ResolversParentTypes['ReviewRequestedEvent'] | ResolversParentTypes['SavedReply'] | ResolversParentTypes['SecurityAdvisory'] | ResolversParentTypes['SponsorsActivity'] | ResolversParentTypes['SponsorsListing'] | ResolversParentTypes['SponsorsTier'] | ResolversParentTypes['Sponsorship'] | ResolversParentTypes['SponsorshipNewsletter'] | ResolversParentTypes['Status'] | ResolversParentTypes['StatusCheckRollup'] | ResolversParentTypes['StatusContext'] | ResolversParentTypes['SubscribedEvent'] | ResolversParentTypes['Tag'] | ResolversParentTypes['Team'] | ResolversParentTypes['TeamAddMemberAuditEntry'] | ResolversParentTypes['TeamAddRepositoryAuditEntry'] | ResolversParentTypes['TeamChangeParentTeamAuditEntry'] | ResolversParentTypes['TeamDiscussion'] | ResolversParentTypes['TeamDiscussionComment'] | ResolversParentTypes['TeamRemoveMemberAuditEntry'] | ResolversParentTypes['TeamRemoveRepositoryAuditEntry'] | ResolversParentTypes['Topic'] | ResolversParentTypes['TransferredEvent'] | ResolversParentTypes['Tree'] | ResolversParentTypes['UnassignedEvent'] | ResolversParentTypes['UnlabeledEvent'] | ResolversParentTypes['UnlockedEvent'] | ResolversParentTypes['UnmarkedAsDuplicateEvent'] | ResolversParentTypes['UnpinnedEvent'] | ResolversParentTypes['UnsubscribedEvent'] | ResolversParentTypes['User'] | ResolversParentTypes['UserBlockedEvent'] | ResolversParentTypes['UserContentEdit'] | ResolversParentTypes['UserStatus'] | ResolversParentTypes['VerifiableDomain'] | ResolversParentTypes['Workflow'] | ResolversParentTypes['WorkflowRun'];
   OIDCProvider: OidcProvider;
   OauthApplicationAuditEntryData: ResolversParentTypes['OauthApplicationCreateAuditEntry'] | ResolversParentTypes['OrgOauthAppAccessApprovedAuditEntry'] | ResolversParentTypes['OrgOauthAppAccessDeniedAuditEntry'] | ResolversParentTypes['OrgOauthAppAccessRequestedAuditEntry'];
   OauthApplicationCreateAuditEntry: Omit<OauthApplicationCreateAuditEntry, 'actor'> & { actor?: Maybe<ResolversParentTypes['AuditEntryActor']> };
@@ -28037,6 +28461,7 @@ export type ResolversParentTypes = {
   SponsorshipNewsletterEdge: SponsorshipNewsletterEdge;
   SponsorshipNewsletterOrder: SponsorshipNewsletterOrder;
   SponsorshipOrder: SponsorshipOrder;
+  SshSignature: SshSignature;
   StarOrder: StarOrder;
   StargazerConnection: StargazerConnection;
   StargazerEdge: StargazerEdge;
@@ -28051,6 +28476,7 @@ export type ResolversParentTypes = {
   StatusCheckRollupContextConnection: Omit<StatusCheckRollupContextConnection, 'nodes'> & { nodes?: Maybe<Array<Maybe<ResolversParentTypes['StatusCheckRollupContext']>>> };
   StatusCheckRollupContextEdge: Omit<StatusCheckRollupContextEdge, 'node'> & { node?: Maybe<ResolversParentTypes['StatusCheckRollupContext']> };
   StatusContext: StatusContext;
+  StatusContextStateCount: StatusContextStateCount;
   String: Scalars['String'];
   SubmitPullRequestReviewInput: SubmitPullRequestReviewInput;
   SubmitPullRequestReviewPayload: SubmitPullRequestReviewPayload;
@@ -28258,6 +28684,9 @@ export type ResolversParentTypes = {
   Votable: ResolversParentTypes['Discussion'] | ResolversParentTypes['DiscussionComment'];
   Workflow: Workflow;
   WorkflowRun: WorkflowRun;
+  WorkflowRunConnection: WorkflowRunConnection;
+  WorkflowRunEdge: WorkflowRunEdge;
+  WorkflowRunOrder: WorkflowRunOrder;
   X509Certificate: Scalars['X509Certificate'];
 };
 
@@ -28886,6 +29315,12 @@ export type CheckRunEdgeResolvers<ContextType = any, ParentType extends Resolver
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type CheckRunStateCountResolvers<ContextType = any, ParentType extends ResolversParentTypes['CheckRunStateCount'] = ResolversParentTypes['CheckRunStateCount']> = {
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  state?: Resolver<ResolversTypes['CheckRunState'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type CheckStepResolvers<ContextType = any, ParentType extends ResolversParentTypes['CheckStep'] = ResolversParentTypes['CheckStep']> = {
   completedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   conclusion?: Resolver<Maybe<ResolversTypes['CheckConclusionState']>, ParentType, ContextType>;
@@ -28950,6 +29385,12 @@ export type CheckSuiteEdgeResolvers<ContextType = any, ParentType extends Resolv
 export type ClearLabelsFromLabelablePayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['ClearLabelsFromLabelablePayload'] = ResolversParentTypes['ClearLabelsFromLabelablePayload']> = {
   clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   labelable?: Resolver<Maybe<ResolversTypes['Labelable']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ClearProjectV2ItemFieldValuePayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['ClearProjectV2ItemFieldValuePayload'] = ResolversParentTypes['ClearProjectV2ItemFieldValuePayload']> = {
+  clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  projectV2Item?: Resolver<Maybe<ResolversTypes['ProjectV2Item']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -29048,6 +29489,7 @@ export type CommitResolvers<ContextType = any, ParentType extends ResolversParen
   authors?: Resolver<ResolversTypes['GitActorConnection'], ParentType, ContextType, Partial<CommitAuthorsArgs>>;
   blame?: Resolver<ResolversTypes['Blame'], ParentType, ContextType, RequireFields<CommitBlameArgs, 'path'>>;
   changedFiles?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  changedFilesIfAvailable?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   checkSuites?: Resolver<Maybe<ResolversTypes['CheckSuiteConnection']>, ParentType, ContextType, Partial<CommitCheckSuitesArgs>>;
   comments?: Resolver<ResolversTypes['CommitCommentConnection'], ParentType, ContextType, Partial<CommitCommentsArgs>>;
   commitResourcePath?: Resolver<ResolversTypes['URI'], ParentType, ContextType>;
@@ -29362,6 +29804,12 @@ export type CreateIssuePayloadResolvers<ContextType = any, ParentType extends Re
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type CreateLinkedBranchPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateLinkedBranchPayload'] = ResolversParentTypes['CreateLinkedBranchPayload']> = {
+  clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  linkedBranch?: Resolver<Maybe<ResolversTypes['LinkedBranch']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type CreateMigrationSourcePayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateMigrationSourcePayload'] = ResolversParentTypes['CreateMigrationSourcePayload']> = {
   clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   migrationSource?: Resolver<Maybe<ResolversTypes['MigrationSource']>, ParentType, ContextType>;
@@ -29634,6 +30082,12 @@ export type DeleteIssuePayloadResolvers<ContextType = any, ParentType extends Re
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type DeleteLinkedBranchPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['DeleteLinkedBranchPayload'] = ResolversParentTypes['DeleteLinkedBranchPayload']> = {
+  clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  issue?: Resolver<Maybe<ResolversTypes['Issue']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type DeleteProjectCardPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['DeleteProjectCardPayload'] = ResolversParentTypes['DeleteProjectCardPayload']> = {
   clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   column?: Resolver<Maybe<ResolversTypes['ProjectColumn']>, ParentType, ContextType>;
@@ -29669,6 +30123,7 @@ export type DeleteProjectV2ItemPayloadResolvers<ContextType = any, ParentType ex
 export type DeletePullRequestReviewCommentPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['DeletePullRequestReviewCommentPayload'] = ResolversParentTypes['DeletePullRequestReviewCommentPayload']> = {
   clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   pullRequestReview?: Resolver<Maybe<ResolversTypes['PullRequestReview']>, ParentType, ContextType>;
+  pullRequestReviewComment?: Resolver<Maybe<ResolversTypes['PullRequestReviewComment']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -30153,7 +30608,7 @@ export type EnterpriseResolvers<ContextType = any, ParentType extends ResolversP
   descriptionHTML?: Resolver<ResolversTypes['HTML'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   location?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  members?: Resolver<ResolversTypes['EnterpriseMemberConnection'], ParentType, ContextType, RequireFields<EnterpriseMembersArgs, 'orderBy'>>;
+  members?: Resolver<ResolversTypes['EnterpriseMemberConnection'], ParentType, ContextType, RequireFields<EnterpriseMembersArgs, 'hasTwoFactorEnabled' | 'orderBy'>>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   organizations?: Resolver<ResolversTypes['OrganizationConnection'], ParentType, ContextType, RequireFields<EnterpriseOrganizationsArgs, 'orderBy'>>;
   ownerInfo?: Resolver<Maybe<ResolversTypes['EnterpriseOwnerInfo']>, ParentType, ContextType>;
@@ -30288,11 +30743,12 @@ export type EnterpriseOutsideCollaboratorEdgeResolvers<ContextType = any, Parent
 };
 
 export type EnterpriseOwnerInfoResolvers<ContextType = any, ParentType extends ResolversParentTypes['EnterpriseOwnerInfo'] = ResolversParentTypes['EnterpriseOwnerInfo']> = {
-  admins?: Resolver<ResolversTypes['EnterpriseAdministratorConnection'], ParentType, ContextType, RequireFields<EnterpriseOwnerInfoAdminsArgs, 'orderBy'>>;
+  admins?: Resolver<ResolversTypes['EnterpriseAdministratorConnection'], ParentType, ContextType, RequireFields<EnterpriseOwnerInfoAdminsArgs, 'hasTwoFactorEnabled' | 'orderBy'>>;
   affiliatedUsersWithTwoFactorDisabled?: Resolver<ResolversTypes['UserConnection'], ParentType, ContextType, Partial<EnterpriseOwnerInfoAffiliatedUsersWithTwoFactorDisabledArgs>>;
   affiliatedUsersWithTwoFactorDisabledExist?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   allowPrivateRepositoryForkingSetting?: Resolver<ResolversTypes['EnterpriseEnabledDisabledSettingValue'], ParentType, ContextType>;
   allowPrivateRepositoryForkingSettingOrganizations?: Resolver<ResolversTypes['OrganizationConnection'], ParentType, ContextType, RequireFields<EnterpriseOwnerInfoAllowPrivateRepositoryForkingSettingOrganizationsArgs, 'orderBy' | 'value'>>;
+  allowPrivateRepositoryForkingSettingPolicyValue?: Resolver<Maybe<ResolversTypes['EnterpriseAllowPrivateRepositoryForkingPolicyValue']>, ParentType, ContextType>;
   defaultRepositoryPermissionSetting?: Resolver<ResolversTypes['EnterpriseDefaultRepositoryPermissionSettingValue'], ParentType, ContextType>;
   defaultRepositoryPermissionSettingOrganizations?: Resolver<ResolversTypes['OrganizationConnection'], ParentType, ContextType, RequireFields<EnterpriseOwnerInfoDefaultRepositoryPermissionSettingOrganizationsArgs, 'orderBy' | 'value'>>;
   domains?: Resolver<ResolversTypes['VerifiableDomainConnection'], ParentType, ContextType, RequireFields<EnterpriseOwnerInfoDomainsArgs, 'isApproved' | 'isVerified' | 'orderBy'>>;
@@ -30749,7 +31205,7 @@ export interface GitSshRemoteScalarConfig extends GraphQLScalarTypeConfig<Resolv
 }
 
 export type GitSignatureResolvers<ContextType = any, ParentType extends ResolversParentTypes['GitSignature'] = ResolversParentTypes['GitSignature']> = {
-  __resolveType: TypeResolveFn<'GpgSignature' | 'SmimeSignature' | 'UnknownSignature', ParentType, ContextType>;
+  __resolveType: TypeResolveFn<'GpgSignature' | 'SmimeSignature' | 'SshSignature' | 'UnknownSignature', ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   isValid?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   payload?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -30890,6 +31346,7 @@ export type IssueResolvers<ContextType = any, ParentType extends ResolversParent
   isReadByViewer?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   labels?: Resolver<Maybe<ResolversTypes['LabelConnection']>, ParentType, ContextType, RequireFields<IssueLabelsArgs, 'orderBy'>>;
   lastEditedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  linkedBranches?: Resolver<ResolversTypes['LinkedBranchConnection'], ParentType, ContextType, Partial<IssueLinkedBranchesArgs>>;
   locked?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   milestone?: Resolver<Maybe<ResolversTypes['Milestone']>, ParentType, ContextType>;
   number?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -31152,6 +31609,26 @@ export type LinkRepositoryToProjectPayloadResolvers<ContextType = any, ParentTyp
   clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   project?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType>;
   repository?: Resolver<Maybe<ResolversTypes['Repository']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type LinkedBranchResolvers<ContextType = any, ParentType extends ResolversParentTypes['LinkedBranch'] = ResolversParentTypes['LinkedBranch']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  ref?: Resolver<Maybe<ResolversTypes['Ref']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type LinkedBranchConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['LinkedBranchConnection'] = ResolversParentTypes['LinkedBranchConnection']> = {
+  edges?: Resolver<Maybe<Array<Maybe<ResolversTypes['LinkedBranchEdge']>>>, ParentType, ContextType>;
+  nodes?: Resolver<Maybe<Array<Maybe<ResolversTypes['LinkedBranch']>>>, ParentType, ContextType>;
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type LinkedBranchEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['LinkedBranchEdge'] = ResolversParentTypes['LinkedBranchEdge']> = {
+  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  node?: Resolver<Maybe<ResolversTypes['LinkedBranch']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -31424,6 +31901,7 @@ export type MigrationResolvers<ContextType = any, ParentType extends ResolversPa
   __resolveType: TypeResolveFn<'RepositoryMigration', ParentType, ContextType>;
   continueOnError?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  databaseId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   failureReason?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   migrationLogUrl?: Resolver<Maybe<ResolversTypes['URI']>, ParentType, ContextType>;
@@ -31552,6 +32030,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   cancelSponsorship?: Resolver<Maybe<ResolversTypes['CancelSponsorshipPayload']>, ParentType, ContextType, RequireFields<MutationCancelSponsorshipArgs, 'input'>>;
   changeUserStatus?: Resolver<Maybe<ResolversTypes['ChangeUserStatusPayload']>, ParentType, ContextType, RequireFields<MutationChangeUserStatusArgs, 'input'>>;
   clearLabelsFromLabelable?: Resolver<Maybe<ResolversTypes['ClearLabelsFromLabelablePayload']>, ParentType, ContextType, RequireFields<MutationClearLabelsFromLabelableArgs, 'input'>>;
+  clearProjectV2ItemFieldValue?: Resolver<Maybe<ResolversTypes['ClearProjectV2ItemFieldValuePayload']>, ParentType, ContextType, RequireFields<MutationClearProjectV2ItemFieldValueArgs, 'input'>>;
   cloneProject?: Resolver<Maybe<ResolversTypes['CloneProjectPayload']>, ParentType, ContextType, RequireFields<MutationCloneProjectArgs, 'input'>>;
   cloneTemplateRepository?: Resolver<Maybe<ResolversTypes['CloneTemplateRepositoryPayload']>, ParentType, ContextType, RequireFields<MutationCloneTemplateRepositoryArgs, 'input'>>;
   closeIssue?: Resolver<Maybe<ResolversTypes['CloseIssuePayload']>, ParentType, ContextType, RequireFields<MutationCloseIssueArgs, 'input'>>;
@@ -31567,6 +32046,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createEnvironment?: Resolver<Maybe<ResolversTypes['CreateEnvironmentPayload']>, ParentType, ContextType, RequireFields<MutationCreateEnvironmentArgs, 'input'>>;
   createIpAllowListEntry?: Resolver<Maybe<ResolversTypes['CreateIpAllowListEntryPayload']>, ParentType, ContextType, RequireFields<MutationCreateIpAllowListEntryArgs, 'input'>>;
   createIssue?: Resolver<Maybe<ResolversTypes['CreateIssuePayload']>, ParentType, ContextType, RequireFields<MutationCreateIssueArgs, 'input'>>;
+  createLinkedBranch?: Resolver<Maybe<ResolversTypes['CreateLinkedBranchPayload']>, ParentType, ContextType, RequireFields<MutationCreateLinkedBranchArgs, 'input'>>;
   createMigrationSource?: Resolver<Maybe<ResolversTypes['CreateMigrationSourcePayload']>, ParentType, ContextType, RequireFields<MutationCreateMigrationSourceArgs, 'input'>>;
   createProject?: Resolver<Maybe<ResolversTypes['CreateProjectPayload']>, ParentType, ContextType, RequireFields<MutationCreateProjectArgs, 'input'>>;
   createProjectV2?: Resolver<Maybe<ResolversTypes['CreateProjectV2Payload']>, ParentType, ContextType, RequireFields<MutationCreateProjectV2Args, 'input'>>;
@@ -31586,6 +32066,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   deleteIpAllowListEntry?: Resolver<Maybe<ResolversTypes['DeleteIpAllowListEntryPayload']>, ParentType, ContextType, RequireFields<MutationDeleteIpAllowListEntryArgs, 'input'>>;
   deleteIssue?: Resolver<Maybe<ResolversTypes['DeleteIssuePayload']>, ParentType, ContextType, RequireFields<MutationDeleteIssueArgs, 'input'>>;
   deleteIssueComment?: Resolver<Maybe<ResolversTypes['DeleteIssueCommentPayload']>, ParentType, ContextType, RequireFields<MutationDeleteIssueCommentArgs, 'input'>>;
+  deleteLinkedBranch?: Resolver<Maybe<ResolversTypes['DeleteLinkedBranchPayload']>, ParentType, ContextType, RequireFields<MutationDeleteLinkedBranchArgs, 'input'>>;
   deleteProject?: Resolver<Maybe<ResolversTypes['DeleteProjectPayload']>, ParentType, ContextType, RequireFields<MutationDeleteProjectArgs, 'input'>>;
   deleteProjectCard?: Resolver<Maybe<ResolversTypes['DeleteProjectCardPayload']>, ParentType, ContextType, RequireFields<MutationDeleteProjectCardArgs, 'input'>>;
   deleteProjectColumn?: Resolver<Maybe<ResolversTypes['DeleteProjectColumnPayload']>, ParentType, ContextType, RequireFields<MutationDeleteProjectColumnArgs, 'input'>>;
@@ -31713,7 +32194,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type NodeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Node'] = ResolversParentTypes['Node']> = {
-  __resolveType: TypeResolveFn<'AddedToProjectEvent' | 'App' | 'AssignedEvent' | 'AutoMergeDisabledEvent' | 'AutoMergeEnabledEvent' | 'AutoRebaseEnabledEvent' | 'AutoSquashEnabledEvent' | 'AutomaticBaseChangeFailedEvent' | 'AutomaticBaseChangeSucceededEvent' | 'BaseRefChangedEvent' | 'BaseRefDeletedEvent' | 'BaseRefForcePushedEvent' | 'Blob' | 'Bot' | 'BranchProtectionRule' | 'BypassForcePushAllowance' | 'BypassPullRequestAllowance' | 'CWE' | 'CheckRun' | 'CheckSuite' | 'ClosedEvent' | 'CodeOfConduct' | 'CommentDeletedEvent' | 'Commit' | 'CommitComment' | 'CommitCommentThread' | 'ConnectedEvent' | 'ConvertToDraftEvent' | 'ConvertedNoteToIssueEvent' | 'ConvertedToDiscussionEvent' | 'CrossReferencedEvent' | 'DemilestonedEvent' | 'DeployKey' | 'DeployedEvent' | 'Deployment' | 'DeploymentEnvironmentChangedEvent' | 'DeploymentReview' | 'DeploymentStatus' | 'DisconnectedEvent' | 'Discussion' | 'DiscussionCategory' | 'DiscussionComment' | 'DiscussionPoll' | 'DiscussionPollOption' | 'DraftIssue' | 'Enterprise' | 'EnterpriseAdministratorInvitation' | 'EnterpriseIdentityProvider' | 'EnterpriseRepositoryInfo' | 'EnterpriseServerInstallation' | 'EnterpriseServerUserAccount' | 'EnterpriseServerUserAccountEmail' | 'EnterpriseServerUserAccountsUpload' | 'EnterpriseUserAccount' | 'Environment' | 'ExternalIdentity' | 'Gist' | 'GistComment' | 'HeadRefDeletedEvent' | 'HeadRefForcePushedEvent' | 'HeadRefRestoredEvent' | 'IpAllowListEntry' | 'Issue' | 'IssueComment' | 'Label' | 'LabeledEvent' | 'Language' | 'License' | 'LockedEvent' | 'Mannequin' | 'MarkedAsDuplicateEvent' | 'MarketplaceCategory' | 'MarketplaceListing' | 'MembersCanDeleteReposClearAuditEntry' | 'MembersCanDeleteReposDisableAuditEntry' | 'MembersCanDeleteReposEnableAuditEntry' | 'MentionedEvent' | 'MergedEvent' | 'MigrationSource' | 'Milestone' | 'MilestonedEvent' | 'MovedColumnsInProjectEvent' | 'OIDCProvider' | 'OauthApplicationCreateAuditEntry' | 'OrgAddBillingManagerAuditEntry' | 'OrgAddMemberAuditEntry' | 'OrgBlockUserAuditEntry' | 'OrgConfigDisableCollaboratorsOnlyAuditEntry' | 'OrgConfigEnableCollaboratorsOnlyAuditEntry' | 'OrgCreateAuditEntry' | 'OrgDisableOauthAppRestrictionsAuditEntry' | 'OrgDisableSamlAuditEntry' | 'OrgDisableTwoFactorRequirementAuditEntry' | 'OrgEnableOauthAppRestrictionsAuditEntry' | 'OrgEnableSamlAuditEntry' | 'OrgEnableTwoFactorRequirementAuditEntry' | 'OrgInviteMemberAuditEntry' | 'OrgInviteToBusinessAuditEntry' | 'OrgOauthAppAccessApprovedAuditEntry' | 'OrgOauthAppAccessDeniedAuditEntry' | 'OrgOauthAppAccessRequestedAuditEntry' | 'OrgRemoveBillingManagerAuditEntry' | 'OrgRemoveMemberAuditEntry' | 'OrgRemoveOutsideCollaboratorAuditEntry' | 'OrgRestoreMemberAuditEntry' | 'OrgUnblockUserAuditEntry' | 'OrgUpdateDefaultRepositoryPermissionAuditEntry' | 'OrgUpdateMemberAuditEntry' | 'OrgUpdateMemberRepositoryCreationPermissionAuditEntry' | 'OrgUpdateMemberRepositoryInvitationPermissionAuditEntry' | 'Organization' | 'OrganizationIdentityProvider' | 'OrganizationInvitation' | 'Package' | 'PackageFile' | 'PackageTag' | 'PackageVersion' | 'PinnedDiscussion' | 'PinnedEvent' | 'PinnedIssue' | 'PrivateRepositoryForkingDisableAuditEntry' | 'PrivateRepositoryForkingEnableAuditEntry' | 'Project' | 'ProjectCard' | 'ProjectColumn' | 'ProjectNext' | 'ProjectNextField' | 'ProjectNextItem' | 'ProjectNextItemFieldValue' | 'ProjectV2' | 'ProjectV2Field' | 'ProjectV2Item' | 'ProjectV2ItemFieldDateValue' | 'ProjectV2ItemFieldIterationValue' | 'ProjectV2ItemFieldNumberValue' | 'ProjectV2ItemFieldSingleSelectValue' | 'ProjectV2ItemFieldTextValue' | 'ProjectV2IterationField' | 'ProjectV2SingleSelectField' | 'ProjectV2View' | 'ProjectView' | 'PublicKey' | 'PullRequest' | 'PullRequestCommit' | 'PullRequestCommitCommentThread' | 'PullRequestReview' | 'PullRequestReviewComment' | 'PullRequestReviewThread' | 'PullRequestThread' | 'Push' | 'PushAllowance' | 'Reaction' | 'ReadyForReviewEvent' | 'Ref' | 'ReferencedEvent' | 'Release' | 'ReleaseAsset' | 'RemovedFromProjectEvent' | 'RenamedTitleEvent' | 'ReopenedEvent' | 'RepoAccessAuditEntry' | 'RepoAddMemberAuditEntry' | 'RepoAddTopicAuditEntry' | 'RepoArchivedAuditEntry' | 'RepoChangeMergeSettingAuditEntry' | 'RepoConfigDisableAnonymousGitAccessAuditEntry' | 'RepoConfigDisableCollaboratorsOnlyAuditEntry' | 'RepoConfigDisableContributorsOnlyAuditEntry' | 'RepoConfigDisableSockpuppetDisallowedAuditEntry' | 'RepoConfigEnableAnonymousGitAccessAuditEntry' | 'RepoConfigEnableCollaboratorsOnlyAuditEntry' | 'RepoConfigEnableContributorsOnlyAuditEntry' | 'RepoConfigEnableSockpuppetDisallowedAuditEntry' | 'RepoConfigLockAnonymousGitAccessAuditEntry' | 'RepoConfigUnlockAnonymousGitAccessAuditEntry' | 'RepoCreateAuditEntry' | 'RepoDestroyAuditEntry' | 'RepoRemoveMemberAuditEntry' | 'RepoRemoveTopicAuditEntry' | 'Repository' | 'RepositoryInvitation' | 'RepositoryMigration' | 'RepositoryTopic' | 'RepositoryVisibilityChangeDisableAuditEntry' | 'RepositoryVisibilityChangeEnableAuditEntry' | 'RepositoryVulnerabilityAlert' | 'ReviewDismissalAllowance' | 'ReviewDismissedEvent' | 'ReviewRequest' | 'ReviewRequestRemovedEvent' | 'ReviewRequestedEvent' | 'SavedReply' | 'SecurityAdvisory' | 'SponsorsActivity' | 'SponsorsListing' | 'SponsorsTier' | 'Sponsorship' | 'SponsorshipNewsletter' | 'Status' | 'StatusCheckRollup' | 'StatusContext' | 'SubscribedEvent' | 'Tag' | 'Team' | 'TeamAddMemberAuditEntry' | 'TeamAddRepositoryAuditEntry' | 'TeamChangeParentTeamAuditEntry' | 'TeamDiscussion' | 'TeamDiscussionComment' | 'TeamRemoveMemberAuditEntry' | 'TeamRemoveRepositoryAuditEntry' | 'Topic' | 'TransferredEvent' | 'Tree' | 'UnassignedEvent' | 'UnlabeledEvent' | 'UnlockedEvent' | 'UnmarkedAsDuplicateEvent' | 'UnpinnedEvent' | 'UnsubscribedEvent' | 'User' | 'UserBlockedEvent' | 'UserContentEdit' | 'UserStatus' | 'VerifiableDomain' | 'Workflow' | 'WorkflowRun', ParentType, ContextType>;
+  __resolveType: TypeResolveFn<'AddedToProjectEvent' | 'App' | 'AssignedEvent' | 'AutoMergeDisabledEvent' | 'AutoMergeEnabledEvent' | 'AutoRebaseEnabledEvent' | 'AutoSquashEnabledEvent' | 'AutomaticBaseChangeFailedEvent' | 'AutomaticBaseChangeSucceededEvent' | 'BaseRefChangedEvent' | 'BaseRefDeletedEvent' | 'BaseRefForcePushedEvent' | 'Blob' | 'Bot' | 'BranchProtectionRule' | 'BypassForcePushAllowance' | 'BypassPullRequestAllowance' | 'CWE' | 'CheckRun' | 'CheckSuite' | 'ClosedEvent' | 'CodeOfConduct' | 'CommentDeletedEvent' | 'Commit' | 'CommitComment' | 'CommitCommentThread' | 'ConnectedEvent' | 'ConvertToDraftEvent' | 'ConvertedNoteToIssueEvent' | 'ConvertedToDiscussionEvent' | 'CrossReferencedEvent' | 'DemilestonedEvent' | 'DeployKey' | 'DeployedEvent' | 'Deployment' | 'DeploymentEnvironmentChangedEvent' | 'DeploymentReview' | 'DeploymentStatus' | 'DisconnectedEvent' | 'Discussion' | 'DiscussionCategory' | 'DiscussionComment' | 'DiscussionPoll' | 'DiscussionPollOption' | 'DraftIssue' | 'Enterprise' | 'EnterpriseAdministratorInvitation' | 'EnterpriseIdentityProvider' | 'EnterpriseRepositoryInfo' | 'EnterpriseServerInstallation' | 'EnterpriseServerUserAccount' | 'EnterpriseServerUserAccountEmail' | 'EnterpriseServerUserAccountsUpload' | 'EnterpriseUserAccount' | 'Environment' | 'ExternalIdentity' | 'Gist' | 'GistComment' | 'HeadRefDeletedEvent' | 'HeadRefForcePushedEvent' | 'HeadRefRestoredEvent' | 'IpAllowListEntry' | 'Issue' | 'IssueComment' | 'Label' | 'LabeledEvent' | 'Language' | 'License' | 'LinkedBranch' | 'LockedEvent' | 'Mannequin' | 'MarkedAsDuplicateEvent' | 'MarketplaceCategory' | 'MarketplaceListing' | 'MembersCanDeleteReposClearAuditEntry' | 'MembersCanDeleteReposDisableAuditEntry' | 'MembersCanDeleteReposEnableAuditEntry' | 'MentionedEvent' | 'MergedEvent' | 'MigrationSource' | 'Milestone' | 'MilestonedEvent' | 'MovedColumnsInProjectEvent' | 'OIDCProvider' | 'OauthApplicationCreateAuditEntry' | 'OrgAddBillingManagerAuditEntry' | 'OrgAddMemberAuditEntry' | 'OrgBlockUserAuditEntry' | 'OrgConfigDisableCollaboratorsOnlyAuditEntry' | 'OrgConfigEnableCollaboratorsOnlyAuditEntry' | 'OrgCreateAuditEntry' | 'OrgDisableOauthAppRestrictionsAuditEntry' | 'OrgDisableSamlAuditEntry' | 'OrgDisableTwoFactorRequirementAuditEntry' | 'OrgEnableOauthAppRestrictionsAuditEntry' | 'OrgEnableSamlAuditEntry' | 'OrgEnableTwoFactorRequirementAuditEntry' | 'OrgInviteMemberAuditEntry' | 'OrgInviteToBusinessAuditEntry' | 'OrgOauthAppAccessApprovedAuditEntry' | 'OrgOauthAppAccessDeniedAuditEntry' | 'OrgOauthAppAccessRequestedAuditEntry' | 'OrgRemoveBillingManagerAuditEntry' | 'OrgRemoveMemberAuditEntry' | 'OrgRemoveOutsideCollaboratorAuditEntry' | 'OrgRestoreMemberAuditEntry' | 'OrgUnblockUserAuditEntry' | 'OrgUpdateDefaultRepositoryPermissionAuditEntry' | 'OrgUpdateMemberAuditEntry' | 'OrgUpdateMemberRepositoryCreationPermissionAuditEntry' | 'OrgUpdateMemberRepositoryInvitationPermissionAuditEntry' | 'Organization' | 'OrganizationIdentityProvider' | 'OrganizationInvitation' | 'Package' | 'PackageFile' | 'PackageTag' | 'PackageVersion' | 'PinnedDiscussion' | 'PinnedEvent' | 'PinnedIssue' | 'PrivateRepositoryForkingDisableAuditEntry' | 'PrivateRepositoryForkingEnableAuditEntry' | 'Project' | 'ProjectCard' | 'ProjectColumn' | 'ProjectNext' | 'ProjectNextField' | 'ProjectNextItem' | 'ProjectNextItemFieldValue' | 'ProjectV2' | 'ProjectV2Field' | 'ProjectV2Item' | 'ProjectV2ItemFieldDateValue' | 'ProjectV2ItemFieldIterationValue' | 'ProjectV2ItemFieldNumberValue' | 'ProjectV2ItemFieldSingleSelectValue' | 'ProjectV2ItemFieldTextValue' | 'ProjectV2IterationField' | 'ProjectV2SingleSelectField' | 'ProjectV2View' | 'ProjectView' | 'PublicKey' | 'PullRequest' | 'PullRequestCommit' | 'PullRequestCommitCommentThread' | 'PullRequestReview' | 'PullRequestReviewComment' | 'PullRequestReviewThread' | 'PullRequestThread' | 'Push' | 'PushAllowance' | 'Reaction' | 'ReadyForReviewEvent' | 'Ref' | 'ReferencedEvent' | 'Release' | 'ReleaseAsset' | 'RemovedFromProjectEvent' | 'RenamedTitleEvent' | 'ReopenedEvent' | 'RepoAccessAuditEntry' | 'RepoAddMemberAuditEntry' | 'RepoAddTopicAuditEntry' | 'RepoArchivedAuditEntry' | 'RepoChangeMergeSettingAuditEntry' | 'RepoConfigDisableAnonymousGitAccessAuditEntry' | 'RepoConfigDisableCollaboratorsOnlyAuditEntry' | 'RepoConfigDisableContributorsOnlyAuditEntry' | 'RepoConfigDisableSockpuppetDisallowedAuditEntry' | 'RepoConfigEnableAnonymousGitAccessAuditEntry' | 'RepoConfigEnableCollaboratorsOnlyAuditEntry' | 'RepoConfigEnableContributorsOnlyAuditEntry' | 'RepoConfigEnableSockpuppetDisallowedAuditEntry' | 'RepoConfigLockAnonymousGitAccessAuditEntry' | 'RepoConfigUnlockAnonymousGitAccessAuditEntry' | 'RepoCreateAuditEntry' | 'RepoDestroyAuditEntry' | 'RepoRemoveMemberAuditEntry' | 'RepoRemoveTopicAuditEntry' | 'Repository' | 'RepositoryInvitation' | 'RepositoryMigration' | 'RepositoryTopic' | 'RepositoryVisibilityChangeDisableAuditEntry' | 'RepositoryVisibilityChangeEnableAuditEntry' | 'RepositoryVulnerabilityAlert' | 'ReviewDismissalAllowance' | 'ReviewDismissedEvent' | 'ReviewRequest' | 'ReviewRequestRemovedEvent' | 'ReviewRequestedEvent' | 'SavedReply' | 'SecurityAdvisory' | 'SponsorsActivity' | 'SponsorsListing' | 'SponsorsTier' | 'Sponsorship' | 'SponsorshipNewsletter' | 'Status' | 'StatusCheckRollup' | 'StatusContext' | 'SubscribedEvent' | 'Tag' | 'Team' | 'TeamAddMemberAuditEntry' | 'TeamAddRepositoryAuditEntry' | 'TeamChangeParentTeamAuditEntry' | 'TeamDiscussion' | 'TeamDiscussionComment' | 'TeamRemoveMemberAuditEntry' | 'TeamRemoveRepositoryAuditEntry' | 'Topic' | 'TransferredEvent' | 'Tree' | 'UnassignedEvent' | 'UnlabeledEvent' | 'UnlockedEvent' | 'UnmarkedAsDuplicateEvent' | 'UnpinnedEvent' | 'UnsubscribedEvent' | 'User' | 'UserBlockedEvent' | 'UserContentEdit' | 'UserStatus' | 'VerifiableDomain' | 'Workflow' | 'WorkflowRun', ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
 };
 
@@ -33203,6 +33684,7 @@ export type ProjectV2Resolvers<ContextType = any, ParentType extends ResolversPa
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   url?: Resolver<ResolversTypes['URI'], ParentType, ContextType>;
+  view?: Resolver<Maybe<ResolversTypes['ProjectV2View']>, ParentType, ContextType, RequireFields<ProjectV2ViewArgs, 'number'>>;
   viewerCanUpdate?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   views?: Resolver<ResolversTypes['ProjectV2ViewConnection'], ParentType, ContextType, RequireFields<ProjectV2ViewsArgs, 'orderBy'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -33523,8 +34005,10 @@ export type ProjectV2SortByEdgeResolvers<ContextType = any, ParentType extends R
 export type ProjectV2ViewResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectV2View'] = ResolversParentTypes['ProjectV2View']> = {
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   databaseId?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  fields?: Resolver<Maybe<ResolversTypes['ProjectV2FieldConfigurationConnection']>, ParentType, ContextType, RequireFields<ProjectV2ViewFieldsArgs, 'orderBy'>>;
   filter?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   groupBy?: Resolver<Maybe<ResolversTypes['ProjectV2FieldConnection']>, ParentType, ContextType, RequireFields<ProjectV2ViewGroupByArgs, 'orderBy'>>;
+  groupByFields?: Resolver<Maybe<ResolversTypes['ProjectV2FieldConfigurationConnection']>, ParentType, ContextType, RequireFields<ProjectV2ViewGroupByFieldsArgs, 'orderBy'>>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   layout?: Resolver<ResolversTypes['ProjectV2ViewLayout'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -33951,13 +34435,17 @@ export type PullRequestTemplateResolvers<ContextType = any, ParentType extends R
 
 export type PullRequestThreadResolvers<ContextType = any, ParentType extends ResolversParentTypes['PullRequestThread'] = ResolversParentTypes['PullRequestThread']> = {
   comments?: Resolver<ResolversTypes['PullRequestReviewCommentConnection'], ParentType, ContextType, Partial<PullRequestThreadCommentsArgs>>;
+  diffSide?: Resolver<ResolversTypes['DiffSide'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   isCollapsed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   isOutdated?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   isResolved?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  line?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   pullRequest?: Resolver<ResolversTypes['PullRequest'], ParentType, ContextType>;
   repository?: Resolver<ResolversTypes['Repository'], ParentType, ContextType>;
   resolvedBy?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  startDiffSide?: Resolver<Maybe<ResolversTypes['DiffSide']>, ParentType, ContextType>;
+  startLine?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   viewerCanReply?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   viewerCanResolve?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   viewerCanUnresolve?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
@@ -34990,6 +35478,8 @@ export type RepositoryResolvers<ContextType = any, ParentType extends ResolversP
   lockReason?: Resolver<Maybe<ResolversTypes['RepositoryLockReason']>, ParentType, ContextType>;
   mentionableUsers?: Resolver<ResolversTypes['UserConnection'], ParentType, ContextType, Partial<RepositoryMentionableUsersArgs>>;
   mergeCommitAllowed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  mergeCommitMessage?: Resolver<ResolversTypes['MergeCommitMessage'], ParentType, ContextType>;
+  mergeCommitTitle?: Resolver<ResolversTypes['MergeCommitTitle'], ParentType, ContextType>;
   milestone?: Resolver<Maybe<ResolversTypes['Milestone']>, ParentType, ContextType, RequireFields<RepositoryMilestoneArgs, 'number'>>;
   milestones?: Resolver<Maybe<ResolversTypes['MilestoneConnection']>, ParentType, ContextType, Partial<RepositoryMilestonesArgs>>;
   mirrorUrl?: Resolver<Maybe<ResolversTypes['URI']>, ParentType, ContextType>;
@@ -35026,6 +35516,8 @@ export type RepositoryResolvers<ContextType = any, ParentType extends ResolversP
   securityPolicyUrl?: Resolver<Maybe<ResolversTypes['URI']>, ParentType, ContextType>;
   shortDescriptionHTML?: Resolver<ResolversTypes['HTML'], ParentType, ContextType, RequireFields<RepositoryShortDescriptionHtmlArgs, 'limit'>>;
   squashMergeAllowed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  squashMergeCommitMessage?: Resolver<ResolversTypes['SquashMergeCommitMessage'], ParentType, ContextType>;
+  squashMergeCommitTitle?: Resolver<ResolversTypes['SquashMergeCommitTitle'], ParentType, ContextType>;
   squashPrTitleUsedAsDefault?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   sshUrl?: Resolver<ResolversTypes['GitSSHRemote'], ParentType, ContextType>;
   stargazerCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -35193,6 +35685,7 @@ export type RepositoryInvitationEdgeResolvers<ContextType = any, ParentType exte
 export type RepositoryMigrationResolvers<ContextType = any, ParentType extends ResolversParentTypes['RepositoryMigration'] = ResolversParentTypes['RepositoryMigration']> = {
   continueOnError?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  databaseId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   failureReason?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   migrationLogUrl?: Resolver<Maybe<ResolversTypes['URI']>, ParentType, ContextType>;
@@ -35764,16 +36257,20 @@ export type SponsorsGoalResolvers<ContextType = any, ParentType extends Resolver
 export type SponsorsListingResolvers<ContextType = any, ParentType extends ResolversParentTypes['SponsorsListing'] = ResolversParentTypes['SponsorsListing']> = {
   activeGoal?: Resolver<Maybe<ResolversTypes['SponsorsGoal']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  dashboardResourcePath?: Resolver<ResolversTypes['URI'], ParentType, ContextType>;
+  dashboardUrl?: Resolver<ResolversTypes['URI'], ParentType, ContextType>;
   fullDescription?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   fullDescriptionHTML?: Resolver<ResolversTypes['HTML'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   isPublic?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   nextPayoutDate?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  resourcePath?: Resolver<ResolversTypes['URI'], ParentType, ContextType>;
   shortDescription?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   slug?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   sponsorable?: Resolver<ResolversTypes['Sponsorable'], ParentType, ContextType>;
   tiers?: Resolver<Maybe<ResolversTypes['SponsorsTierConnection']>, ParentType, ContextType, RequireFields<SponsorsListingTiersArgs, 'orderBy'>>;
+  url?: Resolver<ResolversTypes['URI'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -35869,6 +36366,18 @@ export type SponsorshipNewsletterEdgeResolvers<ContextType = any, ParentType ext
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type SshSignatureResolvers<ContextType = any, ParentType extends ResolversParentTypes['SshSignature'] = ResolversParentTypes['SshSignature']> = {
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  isValid?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  keyFingerprint?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  payload?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  signature?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  signer?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  state?: Resolver<ResolversTypes['GitSignatureState'], ParentType, ContextType>;
+  wasSignedByGitHub?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type StargazerConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['StargazerConnection'] = ResolversParentTypes['StargazerConnection']> = {
   edges?: Resolver<Maybe<Array<Maybe<ResolversTypes['StargazerEdge']>>>, ParentType, ContextType>;
   nodes?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
@@ -35937,9 +36446,13 @@ export type StatusCheckRollupContextResolvers<ContextType = any, ParentType exte
 };
 
 export type StatusCheckRollupContextConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['StatusCheckRollupContextConnection'] = ResolversParentTypes['StatusCheckRollupContextConnection']> = {
+  checkRunCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  checkRunCountsByState?: Resolver<Maybe<Array<ResolversTypes['CheckRunStateCount']>>, ParentType, ContextType>;
   edges?: Resolver<Maybe<Array<Maybe<ResolversTypes['StatusCheckRollupContextEdge']>>>, ParentType, ContextType>;
   nodes?: Resolver<Maybe<Array<Maybe<ResolversTypes['StatusCheckRollupContext']>>>, ParentType, ContextType>;
   pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  statusContextCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  statusContextCountsByState?: Resolver<Maybe<Array<ResolversTypes['StatusContextStateCount']>>, ParentType, ContextType>;
   totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -35961,6 +36474,12 @@ export type StatusContextResolvers<ContextType = any, ParentType extends Resolve
   isRequired?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, Partial<StatusContextIsRequiredArgs>>;
   state?: Resolver<ResolversTypes['StatusState'], ParentType, ContextType>;
   targetUrl?: Resolver<Maybe<ResolversTypes['URI']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type StatusContextStateCountResolvers<ContextType = any, ParentType extends ResolversParentTypes['StatusContextStateCount'] = ResolversParentTypes['StatusContextStateCount']> = {
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  state?: Resolver<ResolversTypes['StatusState'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -37182,6 +37701,7 @@ export type WorkflowResolvers<ContextType = any, ParentType extends ResolversPar
   databaseId?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  runs?: Resolver<ResolversTypes['WorkflowRunConnection'], ParentType, ContextType, RequireFields<WorkflowRunsArgs, 'orderBy'>>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -37198,6 +37718,20 @@ export type WorkflowRunResolvers<ContextType = any, ParentType extends Resolvers
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   url?: Resolver<ResolversTypes['URI'], ParentType, ContextType>;
   workflow?: Resolver<ResolversTypes['Workflow'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type WorkflowRunConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['WorkflowRunConnection'] = ResolversParentTypes['WorkflowRunConnection']> = {
+  edges?: Resolver<Maybe<Array<Maybe<ResolversTypes['WorkflowRunEdge']>>>, ParentType, ContextType>;
+  nodes?: Resolver<Maybe<Array<Maybe<ResolversTypes['WorkflowRun']>>>, ParentType, ContextType>;
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type WorkflowRunEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['WorkflowRunEdge'] = ResolversParentTypes['WorkflowRunEdge']> = {
+  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  node?: Resolver<Maybe<ResolversTypes['WorkflowRun']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -37283,6 +37817,7 @@ export type Resolvers<ContextType = any> = {
   CheckRun?: CheckRunResolvers<ContextType>;
   CheckRunConnection?: CheckRunConnectionResolvers<ContextType>;
   CheckRunEdge?: CheckRunEdgeResolvers<ContextType>;
+  CheckRunStateCount?: CheckRunStateCountResolvers<ContextType>;
   CheckStep?: CheckStepResolvers<ContextType>;
   CheckStepConnection?: CheckStepConnectionResolvers<ContextType>;
   CheckStepEdge?: CheckStepEdgeResolvers<ContextType>;
@@ -37290,6 +37825,7 @@ export type Resolvers<ContextType = any> = {
   CheckSuiteConnection?: CheckSuiteConnectionResolvers<ContextType>;
   CheckSuiteEdge?: CheckSuiteEdgeResolvers<ContextType>;
   ClearLabelsFromLabelablePayload?: ClearLabelsFromLabelablePayloadResolvers<ContextType>;
+  ClearProjectV2ItemFieldValuePayload?: ClearProjectV2ItemFieldValuePayloadResolvers<ContextType>;
   CloneProjectPayload?: CloneProjectPayloadResolvers<ContextType>;
   CloneTemplateRepositoryPayload?: CloneTemplateRepositoryPayloadResolvers<ContextType>;
   Closable?: ClosableResolvers<ContextType>;
@@ -37330,6 +37866,7 @@ export type Resolvers<ContextType = any> = {
   CreateEnvironmentPayload?: CreateEnvironmentPayloadResolvers<ContextType>;
   CreateIpAllowListEntryPayload?: CreateIpAllowListEntryPayloadResolvers<ContextType>;
   CreateIssuePayload?: CreateIssuePayloadResolvers<ContextType>;
+  CreateLinkedBranchPayload?: CreateLinkedBranchPayloadResolvers<ContextType>;
   CreateMigrationSourcePayload?: CreateMigrationSourcePayloadResolvers<ContextType>;
   CreateProjectPayload?: CreateProjectPayloadResolvers<ContextType>;
   CreateProjectV2Payload?: CreateProjectV2PayloadResolvers<ContextType>;
@@ -37371,6 +37908,7 @@ export type Resolvers<ContextType = any> = {
   DeleteIpAllowListEntryPayload?: DeleteIpAllowListEntryPayloadResolvers<ContextType>;
   DeleteIssueCommentPayload?: DeleteIssueCommentPayloadResolvers<ContextType>;
   DeleteIssuePayload?: DeleteIssuePayloadResolvers<ContextType>;
+  DeleteLinkedBranchPayload?: DeleteLinkedBranchPayloadResolvers<ContextType>;
   DeleteProjectCardPayload?: DeleteProjectCardPayloadResolvers<ContextType>;
   DeleteProjectColumnPayload?: DeleteProjectColumnPayloadResolvers<ContextType>;
   DeleteProjectNextItemPayload?: DeleteProjectNextItemPayloadResolvers<ContextType>;
@@ -37534,6 +38072,9 @@ export type Resolvers<ContextType = any> = {
   License?: LicenseResolvers<ContextType>;
   LicenseRule?: LicenseRuleResolvers<ContextType>;
   LinkRepositoryToProjectPayload?: LinkRepositoryToProjectPayloadResolvers<ContextType>;
+  LinkedBranch?: LinkedBranchResolvers<ContextType>;
+  LinkedBranchConnection?: LinkedBranchConnectionResolvers<ContextType>;
+  LinkedBranchEdge?: LinkedBranchEdgeResolvers<ContextType>;
   LockLockablePayload?: LockLockablePayloadResolvers<ContextType>;
   Lockable?: LockableResolvers<ContextType>;
   LockedEvent?: LockedEventResolvers<ContextType>;
@@ -37919,6 +38460,7 @@ export type Resolvers<ContextType = any> = {
   SponsorshipNewsletter?: SponsorshipNewsletterResolvers<ContextType>;
   SponsorshipNewsletterConnection?: SponsorshipNewsletterConnectionResolvers<ContextType>;
   SponsorshipNewsletterEdge?: SponsorshipNewsletterEdgeResolvers<ContextType>;
+  SshSignature?: SshSignatureResolvers<ContextType>;
   StargazerConnection?: StargazerConnectionResolvers<ContextType>;
   StargazerEdge?: StargazerEdgeResolvers<ContextType>;
   Starrable?: StarrableResolvers<ContextType>;
@@ -37931,6 +38473,7 @@ export type Resolvers<ContextType = any> = {
   StatusCheckRollupContextConnection?: StatusCheckRollupContextConnectionResolvers<ContextType>;
   StatusCheckRollupContextEdge?: StatusCheckRollupContextEdgeResolvers<ContextType>;
   StatusContext?: StatusContextResolvers<ContextType>;
+  StatusContextStateCount?: StatusContextStateCountResolvers<ContextType>;
   SubmitPullRequestReviewPayload?: SubmitPullRequestReviewPayloadResolvers<ContextType>;
   Submodule?: SubmoduleResolvers<ContextType>;
   SubmoduleConnection?: SubmoduleConnectionResolvers<ContextType>;
@@ -38062,6 +38605,8 @@ export type Resolvers<ContextType = any> = {
   Votable?: VotableResolvers<ContextType>;
   Workflow?: WorkflowResolvers<ContextType>;
   WorkflowRun?: WorkflowRunResolvers<ContextType>;
+  WorkflowRunConnection?: WorkflowRunConnectionResolvers<ContextType>;
+  WorkflowRunEdge?: WorkflowRunEdgeResolvers<ContextType>;
   X509Certificate?: GraphQLScalarType;
 };
 
@@ -38070,13 +38615,20 @@ export type DirectiveResolvers<ContextType = any> = {
 };
 
 
+export const AddLabels = gql`
+    mutation AddLabels($input: AddLabelsToLabelableInput!) {
+  addLabelsToLabelable(input: $input) {
+    clientMutationId
+  }
+}
+    `;
 export const CreatePr = gql`
     mutation CreatePR($input: CreatePullRequestInput!) {
   createPullRequest(input: $input) {
     clientMutationId
     pullRequest {
-      body
-      title
+      id
+      number
     }
   }
 }
@@ -38085,6 +38637,32 @@ export const DeleteBranch = gql`
     mutation DeleteBranch($input: DeleteRefInput!) {
   deleteRef(input: $input) {
     clientMutationId
+  }
+}
+    `;
+export const UpdatePullRequest = gql`
+    mutation UpdatePullRequest($input: UpdatePullRequestInput!) {
+  updatePullRequest(input: $input) {
+    pullRequest {
+      id
+      number
+    }
+  }
+}
+    `;
+export const Labels = gql`
+    query Labels($owner: String!, $name: String!) {
+  repository(owner: $owner, name: $name) {
+    id
+    labels(first: 100) {
+      totalCount
+      edges {
+        node {
+          id
+          name
+        }
+      }
+    }
   }
 }
     `;
@@ -38111,12 +38689,19 @@ export const TransifexBranch = gql`
   }
 }
     `;
+export type AddLabelsMutationVariables = Exact<{
+  input: AddLabelsToLabelableInput;
+}>;
+
+
+export type AddLabelsMutation = { __typename?: 'Mutation', addLabelsToLabelable?: { __typename?: 'AddLabelsToLabelablePayload', clientMutationId?: string | null } | null };
+
 export type CreatePrMutationVariables = Exact<{
   input: CreatePullRequestInput;
 }>;
 
 
-export type CreatePrMutation = { __typename?: 'Mutation', createPullRequest?: { __typename?: 'CreatePullRequestPayload', clientMutationId?: string | null, pullRequest?: { __typename?: 'PullRequest', body: string, title: string } | null } | null };
+export type CreatePrMutation = { __typename?: 'Mutation', createPullRequest?: { __typename?: 'CreatePullRequestPayload', clientMutationId?: string | null, pullRequest?: { __typename?: 'PullRequest', id: string, number: number } | null } | null };
 
 export type DeleteBranchMutationVariables = Exact<{
   input: DeleteRefInput;
@@ -38124,6 +38709,21 @@ export type DeleteBranchMutationVariables = Exact<{
 
 
 export type DeleteBranchMutation = { __typename?: 'Mutation', deleteRef?: { __typename?: 'DeleteRefPayload', clientMutationId?: string | null } | null };
+
+export type UpdatePullRequestMutationVariables = Exact<{
+  input: UpdatePullRequestInput;
+}>;
+
+
+export type UpdatePullRequestMutation = { __typename?: 'Mutation', updatePullRequest?: { __typename?: 'UpdatePullRequestPayload', pullRequest?: { __typename?: 'PullRequest', id: string, number: number } | null } | null };
+
+export type LabelsQueryVariables = Exact<{
+  owner: Scalars['String'];
+  name: Scalars['String'];
+}>;
+
+
+export type LabelsQuery = { __typename?: 'Query', repository?: { __typename?: 'Repository', id: string, labels?: { __typename?: 'LabelConnection', totalCount: number, edges?: Array<{ __typename?: 'LabelEdge', node?: { __typename?: 'Label', id: string, name: string } | null } | null> | null } | null } | null };
 
 export type TransifexBranchQueryVariables = Exact<{
   owner: Scalars['String'];
