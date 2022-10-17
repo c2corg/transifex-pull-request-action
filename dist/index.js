@@ -2596,7 +2596,7 @@ async function run() {
         await (0, exec_1.exec)('git', ['status', '-s'], {
             listeners: {
                 stdout: (data) => {
-                    const match = data.toString().match(new RegExp(`[ MTADRCU]{2}${outputFolder}([\\w]{2}).json`));
+                    const match = data.toString().match(new RegExp(`[ MTADRCU]{2}${outputFolder}([\\w]+).json`));
                     if (match?.[1]) {
                         updatedLangs.push(match[1]);
                     }
