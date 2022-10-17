@@ -41,7 +41,7 @@ const locales = core
 const githubToken = core.getInput('github_token');
 const repositoryOwner = github.context.repo.owner;
 const repositoryName = github.context.repo.repo;
-const branch = core.getInput('branch');
+const branch = core.getInput('branch') || 'transifex/i18n-updates';
 const baseBranch = core.getInput('base_branch') || 'master';
 const labels = (core.getInput('labels') || '')
   .split(',')
