@@ -8,9 +8,10 @@
     "build": "tsc",
     "lint": "prettier --check \"**/*.{ts,js,json,css,scss,less,md,html}\" && eslint src/**",
     "pack": "ncc build && cp src/*.sh dist/",
+    "graphql": "graphql-codegen --config codegen.yml",
     "all": "npm run graphql && npm run lint && npm run build && npm run pack",
     "prepare": "husky install",
-    "graphql": "graphql-codegen --config codegen.yml"
+    "preversion": "npm run all"
   },
   "repository": {
     "type": "git",
