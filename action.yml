@@ -9,7 +9,7 @@ inputs:
     description: Transifex organisation
     required: true
   transifex_project:
-    description: Transifex transifexProject
+    description: Transifex project
     required: true
   transifex_resource:
     description: Transifex resource
