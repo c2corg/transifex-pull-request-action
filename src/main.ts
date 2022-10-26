@@ -47,6 +47,7 @@ const labels = (core.getInput('labels') || '')
   .split(',')
   .map((label) => label.trim())
   .filter((label) => !!label);
+const transform = core.getInput('transform') || 'none';
 
 const octokit = github.getOctokit(githubToken);
 
@@ -136,6 +137,51 @@ const fetchTranslation = async (lang: string): Promise<string> => {
   return response.text();
 };
 
+function poToJson(src: string, lang: string): string {
+  // parse gettext file
+  const gettext = po.parse(src);
+  // build JSON file from gettext
+  const json: {
+    [lang: string]: {
+      [msgid: string]: string | { [msgctxt: string]: string };
+    };
+  } = {};
+  for (const msgctxt in gettext.translations) {
+    const values = gettext.translations[msgctxt];
+    for (let msgid in values) {
+      msgid = msgid.trim();
+      if (!msgid) {
+        // skip artifactory empty key
+        continue;
+      }
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const { msgstr: msgstrs } = values[msgid]!;
+      const msgstr = msgstrs[0]; // we do not handle specific formats
+      if (!msgstr || !msgstr.trim() || msgid === msgstr.trim()) {
+        // to save bits, skip entries whose value is equal to key or empty
+        continue;
+      }
+
+      const jsonLang = json[lang] || {};
+      if (msgctxt !== '') {
+        jsonLang[msgid] = jsonLang[msgid] || {};
+        if (typeof jsonLang[msgid] === 'string') {
+          jsonLang[msgid] = { $$noContext: jsonLang[msgid] as string };
+        }
+        (jsonLang[msgid] as { [msgctxt: string]: string })[msgctxt] = msgstr;
+      } else {
+        if (typeof jsonLang[msgid] === 'object') {
+          (jsonLang[msgid] as { [msgctxt: string]: string })['$$noContext'] = msgstr;
+        } else {
+          jsonLang[msgid] = msgstr;
+        }
+      }
+      json[lang] = jsonLang;
+    }
+  }
+  return JSON.stringify(sort(json), null, 2);
+}
+
 async function run(): Promise<void> {
   try {
     // check if there is a branch and a pull request matching already existing for translations
@@ -192,48 +238,18 @@ async function run(): Promise<void> {
     for (const lang of locales) {
       core.info(`  > ${lang}`);
       const translationBody = await fetchTranslation(lang);
-      // parse gettext file
-      const gettext = po.parse(translationBody);
-      // build JSON file from gettext
-      const json: {
-        [lang: string]: {
-          [msgid: string]: string | { [msgctxt: string]: string };
-        };
-      } = {};
-      for (const msgctxt in gettext.translations) {
-        const values = gettext.translations[msgctxt];
-        for (let msgid in values) {
-          msgid = msgid.trim();
-          if (!msgid) {
-            // skip artifactory empty key
-            continue;
-          }
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          const { msgstr: msgstrs } = values[msgid]!;
-          const msgstr = msgstrs[0]; // we do not handle specific formats
-          if (!msgstr || !msgstr.trim() || msgid === msgstr.trim()) {
-            // to save bits, skip entries whose value is equal to key or empty
-            continue;
-          }
 
-          const jsonLang = json[lang] || {};
-          if (msgctxt !== '') {
-            jsonLang[msgid] = jsonLang[msgid] || {};
-            if (typeof jsonLang[msgid] === 'string') {
-              jsonLang[msgid] = { $$noContext: jsonLang[msgid] as string };
-            }
-            (jsonLang[msgid] as { [msgctxt: string]: string })[msgctxt] = msgstr;
-          } else {
-            if (typeof jsonLang[msgid] === 'object') {
-              (jsonLang[msgid] as { [msgctxt: string]: string })['$$noContext'] = msgstr;
-            } else {
-              jsonLang[msgid] = msgstr;
-            }
-          }
-          json[lang] = jsonLang;
-        }
+      let content: string = translationBody;
+      switch (transform) {
+        case 'po-to-json':
+          content = poToJson(content, lang);
+          break;
+        case 'none':
+        default:
+        // nothing to do
       }
-      writeFileSync(`${outputFolder}${lang}.json`, JSON.stringify(sort(json), null, 2) + '\n');
+
+      writeFileSync(`${outputFolder}${lang}.json`, content + '\n');
     }
 
     core.info('Check whether new files bring modifications to the current branch');

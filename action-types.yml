@@ -20,6 +20,11 @@ inputs:
     type: string
   base_branch:
     type: string
+  transform:
+    type: enum
+    allowed-values:
+      - none
+      - po-to-json
   labels:
     type: list
     separator: ','

@@ -29,6 +29,8 @@ inputs:
     default: transifex/i18n-updates
   base_branch:
     description: The target branch into which the pull request will be merged
+  transform:
+    description: Transformation to apply to translation files. One of `none` or `po-to-json`
   labels:
     description: Labels to associate to the pull request
     required: false
