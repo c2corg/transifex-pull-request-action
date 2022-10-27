@@ -1,6 +1,6 @@
 {
   "name": "transifex-pull-request-action",
-  "version": "5.0.0-rc.1",
+  "version": "5.0.0",
   "private": true,
   "description": "A Github Action that fetches translations from transifex and proposes a pull request to merge these.",
   "main": "lib/main.js",
