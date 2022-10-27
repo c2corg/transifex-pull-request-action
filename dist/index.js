@@ -2610,13 +2610,13 @@ async function run() {
             let content = translationBody;
             switch (transform) {
                 case 'po-to-json':
-                    content = poToJson(content, lang);
+                    content = poToJson(content, lang) + '\n';
                     break;
                 case 'none':
                 default:
                 // nothing to do
             }
-            (0, fs_1.writeFileSync)(`${outputFolder}${lang}.json`, content + '\n');
+            (0, fs_1.writeFileSync)(`${outputFolder}${lang}.json`, content);
         }
         core.info('Check whether new files bring modifications to the current branch');
         let gitStatus = '';

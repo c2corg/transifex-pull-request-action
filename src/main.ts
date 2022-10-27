@@ -242,14 +242,14 @@ async function run(): Promise<void> {
       let content: string = translationBody;
       switch (transform) {
         case 'po-to-json':
-          content = poToJson(content, lang);
+          content = poToJson(content, lang) + '\n';
           break;
         case 'none':
         default:
         // nothing to do
       }
 
-      writeFileSync(`${outputFolder}${lang}.json`, content + '\n');
+      writeFileSync(`${outputFolder}${lang}.json`, content);
     }
 
     core.info('Check whether new files bring modifications to the current branch');
