@@ -271,20 +271,6 @@ async function run(): Promise<void> {
     await exec('git', ['add', '.']);
     await exec('git', ['commit', '-a', '-m', 'Update translations from transifex']);
 
-    const updatedLangs: string[] = [];
-    await exec('git', ['log', '--name-only', '--oneline', 'HEAD^..HEAD'], {
-      listeners: {
-        stdout: (data: Buffer): void => {
-          updatedLangs.push(
-            ...[...data.toString().matchAll(new RegExp(`^${outputFolder}([\\w]+)\.json$`, 'gm'))].map(
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              ([_full, lang]) => lang!,
-            ),
-          );
-        },
-      },
-    });
-
     // setup credentials
     await exec('bash', [path(__dirname, 'setup-credentials.sh')]);
 
@@ -296,7 +282,7 @@ async function run(): Promise<void> {
     }
 
     // create PR if not exists, update otherwise
-    const title = '🎓 Import i18n from Transifex [' + updatedLangs.sort().join(',') + ']';
+    const title = 'i18n: import translations from Transifex 🎓';
     const body = 'Translations have been updated on Transifex. Review changes, merge this PR and have a 🍺.';
     let prId: string;
     if (!transifexPR) {
