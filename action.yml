@@ -35,5 +35,5 @@ inputs:
     description: Labels to associate to the pull request
     required: false
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'dist/index.js'
