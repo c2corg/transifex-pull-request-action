@@ -1,7 +1,7 @@
 {
-  "extends": "@tsconfig/node18-strictest/tsconfig.json",
+  "extends": ["@tsconfig/strictest/tsconfig.json", "@tsconfig/node20/tsconfig.json"],
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "NodeNext",
     "outDir": "./lib",
     "rootDir": "./src",
     "importsNotUsedAsValues": "remove"

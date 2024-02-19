@@ -33,8 +33,7 @@
     "@actions/github": "6.0.0",
     "@octokit/graphql": "7.0.2",
     "gettext-parser": "8.0.0",
-    "graphql": "16.8.1",
-    "node-fetch": "3.2.10"
+    "graphql": "16.8.1"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "5.0.2",
@@ -43,9 +42,10 @@
     "@graphql-codegen/typescript-operations": "4.1.2",
     "@graphql-codegen/typescript-resolvers": "4.0.4",
     "@octokit/graphql-schema": "14.56.0",
-    "@tsconfig/node18-strictest": "1.0.0",
+    "@tsconfig/node20": "20.1.2",
+    "@tsconfig/strictest": "2.0.3",
     "@types/gettext-parser": "4.0.4",
-    "@types/node": "18.11.7",
+    "@types/node": "20.11.19",
     "@typescript-eslint/eslint-plugin": "7.0.1",
     "@typescript-eslint/parser": "7.0.1",
     "@vercel/ncc": "0.38.1",
@@ -55,7 +55,6 @@
     "husky": "9.0.11",
     "prettier": "3.2.5",
     "pretty-quick": "4.0.0",
-    "ts-node": "10.9.2",
-    "typescript": "4.9.5"
+    "typescript": "5.3.3"
   }
 }

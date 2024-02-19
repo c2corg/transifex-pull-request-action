@@ -1,12 +1,10 @@
-import { writeFileSync } from 'fs';
-import { join as path } from 'path';
-import fetch from 'node-fetch';
-import type { HeadersInit } from 'node-fetch';
 import * as core from '@actions/core';
-import * as github from '@actions/github';
 import { exec } from '@actions/exec';
+import * as github from '@actions/github';
+import { writeFileSync } from 'fs';
 import { po } from 'gettext-parser';
 import { print } from 'graphql/language/printer';
+import { join as path } from 'path';
 import {
   AddLabels,
   AddLabelsMutation,
@@ -73,7 +71,7 @@ const sort = (obj: NestedStrings): NestedStrings => {
 };
 
 const fetchTranslation = async (lang: string): Promise<string> => {
-  const headers: HeadersInit = {
+  const headers = {
     'Content-Type': 'application/vnd.api+json',
     Authorization: `Bearer ${transifexToken}`,
   };
