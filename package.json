@@ -33,7 +33,7 @@
     "@actions/github": "6.0.0",
     "@octokit/graphql": "7.1.0",
     "gettext-parser": "8.0.0",
-    "graphql": "16.9.0"
+    "graphql": "16.10.0"
   },
   "devDependencies": {
     "@eslint/js": "9.15.0",
